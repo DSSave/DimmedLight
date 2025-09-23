@@ -54,7 +54,7 @@ namespace DimmedLight.Isplayer
 
         private float parryDuration = 0.22f;
         private float parryTimer = 0f;
-        private float parryDelay = 0.7f;
+        private float parryDelay = 0.5f;
         private float parryDelayTimer = 0f;
 
         //private float actionDelay = 1f;

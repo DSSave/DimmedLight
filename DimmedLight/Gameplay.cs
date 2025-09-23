@@ -61,6 +61,8 @@ namespace DimmedLight
         private Song BMG;
         private Song EventSound;
 
+        private Texture2D redOverlay;
+
         public static class Texture2DHelper
         {
             public static Texture2D Pixel { get; set; }
@@ -106,6 +108,9 @@ namespace DimmedLight
             Texture2D pixel = new Texture2D(game.GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
             Texture2DHelper.Pixel = pixel;
+
+            redOverlay = new Texture2D(game.GraphicsDevice, 1, 1);
+            redOverlay.SetData(new[] { Color.Red });
             #endregion
 
             #region BG&Platform
@@ -210,6 +215,7 @@ namespace DimmedLight
                     if (!player.IsReturning && !player.IsInvincible)
                         player.LastSafePosition = player.Position;
 
+
                     scoreManager.Update(gameTime, player);
                 }
                 else
@@ -251,7 +257,20 @@ namespace DimmedLight
 
             pauseMenu.Draw(_spriteBatch);
 
+            if (player.IsInvincible)
+            {
+                float alpha = player.InvincibilityTimer / player.InvincibilityTime;
+                alpha = MathHelper.Clamp(alpha, 0f, 0.3f);
+
+                _spriteBatch.Draw(
+                    redOverlay,
+                    new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                    Color.Red * alpha
+                );
+            }
+
             _spriteBatch.End();
+
         }
 
         private void ResetGame()

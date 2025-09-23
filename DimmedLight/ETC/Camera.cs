@@ -15,6 +15,10 @@ namespace DimmedLight.ETC
         private Vector2 targetPosition;
         private Vector2 currentPosition;
         private float moveSpeed = 2f;
+
+        private Vector2 shakeOffset = Vector2.Zero;
+        private float shakeMagnitude = 0f;
+        private float shakeDuration = 0f;
         public Camera()
         {
             currentPosition = defaultPosition;
@@ -27,7 +31,22 @@ namespace DimmedLight.ETC
 
         public void MoveCamTocenter(float delta)
         {
-            currentPosition = Vector2.Lerp(currentPosition, targetPosition, delta * moveSpeed);
+            float t = MathHelper.Clamp(delta * moveSpeed, 0f, 1f);
+            currentPosition = Vector2.Lerp(currentPosition, targetPosition, t);
+
+            if (shakeDuration > 0)
+            {
+                shakeDuration -= delta;
+                float currentMagnitude = shakeMagnitude * (shakeDuration / 2f);
+                Random rng = new Random();
+                float offsetX = ((float)rng.NextDouble() * 2f - 1f) * currentMagnitude;
+                float offsetY = ((float)rng.NextDouble() * 2f - 1f) * currentMagnitude;
+                shakeOffset = new Vector2(offsetX, offsetY);
+            }
+            else
+            {
+                shakeOffset = Vector2.Zero;
+            }
         }
 
         public void ResetPosition()
@@ -37,7 +56,12 @@ namespace DimmedLight.ETC
 
         public Matrix GetViewMatrix()
         {
-            return Matrix.CreateTranslation(new Vector3(-currentPosition, 0f));
+            return Matrix.CreateTranslation(new Vector3(-currentPosition - shakeOffset, 0f));
+        }
+        public void StartShake(float duration, float magnitude)
+        {
+            shakeDuration = duration;
+            shakeMagnitude = magnitude;
         }
     }
 }

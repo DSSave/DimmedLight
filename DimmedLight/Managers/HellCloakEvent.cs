@@ -24,7 +24,7 @@ namespace DimmedLight.Managers
         private Delisaster delisaster;
         private Camera camera;
 
-        private float duration = 20f; //ค่าเดิม 45 วินาที
+        private float duration = 25f; //ค่าเดิม 45 วินาที
         private float eventElapsed = 0f;
 
         public bool IsPreparing { get; private set; }
@@ -35,7 +35,7 @@ namespace DimmedLight.Managers
         private List<Projectile> projectiles = new List<Projectile>();
         private Texture2D parryProjecTex;
         private Texture2D attackProjecTex;
-        private float delayShoot = 3f;
+        private float delayShoot = 5f;
         private float shootTimer = 0f;
         private float timer = 0f;
         private float spawnCooldown;
@@ -46,10 +46,12 @@ namespace DimmedLight.Managers
         private SoundEffect parryHit;
         private Song eventSong;
         private Song bmg;
+
         public void Prepare()
         {
             IsPreparing = true;
             prepareTimer = 0f;
+            camera.StartShake(prepareTime, 20f);
         }
         public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera, Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg)
         {
@@ -97,6 +99,7 @@ namespace DimmedLight.Managers
             if (IsPreparing)
             {
                 prepareTimer += delta;
+                camera.MoveCamTocenter(delta);
                 if (prepareTimer >= prepareTime)
                 {
                     IsPreparing = false;
@@ -109,6 +112,7 @@ namespace DimmedLight.Managers
             eventElapsed += delta;
             timer += delta;
             spawnTimer += delta;
+            camera.MoveCamTocenter(delta);
             if (!IsPreparing)
             {
                 shootTimer += delta;
@@ -118,9 +122,12 @@ namespace DimmedLight.Managers
                     {
                         spawnTimer = 0f;
                         FireProjectile(currentPhaseSpeed * 60);
-                        if (duration >= 12f)
+                        if (duration >= 16f)
                         {
-                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.5);
+                            spawnCooldown = (float)(rng.NextDouble() * 0.3 + 0.5);
+                        }else if(duration >= 8f)
+                        {
+                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.4);
                         }
                         else
                         {
@@ -208,10 +215,9 @@ namespace DimmedLight.Managers
             player.canWalk = true;
             projectiles.Clear();
 
-            if (MediaPlayer.State == MediaState.Playing) MediaPlayer.Stop();
-
             if (MediaPlayer.State == MediaState.Playing)
-                MediaPlayer.Resume();
+                MediaPlayer.Stop();
+
             MediaPlayer.Play(bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.008f;

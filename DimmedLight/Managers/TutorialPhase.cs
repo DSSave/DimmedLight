@@ -10,7 +10,7 @@ namespace DimmedLight.Managers
 {
     public class TutorialPhase : Phase //Phase 1
     {
-        private bool initialSpawnd = false; // ตรวจสอบว่าศัตรูเริ่มต้นถูกสร้างแล้วหรือไม่
+        //private bool initialSpawnd = false; // ตรวจสอบว่าศัตรูเริ่มต้นถูกสร้างแล้วหรือไม่
         private int fixedSpawnIndex = 0; // index ของศัตรูที่ต้อง spawn ต่อไป
         private EnemyBase currentFixedEnemy = null; // เก็บ enemy ที่ spawn ออกมาแล้ว
 
@@ -31,7 +31,7 @@ namespace DimmedLight.Managers
         public override void Initialize()
         {
             base.Initialize();
-            initialSpawnd = false; // รีเซ็ตสถานะการเกิดศัตรูเริ่มต้น
+            //initialSpawnd = false; // รีเซ็ตสถานะการเกิดศัตรูเริ่มต้น
             timeSinceLastSpawn = 0;
             PlatformSpeed = 6f;
             fixedSpawnIndex = 0;
