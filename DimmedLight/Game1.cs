@@ -45,7 +45,6 @@ namespace DimmedLight
             _gamePlay.LoadContent();
             Console.WriteLine("kfsjhd;hf;jkgdhflgkajfhio;fjhaiufh");
             Console.WriteLine("qwertyuiop[]");
-            Console.WriteLine("zxcvbnm,./");
         }
         protected override void Update(GameTime gameTime)
         {
