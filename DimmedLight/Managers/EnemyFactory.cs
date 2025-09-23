@@ -20,7 +20,7 @@ namespace DimmedLight.Managers
         public EnemyFactory(AnimatedTexture guiltIdle, AnimatedTexture guiltAttack, AnimatedTexture guiltDeath,
                             AnimatedTexture traumaIdle, AnimatedTexture traumaAttack, AnimatedTexture traumaDeath,
                             AnimatedTexture judgementIdle, AnimatedTexture judgementDeath,
-                            Texture2D projectileTexture) // รับ AnimatedTexture prototypes และ Texture2D สำหรับโปรเจกไทล์
+                            Texture2D projectileTexture)
         {
             guiltIdleProto = guiltIdle;
             guiltAttackProto = guiltAttack;
@@ -31,7 +31,7 @@ namespace DimmedLight.Managers
             judgementIdleProto = judgementIdle;
             judgementDeathProto = judgementDeath;
             projectileTex = projectileTexture;
-        } // สร้างศัตรูแต่ละตัวโดยการโคลนโปรโตไทป์และตั้งค่าคุณสมบัติต่างๆ
+        }
 
         public Guilt CreateGuilt(Vector2 pos, float speed) // สร้างศัตรู Guilt
         {
