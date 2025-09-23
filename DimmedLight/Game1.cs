@@ -43,6 +43,8 @@ namespace DimmedLight
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _gamePlay.LoadContent();
+            Console.WriteLine("kfsjhd;hf;jkgdhflgkajfhio;fjhaiufh");
+            Console.WriteLine("qwertyuiop[]");
         }
         protected override void Update(GameTime gameTime)
         {
