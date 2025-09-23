@@ -41,7 +41,7 @@ namespace DimmedLight.Managers
                 new FullPhase(10f)
             };
             currentIndex = 0; //ค่าเดิม 0
-            currentPhase = phases[currentIndex]; // เฟสปัจจุบันคือเฟสแรก
+            currentPhase = phases[currentIndex];
             currentPhase.Initialize();
 
             hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm);
@@ -77,10 +77,10 @@ namespace DimmedLight.Managers
             {
                 return;
             }
-            var spawns = currentPhase.GetSpawns(delta); // ดึงข้อมูลการเกิดศัตรูจากเฟสปัจจุบัน
-            foreach (var s in spawns) // วนลูปผ่านข้อมูลการเกิดศัตรู
+            var spawns = currentPhase.GetSpawns(delta);
+            foreach (var s in spawns)
             {
-                float spawnX = s.Position.X; // ตำแหน่ง X ที่จะเกิดศัตรู
+                float spawnX = s.Position.X;
                 float rightmost = activeEnemies.Count > 0 ? activeEnemies.Max(e => e.Position.X) : 0f; // ตำแหน่ง X ที่ขวาสุดของศัตรูที่กำลังทำงาน
 
                 if (spawnX - rightmost < minSpacing) // ถ้าตำแหน่งที่จะเกิดศัตรูใกล้กับศัตรูที่ขวาสุดเกินไป

@@ -96,7 +96,7 @@ namespace DimmedLight.UI
                     {
                         scorePoints = 150;
                         lightPoints = 50;
-                        soulPoints = 30; //ค่าเดิม 30
+                        soulPoints = 30;
                     }
                     else if (method == "Parry")
                     {
@@ -110,7 +110,7 @@ namespace DimmedLight.UI
                     {
                         scorePoints = 75;
                         lightPoints = 25;
-                        soulPoints = 10; //ค่าเดิม 10
+                        soulPoints = 10;
                     }
                     else if (method == "Parry")
                     {
