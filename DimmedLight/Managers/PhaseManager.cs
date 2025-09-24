@@ -170,6 +170,12 @@ namespace DimmedLight.Managers
             }
             if (phaseIndex >= 0 && phaseIndex < phases.Length)
             {
+                phases = new Phase[]
+                {
+                    new TutorialPhase(6f),
+                    new WarmupPhase(6f),
+                    new FullPhase(10f)
+                };
                 currentIndex = phaseIndex;
                 currentPhase = phases[currentIndex];
 

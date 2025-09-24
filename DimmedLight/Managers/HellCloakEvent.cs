@@ -124,15 +124,18 @@ namespace DimmedLight.Managers
                         FireProjectile(currentPhaseSpeed * 60);
                         if (duration >= 16f)
                         {
-                            spawnCooldown = (float)(rng.NextDouble() * 0.3 + 0.5);
-                        }else if(duration >= 8f)
+                            spawnCooldown = (float)(rng.NextDouble() * 0.4 + 0.5);
+                        }else if(duration >= 10f)
                         {
-                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.4);
+                            spawnCooldown = (float)(rng.NextDouble() * 0.3 + 0.4);
+                        }else if(duration >= 4f)
+                        {
+                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.3);
                         }
-                        else
+                        /*else
                         {
                             spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.25);
-                        }
+                        }*/
                     }
 
                 }
