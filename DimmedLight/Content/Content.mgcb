@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../../D-Loader/generic_char_v0.2/attackProjectile.png
+#begin attackProjectile.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,7 +23,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../../D-Loader/generic_char_v0.2/attackProjectile.png;attackProjectile.png
+/build:attackProjectile.png
 
 #begin Audio/LOOP_SFX_ParrySuccess2.wav
 /importer:WavImporter
