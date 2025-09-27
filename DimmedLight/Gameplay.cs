@@ -79,7 +79,7 @@ namespace DimmedLight
             _spriteBatch = new SpriteBatch(game.GraphicsDevice);
             
             #region Assets
-            platformTex = game.Content.Load<Texture2D>("floor_platform2");
+            platformTex = game.Content.Load<Texture2D>("platform-remake");
             skyTex = game.Content.Load<Texture2D>("Sky_sky");
             backTex = game.Content.Load<Texture2D>("Sky_back_mountain");
             frontTex = game.Content.Load<Texture2D>("Sky_front_mountain");

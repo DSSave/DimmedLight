@@ -19,7 +19,7 @@ namespace DimmedLight.Background
             Positions = new Vector2[copies];
             int w = texture.Width;
             int screenHeight = 1080;
-            int y = screenHeight - texture.Height + 130; // Y ต่ำลง 130 
+            int y = screenHeight - texture.Height + 115; // Y ต่ำลง 130 
             for (int i = 0; i < Positions.Length; i++) Positions[i] = new Vector2(i * w, y); // วางตำแหน่งแต่ละชิ้นชิดกันแนวนอน
         }
 

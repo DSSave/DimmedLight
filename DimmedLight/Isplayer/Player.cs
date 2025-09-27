@@ -54,7 +54,7 @@ namespace DimmedLight.Isplayer
 
         private float parryDuration = 0.22f;
         private float parryTimer = 0f;
-        private float parryDelay = 0.5f;
+        private float parryDelay = 0.3f;
         private float parryDelayTimer = 0f;
 
         //private float actionDelay = 1f;
@@ -121,7 +121,7 @@ namespace DimmedLight.Isplayer
         public void Load(ContentManager content)
         {
             Idle.Load(content, "Test_Idle", 6, 1, 15); //โหลดไฟล์ใส่อนิเมชั่น กำหนด frame count, row, fps 
-            Walk.Load(content, "Test_Walk", 8, 1, 15); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
+            Walk.Load(content, "Player-running-spritesheet", 10, 1, 15); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
             Jump.Load(content, "Test_Jump", 8, 2, 15);
             Attack.Load(content, "Test_Attack", 6, 1, 15);
             Parry.Load(content, "Test_Parry", 8, 1, 15);
@@ -211,7 +211,7 @@ namespace DimmedLight.Isplayer
                 }
                 if (IsParrying)
                 {
-                    HitBoxParry = new Rectangle((int)Position.X + 120, (int)Position.Y + 40, 90, 140);
+                    HitBoxParry = new Rectangle((int)Position.X + 120, (int)Position.Y + 35, 90, 150);
                     parryTimer -= delta;
                     Parry.UpdateFrame(delta);
                     if (parryTimer <= 0f) IsParrying = false;
@@ -295,14 +295,14 @@ namespace DimmedLight.Isplayer
 
             if (active)
             {
-                parryDelay = 0;
-                attackDelay = 0;
+                parryDelay = 0.2f;
+                attackDelay = 0.2f;
                 jumpPower = 0;
                 attackDuration = 0.22f;
             }
             else
             {
-                parryDelay = 0.7f;
+                parryDelay = 0.3f;
                 attackDelay = 0.55f;
                 jumpPower = -15f;
                 attackDuration = 0.32f;
