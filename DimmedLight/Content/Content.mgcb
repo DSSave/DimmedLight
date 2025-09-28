@@ -25,18 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:attackProjectile.png
 
-#begin attackProjectile.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:attackProjectile.png
-
 #begin Audio/LOOP_SFX_ParrySuccess2.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -150,6 +138,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Enemy2_Idle.png
+
+#begin floating-platform.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floating-platform.png
 
 #begin gameFont.spritefont
 /importer:FontDescriptionImporter

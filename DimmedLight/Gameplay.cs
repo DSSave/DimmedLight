@@ -22,7 +22,7 @@ namespace DimmedLight
 
         #region Assets
         Texture2D skyTex, backTex, frontTex;
-        Texture2D platformTex;
+        Texture2D platformTex, platformAsset;
         Texture2D projectileTex, attackProjecTex;
 
         Texture2D hurtBoxTex, hitBoxTex;
@@ -80,6 +80,7 @@ namespace DimmedLight
             
             #region Assets
             platformTex = game.Content.Load<Texture2D>("platform-remake");
+            platformAsset = game.Content.Load<Texture2D>("floating-platform");
             skyTex = game.Content.Load<Texture2D>("Sky_sky");
             backTex = game.Content.Load<Texture2D>("Sky_back_mountain");
             frontTex = game.Content.Load<Texture2D>("Sky_front_mountain");
@@ -117,7 +118,7 @@ namespace DimmedLight
             skyLayer = new BackgroundLayer(skyTex, 3, 0.2f);
             backLayer = new BackgroundLayer(backTex, 3, 0.5f);
             frontLayer = new BackgroundLayer(frontTex, 3, 0.8f);
-            platformManager = new PlatformManager(platformTex, 6);
+            platformManager = new PlatformManager(platformTex, platformAsset, 6);
             #endregion
 
             #region Player
@@ -203,7 +204,7 @@ namespace DimmedLight
                     skyLayer.Update(bgSpeed);
                     backLayer.Update(bgSpeed);
                     frontLayer.Update(bgSpeed);
-                    platformManager.Update(bgSpeed);
+                    platformManager.Update(bgSpeed, delta);
 
                     player.Update(gameTime, keyState, gpState, previousKeyState, previousGamePadState, delta);
                     delisaster.Update(delta, player);
@@ -287,6 +288,8 @@ namespace DimmedLight
             delisaster.currentOffset = 0f;
 
             scoreManager.Reset();
+
+            platformManager.Reset();
 
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Stop();
