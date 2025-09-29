@@ -182,6 +182,18 @@
 /processorParam:TextureFormat=Color
 /build:platform-remake.png
 
+#begin player_attack_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:player_attack_spritesheet.png
+
 #begin Player-running-spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -241,18 +253,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sky_sky.png
-
-#begin Test_Attack.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Test_Attack.png
 
 #begin Test_Die.png
 /importer:TextureImporter

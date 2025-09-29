@@ -1,10 +1,4 @@
-﻿using DimmedLight.Animated;
-using DimmedLight.Background;
-using DimmedLight.Enemies;
-using DimmedLight.ETC;
-using DimmedLight.Isplayer;
-using DimmedLight.Managers;
-using DimmedLight.UI;
+﻿using DimmedLight.GamePlay;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
