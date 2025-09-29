@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace DimmedLight.GamePlay.Isplayer
 {
@@ -68,6 +69,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public float PostDeathDelay = 3f;
         public bool DeathDelayStarted;
         public float DeathDelayTimer;
+        public bool IsVisible = true;
         #endregion
 
         #region health and invincibility
@@ -89,7 +91,7 @@ namespace DimmedLight.GamePlay.Isplayer
         #endregion
 
         #region helper
-        private Vector2 objectOffset = new Vector2(-50, -45);
+        //private Vector2 objectOffset = new Vector2(-50, -45);
         #endregion
 
         #region delay before can walk
@@ -113,7 +115,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Attack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Parry = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Death = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            Position = new Vector2(400, 650);
+            Position = new Vector2(395, 655);
             phaseManager = manager;
             scoreManager = score;
         }
@@ -136,7 +138,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public void Update(GameTime gameTime, KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
         {
             // update hitboxes
-            HurtBox = new Rectangle((int)Position.X + 50, (int)Position.Y + 45, 112, 135); //สร้าง hurtbox
+            HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 156, 174); //สร้าง hurtbox
 
             if (!canWalk) // delay before can walk
             {
@@ -189,7 +191,7 @@ namespace DimmedLight.GamePlay.Isplayer
             }
             if (IsAttacking)
             {
-                HitBoxAttack = new Rectangle((int)Position.X + 120, (int)Position.Y + 45, 112, 135);//ต่ำแหน่ง x y width height
+                HitBoxAttack = new Rectangle((int)Position.X + 156, (int)Position.Y, 76, 174);//ต่ำแหน่ง x y width height
                 attackTimer -= delta;
                 Attack.UpdateFrame(delta);
                 if (attackTimer <= 0f) IsAttacking = false;
@@ -211,7 +213,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
                 if (IsParrying)
                 {
-                    HitBoxParry = new Rectangle((int)Position.X + 120, (int)Position.Y + 35, 90, 150);
+                    HitBoxParry = new Rectangle((int)Position.X + 156, (int)Position.Y - 5, 54, 185);
                     parryTimer -= delta;
                     Parry.UpdateFrame(delta);
                     if (parryTimer <= 0f) IsParrying = false;
@@ -315,53 +317,56 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 DeathAnimationStarted = true;
                 Death.Reset();
-                DeathTimer = 0f;
+                Death.Loop = false;
             }
-            else
+
+            Death.UpdateFrame(delta);
+
+            if (Death.IsEnd && !DeathDelayStarted)
             {
-                DeathTimer += delta;
-                Death.UpdateFrame(delta);
-                if (DeathTimer >= DeathDuration && !DeathDelayStarted)
-                {
-                    DeathDelayStarted = true;
-                    DeathDelayTimer = 0f;
-                }
-                if (DeathDelayStarted)
-                {
-                    DeathDelayTimer += delta;
-                }
+                DeathDelayStarted = true;
+                DeathDelayTimer = 0f;
+            }
+
+            if (DeathDelayStarted)
+            {
+                DeathDelayTimer += delta;
             }
         }
 
         public void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex)
         {
+            if (!IsVisible && !DeathAnimationStarted)
+                return;
+
             if (!canWalk)
             {
-                Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + objectOffset, false);
+                Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
             }
             else if (IsAttacking)
             {
                 Attack.DrawFrame(sb, Position, false);
-                //sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
+                sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
             }
             else if (IsParrying)
             {
                 Parry.DrawFrame(sb, Position, false);
-                //sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
+                sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
             }
             else if (IsJumping)
             {
-                Jump.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + objectOffset, false);
+                Jump.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
             }
             else if (DeathAnimationStarted)
             {
-                Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + objectOffset, false);
+                Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
             }
             else
             {
-                Walk.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + objectOffset, false);
+                if (IsVisible) 
+                    Walk.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
             }
-            //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+            sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
         }
         public void SetPhaseManager(PhaseManager manager) 
         { 
@@ -383,6 +388,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Attack.Reset();
             Parry.Reset();
             Death.Reset();
+            Death.Loop = true;
             IsInvincible = false;
             InvincibilityTimer = 0f;
             HealingTimer = 0f;
@@ -392,6 +398,7 @@ namespace DimmedLight.GamePlay.Isplayer
             idleTimer = 0f;
             canWalk = false;
             SetEvent(false);
+            IsVisible = true;
         }
         public void UltimateReset()
         {

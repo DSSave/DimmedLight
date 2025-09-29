@@ -39,6 +39,7 @@ namespace DimmedLight.GamePlay.Animated
 
         public float Rotation, Scale, Depth;
         public Vector2 Origin;
+        private bool loop = true;
         public AnimatedTexture(Vector2 origin, float rotation, float scale, float depth)
         {
             Origin = origin;
@@ -87,6 +88,15 @@ namespace DimmedLight.GamePlay.Animated
             return clone;
         }
         // class AnimatedTexture
+        public bool Loop
+        {
+            get => loop;
+            set
+            {
+                loop = value;
+                if (loop) Ended = false;
+            }
+        }
         public void UpdateFrame(float elapsed)
         {
             if (pauseFrame > -1 && pauseRow > -1)
@@ -101,8 +111,43 @@ namespace DimmedLight.GamePlay.Animated
             }
             if (Paused)
                 return;
+            if (!loop && Ended) return;
             TotalElapsed += elapsed;
-            if (TotalElapsed > TimePerFrame)
+
+            while (TotalElapsed > TimePerFrame)
+            {
+                // คำนวนเฟรมถัดไป
+                int nextFrame = Frame + 1;
+                int nextRow = frame_r;
+
+                if (nextFrame >= framecount)
+                {
+                    nextFrame = 0;
+                    nextRow = frame_r + 1;
+                }
+
+                // ถ้าไม่วนและเฟรมถัดไปออกนอกแถวสุดท้าย -> ถือว่า animation จบ
+                if (!loop && nextRow >= framerow)
+                {
+                    // ตั้งค่าให้เป็นเฟรมสุดท้ายของ animation แล้วทำ Ended = true
+                    Frame = Math.Max(0, framecount - 1);
+                    frame_r = Math.Max(0, framerow - 1);
+                    Ended = true;
+                    TotalElapsed = 0f;
+                    return;
+                }
+
+                // ปกติอัพเดตไปเฟรมถัดไป
+                Frame = nextFrame;
+                frame_r = nextRow % framerow;
+
+                // ป้องกันการ overflow
+                Frame = Frame % framecount;
+
+                TotalElapsed -= TimePerFrame;
+            }
+
+            /*if (TotalElapsed > TimePerFrame)
             {
                 Frame++;
                 if (Frame == framecount)
@@ -128,7 +173,7 @@ namespace DimmedLight.GamePlay.Animated
                 // check start check end
 
                 TotalElapsed -= TimePerFrame;
-            }
+            }*/
         }
 
         // class AnimatedTexture

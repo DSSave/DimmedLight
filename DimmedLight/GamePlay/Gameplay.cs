@@ -62,6 +62,7 @@ namespace DimmedLight.GamePlay
         private Song EventSound;
 
         private Texture2D redOverlay;
+        private bool delisasterHasDashed = false;
 
         public static class Texture2DHelper
         {
@@ -176,6 +177,7 @@ namespace DimmedLight.GamePlay
 
             pauseMenu.Update(keyState, previousKeyState);
 
+            if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
@@ -223,6 +225,11 @@ namespace DimmedLight.GamePlay
                 {
                     player.UpdateDeathAnimation(delta);
                     delisaster.Update(delta, player);
+                    if (!delisasterHasDashed)
+                    {
+                        delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+                        delisasterHasDashed = true;
+                    }
                     if (player.DeathDelayStarted && player.DeathDelayTimer >= player.PostDeathDelay)
                     {
                         ResetGame();
@@ -281,11 +288,8 @@ namespace DimmedLight.GamePlay
             player.Position = new Vector2(400, 650);
             player.Reset();
 
-            delisaster.Position = new Vector2(-500, 298);
-            delisaster.IsReturning = false;
-            delisaster.ReturnTimer = delisaster.ReturnPos;
-            delisaster.OriginalPosition = delisaster.Position;
-            delisaster.currentOffset = 0f;
+            delisaster.ResetPosition();
+            delisasterHasDashed = false;
 
             scoreManager.Reset();
 
