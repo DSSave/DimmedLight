@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +29,14 @@ namespace DimmedLight.GamePlay.Enemies
 
         private Vector2 projectileOffSet = new Vector2(-50, 398);
 
+        private bool IsDashing = false;
+        private bool IsDashReturning = false;
+        private Vector2 DashStart;
+        private Vector2 DashTarget;
+        private float DashForwardSpeed = 350f;
+        public float DashReturnSpeed = 100f;
         public bool IsInEvent { get; set; } = false;
+
         public Delisaster()
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -52,7 +60,30 @@ namespace DimmedLight.GamePlay.Enemies
                     ReturnTimer = ReturnPos; // เริ่มจับเวลาคืนตำแหน่ง
                 }
             }
+            if (IsDashing)
+            {
+                float step = DashForwardSpeed * delta;
 
+                if (!IsDashReturning)
+                {
+                    Position.X = MathHelper.Min(Position.X + DashForwardSpeed * delta, DashTarget.X);
+                    if (Position.X >= DashTarget.X)
+                        IsDashReturning = true;
+                }
+                else // ถอยกลับ
+                {
+                    Position.X = MathHelper.Max(Position.X - DashReturnSpeed * delta, DashStart.X);
+                    if (Position.X <= DashStart.X)
+                    {
+                        IsDashing = false;
+                        IsInEvent = false;
+                        Position = DashStart;
+                    }
+                }
+
+                Idle.UpdateFrame(delta);
+                return;
+            }
             if (IsInEvent)
             {
                 Idle.UpdateFrame(delta);
@@ -84,7 +115,14 @@ namespace DimmedLight.GamePlay.Enemies
 
             Idle.UpdateFrame(delta);
         }
-
+        public void DashForward(Vector2 target)
+        {
+            IsDashing = true;
+            IsDashReturning = false;
+            DashStart = Position;
+            DashTarget = target;
+            IsInEvent = true;
+        }
         public void movetToRight(Vector2 target)
         {
             Position = target;
@@ -98,6 +136,8 @@ namespace DimmedLight.GamePlay.Enemies
             currentOffset = 0f;
             IsReturning = false;
             IsInEvent = false;
+            IsDashing = false;
+            IsDashReturning = false;
         }
         public Vector2 ProjectileSpawn()
         {
