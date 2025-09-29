@@ -213,7 +213,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
                 if (IsParrying)
                 {
-                    HitBoxParry = new Rectangle((int)Position.X + 156, (int)Position.Y - 5, 54, 185);
+                    HitBoxParry = new Rectangle((int)Position.X + 156, (int)Position.Y - 6, 54, 188);
                     parryTimer -= delta;
                     Parry.UpdateFrame(delta);
                     if (parryTimer <= 0f) IsParrying = false;
