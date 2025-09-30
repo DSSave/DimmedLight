@@ -96,10 +96,6 @@ namespace DimmedLight.GamePlay.Enemies
                                     player.ReturnTimer = player.ReturnX;
                                     player.IsReturning = true;
                                 }
-                                else
-                                {
-                                    player.ReturnTimer += 4f;
-                                }
                                 player.Position += player.KnockBack;
 
                                 if (!delisaster.IsReturning)
