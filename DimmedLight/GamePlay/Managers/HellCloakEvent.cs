@@ -127,10 +127,10 @@ namespace DimmedLight.GamePlay.Managers
                             spawnCooldown = (float)(rng.NextDouble() * 0.4 + 0.5);
                         }else if(duration >= 10f)
                         {
-                            spawnCooldown = (float)(rng.NextDouble() * 0.3 + 0.4);
+                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.3);
                         }else if(duration >= 4f)
                         {
-                            spawnCooldown = (float)(rng.NextDouble() * 0.2 + 0.3);
+                            spawnCooldown = (float)(rng.NextDouble() * 0.1 + 0.2);
                         }
                         /*else
                         {
