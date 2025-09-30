@@ -19,6 +19,8 @@ namespace DimmedLight
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
+       // private SpriteFont fant;
+
 
         #region Assets
         Texture2D skyTex, backTex, frontTex;
