@@ -37,7 +37,7 @@ namespace DimmedLight
             _gamePlay = new Gameplay(this, _graphics);
             base.Initialize();
         }
-
+        //haha lol
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
