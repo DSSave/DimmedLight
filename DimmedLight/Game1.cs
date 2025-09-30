@@ -47,7 +47,7 @@ namespace DimmedLight
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _gamePlay.Draw(gameTime);
-
+            //
             base.Draw(gameTime);
         }
     }
