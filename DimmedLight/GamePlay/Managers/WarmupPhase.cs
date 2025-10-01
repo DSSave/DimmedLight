@@ -27,7 +27,7 @@ namespace DimmedLight.GamePlay.Managers
                 string[] types = new[] { "Guilt", "Trauma", "Judgement", "FloorTrauma" };
                 string type = types[rnd.Next(types.Length)];
                 float x = 1920 + rnd.Next(300, 800);
-                float y = type == "Guilt" ? 695f : type == "Trauma" ? 380f : type == "Judgement" ? 763f : 655f;
+                float y = type == "Guilt" ? 670f : type == "Trauma" ? 380f : type == "Judgement" ? 720f : 565f;
                 result.Add(new EnemySpawnInfo(type, new Vector2(x, y), PlatformSpeed));
             }
 

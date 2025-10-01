@@ -234,6 +234,34 @@ namespace DimmedLight.GamePlay.Animated
                     Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, Depth);
             }
         }
+        public void DrawFrame(SpriteBatch batch, Vector2 screenPos, Color color, bool flip = false)
+        {
+            int FrameWidth = myTexture.Width / framecount;
+            int FrameHeight = myTexture.Height / framerow;
+            Rectangle sourcerect;
+
+            if (Overload == 1)
+            {
+                sourcerect = new Rectangle(FrameWidth * Frame, FrameHeight * frame_r,
+                    FrameWidth, FrameHeight);
+            }
+            else
+            {
+                sourcerect = new Rectangle(FrameWidth * Frame, FrameHeight * (startrow - 1),
+                    FrameWidth, FrameHeight);
+            }
+
+            if (!flip)
+            {
+                batch.Draw(myTexture, screenPos, sourcerect, color,
+                    Rotation, Origin, Scale, SpriteEffects.None, Depth);
+            }
+            else
+            {
+                batch.Draw(myTexture, screenPos, sourcerect, color,
+                    Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, Depth);
+            }
+        }
         public bool IsPaused => Paused;
         public bool IsEnd => Ended;
         public void Reset()

@@ -27,7 +27,7 @@ namespace DimmedLight.GamePlay.Enemies
         public float MaxForwardOffset = 300f; // ระยะทางสูงสุดที่ Delisaster จะขยับไปทางขวา
         public float currentOffset = 0f;
 
-        private Vector2 projectileOffSet = new Vector2(-50, 398);
+        private Vector2 projectileOffSet = new Vector2(285, 750);
 
         private bool IsDashing = false;
         private bool IsDashReturning = false;
@@ -35,18 +35,19 @@ namespace DimmedLight.GamePlay.Enemies
         private Vector2 DashTarget;
         private float DashForwardSpeed = 350f;
         public float DashReturnSpeed = 100f;
+        public bool IsFlipped = false;
         public bool IsInEvent { get; set; } = false;
 
         public Delisaster()
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            Position = new Vector2(-500, 298);
+            Position = new Vector2(-650, -50);
             OriginalPosition = Position;
         }
 
         public void Load(ContentManager content)
         {
-            Idle.Load(content, "BossFollow", 6, 1, 15);
+            Idle.Load(content, "delisaster", 1, 1, 15);
         }
 
         public void Update(float delta, Player player)
@@ -59,8 +60,9 @@ namespace DimmedLight.GamePlay.Enemies
                     IsReturning = true;
                     ReturnTimer = ReturnPos; // เริ่มจับเวลาคืนตำแหน่ง
                 }
+                IsFlipped = false;
             }
-            if (IsDashing)
+            /*if (IsDashing)
             {
                 float step = DashForwardSpeed * delta;
 
@@ -83,10 +85,11 @@ namespace DimmedLight.GamePlay.Enemies
 
                 Idle.UpdateFrame(delta);
                 return;
-            }
+            }*/
             if (IsInEvent)
             {
                 Idle.UpdateFrame(delta);
+                IsFlipped = true;
                 return;
             }
 
@@ -101,6 +104,7 @@ namespace DimmedLight.GamePlay.Enemies
                     IsReturning = false;
                     Position = OriginalPosition;
                 }
+                IsFlipped = false;
             }
             else
             {
@@ -111,18 +115,19 @@ namespace DimmedLight.GamePlay.Enemies
                     currentOffset = MathHelper.Clamp(currentOffset, 0f, MaxForwardOffset); // จำกัดไม่ให้เกิน MaxForwardOffset
                 }
                 Position.X = OriginalPosition.X + currentOffset; // อัพเดตตำแหน่ง X ของ Delisaster
+                IsFlipped = false;
             }
-
+            IsFlipped = false;
             Idle.UpdateFrame(delta);
         }
-        public void DashForward(Vector2 target)
+        /*public void DashForward(Vector2 target)
         {
             IsDashing = true;
             IsDashReturning = false;
             DashStart = Position;
             DashTarget = target;
             IsInEvent = true;
-        }
+        }*/
         public void movetToRight(Vector2 target)
         {
             Position = target;
@@ -146,7 +151,7 @@ namespace DimmedLight.GamePlay.Enemies
 
         public void Draw(SpriteBatch sb)
         {
-            Idle.DrawFrame(sb, Position, false);
+            Idle.DrawFrame(sb, Position, IsFlipped);
         }
     }
 }

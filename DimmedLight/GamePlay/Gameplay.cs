@@ -23,10 +23,11 @@ namespace DimmedLight.GamePlay
         #region Assets
         Texture2D skyTex, backTex, frontTex;
         Texture2D platformTex, platformAsset;
-        Texture2D projectileTex, attackProjecTex;
+        Texture2D projectileTex, attackProjecTex, parryProjecTex;
 
         Texture2D hurtBoxTex, hitBoxTex;
         Texture2D hellCloakTheme;
+        Texture2D tutorialImage;
         #endregion
 
         #region Background & Platforms
@@ -63,7 +64,7 @@ namespace DimmedLight.GamePlay
 
         private Texture2D redOverlay;
         private bool delisasterHasDashed = false;
-
+        private Color attack = new Color(37, 150, 190);
         public static class Texture2DHelper
         {
             public static Texture2D Pixel { get; set; }
@@ -85,10 +86,15 @@ namespace DimmedLight.GamePlay
             skyTex = game.Content.Load<Texture2D>("Sky_sky");
             backTex = game.Content.Load<Texture2D>("Sky_back_mountain");
             frontTex = game.Content.Load<Texture2D>("Sky_front_mountain");
-            projectileTex = game.Content.Load<Texture2D>("attackProjectile");
-            attackProjecTex = game.Content.Load<Texture2D>("Projectile_Trauma");
+
+            projectileTex = game.Content.Load<Texture2D>("bullet4");
+            attackProjecTex = game.Content.Load<Texture2D>("bullet2");
+            parryProjecTex = game.Content.Load<Texture2D>("bullet1");
+
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
+            tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
+
             parryHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
             BMG = game.Content.Load<Song>("Audio/SunYaNaFon");
             EventSound = game.Content.Load<Song>("Audio/TaLayJai");
@@ -105,7 +111,7 @@ namespace DimmedLight.GamePlay
             hurtBoxTex = new Texture2D(game.GraphicsDevice, 1, 1);
             hurtBoxTex.SetData(new[] { Color.Red });
             hitBoxTex = new Texture2D(game.GraphicsDevice, 1, 1);
-            hitBoxTex.SetData(new[] { Color.Blue });
+            hitBoxTex.SetData(new[] { attack });
 
             Texture2D pixel = new Texture2D(game.GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
@@ -140,30 +146,32 @@ namespace DimmedLight.GamePlay
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            guiltIdle.Load(game.Content, "Enemy1_Idle", 6, 1, 15);
-            guiltAttack.Load(game.Content, "Enemy1_Attack", 8, 1, 15);
+            guiltIdle.Load(game.Content, "Guilt_idle", 1, 1, 15);
+            guiltAttack.Load(game.Content, "Guilt_idle", 1, 1, 15);
             guiltDeath.Load(game.Content, "Enemy1_Death", 8, 2, 15);
 
             var traumaIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            traumaIdle.Load(game.Content, "Enemy2_Idle", 6, 1, 15);
-            traumaAttack.Load(game.Content, "Enemy2_Attack", 8, 1, 15);
+            traumaIdle.Load(game.Content, "trauma", 1, 1, 15);
+            traumaAttack.Load(game.Content, "trauma", 1, 1, 15);
             traumaDeath.Load(game.Content, "Enemy2_Death", 8, 2, 15);
 
             var judgementIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var judgementDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            judgementIdle.Load(game.Content, "ObstacleUpSize", 1, 1, 15);
-            judgementDeath.Load(game.Content, "ObstacleUpSize", 1, 1, 15);
+            judgementIdle.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
+            judgementDeath.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
 
             enemyFactory = new EnemyFactory(
                 guiltIdle, guiltAttack, guiltDeath,
                 traumaIdle, traumaAttack, traumaDeath,
                 judgementIdle, judgementDeath,
-                projectileTex
+                projectileTex,
+                parryProjecTex
             );
 
-            phaseManager = new PhaseManager(enemyFactory, player, delisaster, camera, hellCloakTheme, projectileTex, attackProjecTex, parryHit, EventSound, BMG);
+            phaseManager = new PhaseManager(enemyFactory, player, delisaster, camera, hellCloakTheme, tutorialImage,
+                parryProjecTex, attackProjecTex, parryHit, EventSound, BMG, game.GraphicsDevice);
             #endregion
 
             player.SetPhaseManager(phaseManager);
@@ -177,7 +185,7 @@ namespace DimmedLight.GamePlay
 
             pauseMenu.Update(keyState, previousKeyState);
 
-            if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+            //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
@@ -199,7 +207,13 @@ namespace DimmedLight.GamePlay
             if (!pauseMenu.IsPaused)
             {
                 float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                
+                if (phaseManager.TutorialEvent != null && phaseManager.TutorialEvent.IsActive)
+                {
+                    phaseManager.TutorialEvent.Update(keyState, previousKeyState);
+                    previousKeyState = keyState;
+                    previousGamePadState = gpState;
+                    return;
+                }
                 if (!player.IsDead)
                 {
                     float bgSpeed = player.canWalk ? phaseManager.PlatformSpeed : 0f;
@@ -211,7 +225,7 @@ namespace DimmedLight.GamePlay
                     player.Update(gameTime, keyState, gpState, previousKeyState, previousGamePadState, delta);
                     delisaster.Update(delta, player);
 
-                    phaseManager.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+                    phaseManager.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager, keyState, previousKeyState);
 
                     if (player.Health <= 0) player.IsDead = true;
 
@@ -227,7 +241,7 @@ namespace DimmedLight.GamePlay
                     delisaster.Update(delta, player);
                     if (!delisasterHasDashed)
                     {
-                        delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+                        //delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
                         delisasterHasDashed = true;
                     }
                     if (player.DeathDelayStarted && player.DeathDelayTimer >= player.PostDeathDelay)

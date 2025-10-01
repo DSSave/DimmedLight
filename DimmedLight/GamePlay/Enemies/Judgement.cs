@@ -28,10 +28,10 @@ namespace DimmedLight.GamePlay.Enemies
             if (!player.IsDead)
             {
                 Position.X -= speed * delta * 60;
-                HitN = new Rectangle((int)Position.X, (int)Position.Y, 256, 67);
+                HitN = new Rectangle((int)Position.X, (int)Position.Y, 176, 133);
                 if (!IsDead)
                 {
-                    IsFlipped = player.Position.X < Position.X;
+                    IsFlipped = player.Position.X > Position.X;
                     if (player.HurtBox.Intersects(HitN) && !player.IsInvincible) // ถ้าผู้เล่นโดนชนและไม่อยู่ในสถานะอมตะ
                     {
                         player.Health--;
@@ -74,6 +74,7 @@ namespace DimmedLight.GamePlay.Enemies
                         DeathAnimationStarted = true;
                         DeathTimer = 0f;
                     }
+                    Idle.UpdateFrame(delta);
                 }
             }
             if (DeathAnimationStarted)

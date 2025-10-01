@@ -16,11 +16,12 @@ namespace DimmedLight.GamePlay.Managers
         private AnimatedTexture traumaIdleProto, traumaAttackProto, traumaDeathProto;
         private AnimatedTexture judgementIdleProto, judgementDeathProto;
         private Texture2D projectileTex;
-
+        private Texture2D bullet4Tex;
+        private Texture2D bullet1Tex;
         public EnemyFactory(AnimatedTexture guiltIdle, AnimatedTexture guiltAttack, AnimatedTexture guiltDeath,
                             AnimatedTexture traumaIdle, AnimatedTexture traumaAttack, AnimatedTexture traumaDeath,
                             AnimatedTexture judgementIdle, AnimatedTexture judgementDeath,
-                            Texture2D projectileTexture)
+                            Texture2D bullet4, Texture2D bullet1)
         {
             guiltIdleProto = guiltIdle;
             guiltAttackProto = guiltAttack;
@@ -30,7 +31,8 @@ namespace DimmedLight.GamePlay.Managers
             traumaDeathProto = traumaDeath;
             judgementIdleProto = judgementIdle;
             judgementDeathProto = judgementDeath;
-            projectileTex = projectileTexture;
+            bullet4Tex = bullet4;
+            bullet1Tex = bullet1;
         }
 
         public Guilt CreateGuilt(Vector2 pos, float speed) // สร้างศัตรู Guilt
@@ -48,12 +50,12 @@ namespace DimmedLight.GamePlay.Managers
         }
         public Trauma CreateTrauma(Vector2 pos, float speed) // สร้างศัตรู Trauma
         {
-            var t = new Trauma(projectileTex); // ส่ง texture ของโปรเจกไทล์ไปยัง Constructor ของ Trauma
+            var t = new Trauma(bullet4Tex); // ส่ง texture ของโปรเจกไทล์ไปยัง Constructor ของ Trauma
             t.Idle = traumaIdleProto.Clone();
             t.AttackAnim = traumaAttackProto.Clone();
             t.Death = traumaDeathProto.Clone();
             t.Position = pos;
-            t.ProjectileObj = new Projectile(projectileTex);
+            t.ProjectileObj = new Projectile(bullet4Tex);
             t.SetSpeed(speed);
             t.IsDead = false;
             t.DeathAnimationStarted = false;
@@ -62,12 +64,12 @@ namespace DimmedLight.GamePlay.Managers
         }
         public FloorTrauma CreateFloorTrauma(Vector2 pos, float speed) // สร้างศัตรู FloorTrauma
         {
-            var ft = new FloorTrauma(projectileTex);
+            var ft = new FloorTrauma(bullet1Tex);
             ft.Idle = traumaIdleProto.Clone();
             ft.AttackAnim = traumaAttackProto.Clone();
             ft.Death = traumaDeathProto.Clone();
             ft.Position = pos;
-            ft.ProjectileObj = new Projectile(projectileTex);
+            ft.ProjectileObj = new Projectile(bullet1Tex);
             ft.SetSpeed(speed);
             ft.IsDead = false;
             ft.DeathAnimationStarted = false;
