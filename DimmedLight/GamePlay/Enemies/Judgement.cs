@@ -28,7 +28,7 @@ namespace DimmedLight.GamePlay.Enemies
             if (!player.IsDead)
             {
                 Position.X -= speed * delta * 60;
-                HitN = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, 138, 90);
+                HitN = new Rectangle((int)Position.X + 27, (int)Position.Y + 32, 125, 90);
                 if (!IsDead)
                 {
                     IsFlipped = player.Position.X > Position.X;
