@@ -97,7 +97,7 @@ namespace DimmedLight.GamePlay.Managers
                 if (!hellCloakEvent.IsActive && !hellCloakEvent.IsPreparing)
                 {
                     phase3Timer = 0f;
-                    nextEventTime = rng.Next(50, 90); //random next eventTime
+                    nextEventTime = rng.Next(20, 40); //random next eventTime
                     //nextEventTime = 50f;
                     lastSpawnX = 0f;
                 }
