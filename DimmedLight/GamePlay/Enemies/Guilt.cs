@@ -21,7 +21,7 @@ namespace DimmedLight.GamePlay.Enemies
         public float AttackDuration = 0.5f;
         public float AttackHitTime = 0.25f;
         public bool HitTriggered = false;
-
+        private Color attack = new Color(255, 144, 100);
         public Guilt()
         {
             EnemyType = "Guilt";
@@ -37,11 +37,11 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 Position.X -= speed * delta * 60;
 
-                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 112, 135);
-                HitBox = new Rectangle((int)Position.X - 45, (int)Position.Y, 112, 135);
+                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 144, 178);
+                HitBox = new Rectangle((int)Position.X - 45, (int)Position.Y, 144, 178);
                 if (!IsDead)
                 {
-                    IsFlipped = player.Position.X < Position.X; // หันหน้าไปทางผู้เล่น
+                    IsFlipped = player.Position.X > Position.X; // หันหน้าไปทางผู้เล่น
                     if (!IsAttacking && !HitTriggered && HitBox.Intersects(player.HurtBox)) // ถ้าศัตรูยังไม่โจมตีและผู้เล่นอยู่ในระยะโจมตี
                     {
                         IsAttacking = true;
@@ -143,16 +143,16 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead)
                 {
-                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
                 }
                 else if (IsAttacking)
                 {
-                    Attack.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    Attack.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), attack * 1f, IsFlipped);
                     //sb.Draw(hitBoxTex, HitBox, Color.Blue * 0.4f);
                 }
                 else
                 {
-                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
             }
