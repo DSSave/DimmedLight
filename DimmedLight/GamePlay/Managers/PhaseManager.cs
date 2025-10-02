@@ -185,9 +185,13 @@ namespace DimmedLight.GamePlay.Managers
             lastSpawnX = 0f;
 
             hellCloakEvent.Reset();
-            TutorialEvent?.Start();
             phase3Timer = 0f;
             nextEventTime = 30f;
+
+            if (TutorialEvent != null && TutorialEvent.IsActive)
+            {
+                TutorialEvent?.Start();
+            }
         }
         public void ResetCurrentPhase(int phaseIndex)
         {
