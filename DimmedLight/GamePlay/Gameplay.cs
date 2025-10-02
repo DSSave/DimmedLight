@@ -28,6 +28,8 @@ namespace DimmedLight.GamePlay
         Texture2D hurtBoxTex, hitBoxTex;
         Texture2D hellCloakTheme;
         Texture2D tutorialImage;
+        Texture2D pauseImage;
+        Texture2D bottonCursor;
         #endregion
 
         #region Background & Platforms
@@ -96,6 +98,8 @@ namespace DimmedLight.GamePlay
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
             tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
+            pauseImage = game.Content.Load<Texture2D>("Frame");
+            bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
             parryHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
             BMG = game.Content.Load<Song>("Audio/SunYaNaFon");
@@ -143,7 +147,7 @@ namespace DimmedLight.GamePlay
             delisaster.Load(game.Content);
             hud = new HUD();
             camera = new Camera();
-            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font);
+            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor);
             #endregion
 
             #region Enemy&Factory
