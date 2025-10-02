@@ -1,21 +1,22 @@
 ﻿using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Background;
+using DimmedLight.GamePlay.Enemies;
+using DimmedLight.GamePlay.ETC;
+using DimmedLight.GamePlay.Isplayer;
+using DimmedLight.GamePlay.Managers;
+using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using DimmedLight.GamePlay.Enemies;
-using DimmedLight.GamePlay.ETC;
-using DimmedLight.GamePlay.UI;
-using DimmedLight.GamePlay.Managers;
-using DimmedLight.GamePlay.Isplayer;
 
 namespace DimmedLight.GamePlay
 {
     public class Gameplay
     {
-        private Game game;
+        private Game1 game;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
@@ -74,7 +75,7 @@ namespace DimmedLight.GamePlay
             public static Texture2D Pixel { get; set; }
         }
 
-        public Gameplay(Game game, GraphicsDeviceManager graphics)
+        public Gameplay(Game1 game, GraphicsDeviceManager graphics)
         {
             this.game = game;
             _graphics = graphics;
@@ -148,6 +149,20 @@ namespace DimmedLight.GamePlay
             hud = new HUD();
             camera = new Camera();
             pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor);
+            pauseMenu.ClickExit = () =>
+            {
+                if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
+                    MediaPlayer.Stop();
+
+                game.ChangeScreen(new MenuScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+            };
+            pauseMenu.ClickOption = () =>
+            {
+                if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
+                    MediaPlayer.Stop();
+
+                game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+            };
             #endregion
 
             #region Enemy&Factory

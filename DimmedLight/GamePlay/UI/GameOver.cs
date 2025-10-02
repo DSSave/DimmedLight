@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DimmedLight.MainMenu;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -11,7 +12,7 @@ namespace DimmedLight.GamePlay.UI
 {
     public class GameOver
     {
-        private Game game;
+        private Game1 game;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Texture2D gameOverTex;
@@ -28,7 +29,7 @@ namespace DimmedLight.GamePlay.UI
         private Vector2 pos = Vector2.Zero;
 
         public bool RestartRequested { get; private set; }
-        public GameOver(Game game, GraphicsDeviceManager graphics)
+        public GameOver(Game1 game, GraphicsDeviceManager graphics)
         {
             this.game = game;
             _graphics = graphics;
@@ -61,6 +62,8 @@ namespace DimmedLight.GamePlay.UI
                 }
                 else if (mainMenuRect.Contains(mouse.Position))
                 {
+                    game.ChangeScreen(new MenuScreen(game, _graphics, game.GraphicsDevice, game.Content));
+                    RestartRequested = false;
                 }
             }
 

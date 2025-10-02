@@ -17,6 +17,8 @@ namespace DimmedLight.GamePlay.UI
         private GraphicsDevice graphics;
 
         public Action ClickRestart;
+        public Action ClickExit;
+        public Action ClickOption;
         public bool IsPaused { get; private set; } = false;
         private bool inExitMenu = false;
 
@@ -44,14 +46,14 @@ namespace DimmedLight.GamePlay.UI
             {
                 ("Resume", new Rectangle(centerX - 150, startY, 300, 50), () => IsPaused = false),
                 ("Restart", new Rectangle(centerX - 150, startY + spacing, 300, 50), () => { ClickRestart?.Invoke(); IsPaused = false; }),
-                ("Option", new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { /* Not implemented yet */ }),
+                ("Option", new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { ClickOption?.Invoke(); IsPaused = false; }),
                 ("Exit", new Rectangle(centerX - 150, startY + spacing * 3, 300, 50), () => { inExitMenu = true; }),
             };
 
             // Exit menu items
             exitMenuItems = new List<(string, Rectangle, Action)>
             {
-                ("Yes", new Rectangle(centerX - 150, startY + spacing - 25, 300, 50), () => { /* Exit not implemented */ }),
+                ("Yes", new Rectangle(centerX - 150, startY + spacing - 25, 300, 50), () => { ClickExit?.Invoke(); IsPaused = false; }),
                 ("No", new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { inExitMenu = false; }),
             };
         }
