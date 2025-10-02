@@ -65,6 +65,8 @@ namespace DimmedLight.GamePlay
         private Texture2D redOverlay;
         private bool delisasterHasDashed = false;
         private Color attack = new Color(37, 150, 190);
+        private GameOver gameOverScreen;
+        private bool showGameOver = false;
         public static class Texture2DHelper
         {
             public static Texture2D Pixel { get; set; }
@@ -105,6 +107,8 @@ namespace DimmedLight.GamePlay
             MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f;
+            gameOverScreen = new GameOver(game, _graphics);
+            gameOverScreen.LoadContent();
             #endregion
 
             #region Hurt&HitBox
@@ -184,8 +188,9 @@ namespace DimmedLight.GamePlay
             GamePadState gpState = GamePad.GetState(PlayerIndex.One);
 
             pauseMenu.Update(keyState, previousKeyState);
-
+            //float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+            
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
@@ -235,24 +240,38 @@ namespace DimmedLight.GamePlay
 
                     scoreManager.Update(gameTime, player);
                 }
-                else
+                else if (player.IsDead)
                 {
                     player.UpdateDeathAnimation(delta);
                     delisaster.Update(delta, player);
+                    if (MediaPlayer.State == MediaState.Playing)
+                        MediaPlayer.Stop();
                     if (!delisasterHasDashed)
                     {
-                        //delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+                        delisaster.DashForward(new Vector2(0, delisaster.Position.Y));
                         delisasterHasDashed = true;
                     }
                     if (player.DeathDelayStarted && player.DeathDelayTimer >= player.PostDeathDelay)
                     {
-                        ResetGame();
+                        showGameOver = true;
                     }
+                }
+                if (showGameOver)
+                {
+                    gameOverScreen.Update(gameTime);
+                    if (gameOverScreen.RestartRequested)
+                    {
+                        ResetGame();
+                        gameOverScreen.Reset();
+                        showGameOver = false;
+                    }
+                    return;
                 }
 
                 camera.MoveCamTocenter(delta);
             }
-
+            if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5))
+                showGameOver = true;
             previousKeyState = keyState;
             previousGamePadState = gpState;
             pauseMenu.ClickRestart = () => ResetGame();
@@ -290,9 +309,16 @@ namespace DimmedLight.GamePlay
                     Color.Red * alpha
                 );
             }
-
             _spriteBatch.End();
+            if (showGameOver)
+            {
+                _spriteBatch.Begin();
 
+                gameOverScreen.Draw(_spriteBatch);
+                _spriteBatch.End();
+
+                return;
+            }
         }
 
         private void ResetGame()
@@ -308,12 +334,13 @@ namespace DimmedLight.GamePlay
             scoreManager.Reset();
 
             platformManager.Reset();
+            showGameOver = false;
 
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Stop();
             MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f;
+            MediaPlayer.Volume = 0.01f;
         }
     }
 }

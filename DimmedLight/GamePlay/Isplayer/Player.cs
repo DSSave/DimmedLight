@@ -127,7 +127,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Jump.Load(content, "player_jumping_Spritesheet", 9, 1, 8);
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
             Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
-            Death.Load(content, "Test_Die", 8, 2, 15);
+            Death.Load(content, "game_over_spritesheet", 1, 22, 10);
 
             #region Sound&Effect
             attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_เสียงฟัน");
@@ -156,6 +156,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 IsJumping = true;
                 velocityY = jumpPower;
                 jumpEffect.Play();
+                Jump.Reset();
             }
             if (IsJumping) //กระโดดอยู่
             {
@@ -316,6 +317,10 @@ namespace DimmedLight.GamePlay.Isplayer
             if (!DeathAnimationStarted)
             {
                 DeathAnimationStarted = true;
+                IsAttacking = false;
+                IsParrying = false;
+                IsJumping = false;
+                Position = new Vector2(195, 655);
                 Death.Reset();
                 Death.Loop = false;
             }

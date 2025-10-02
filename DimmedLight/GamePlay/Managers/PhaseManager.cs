@@ -34,6 +34,7 @@ namespace DimmedLight.GamePlay.Managers
         private float nextEventTime = 18f;
         public TutorialEvent TutorialEvent { get; private set; }
         public int CurrentPhaseIndex => currentIndex;
+        private bool tutorialShown = false;
         public bool IsInEvent => hellCloakEvent.IsActive || hellCloakEvent.IsPreparing || (TutorialEvent != null && TutorialEvent.IsActive);
 
         public PhaseManager(EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
@@ -48,7 +49,7 @@ namespace DimmedLight.GamePlay.Managers
                 new WarmupPhase(6f),
                 new FullPhase(10f)
             };
-            currentIndex = 2; //ค่าเดิม 0
+            currentIndex = 0; //ค่าเดิม 0
             currentPhase = phases[currentIndex];
             currentPhase.Initialize();
 
@@ -59,7 +60,15 @@ namespace DimmedLight.GamePlay.Managers
             });
             hellCloakEvent.OnPrepareFinished = () =>
             {
-                TutorialEvent.Start();
+                if (!tutorialShown)
+                {
+                    TutorialEvent.Start();
+                    tutorialShown = true;
+                }
+                else
+                {
+                    hellCloakEvent.StartEvent();
+                }
             };
         }
         public void Update(GameTime gameTime, float delta, Player player, ref bool isFlipped, Delisaster delisaster, ScoreManager scoreManager, KeyboardState keyboardState, KeyboardState previousKeyboardState)
@@ -185,7 +194,7 @@ namespace DimmedLight.GamePlay.Managers
             lastSpawnX = 0f;
 
             hellCloakEvent.Reset();
-            TutorialEvent?.Start();
+            tutorialShown = false;
             phase3Timer = 0f;
             nextEventTime = 30f;
         }

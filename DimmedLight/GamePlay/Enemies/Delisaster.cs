@@ -33,8 +33,8 @@ namespace DimmedLight.GamePlay.Enemies
         private bool IsDashReturning = false;
         private Vector2 DashStart;
         private Vector2 DashTarget;
-        private float DashForwardSpeed = 350f;
-        public float DashReturnSpeed = 100f;
+        private float DashForwardSpeed = 550f;
+        public float DashReturnSpeed = 25f;
         public bool IsFlipped = false;
         public bool IsInEvent { get; set; } = false;
 
@@ -62,7 +62,7 @@ namespace DimmedLight.GamePlay.Enemies
                 }
                 IsFlipped = false;
             }
-            /*if (IsDashing)
+            if (IsDashing)
             {
                 float step = DashForwardSpeed * delta;
 
@@ -85,7 +85,7 @@ namespace DimmedLight.GamePlay.Enemies
 
                 Idle.UpdateFrame(delta);
                 return;
-            }*/
+            }
             if (IsInEvent)
             {
                 Idle.UpdateFrame(delta);
@@ -120,14 +120,14 @@ namespace DimmedLight.GamePlay.Enemies
             IsFlipped = false;
             Idle.UpdateFrame(delta);
         }
-        /*public void DashForward(Vector2 target)
+        public void DashForward(Vector2 target)
         {
             IsDashing = true;
             IsDashReturning = false;
             DashStart = Position;
             DashTarget = target;
             IsInEvent = true;
-        }*/
+        }
         public void movetToRight(Vector2 target)
         {
             Position = target;

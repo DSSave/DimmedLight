@@ -28,7 +28,7 @@ namespace DimmedLight.GamePlay.Enemies
             if (!player.IsDead)
             {
                 Position.X -= speed * delta * 60;
-                HitN = new Rectangle((int)Position.X, (int)Position.Y, 176, 133);
+                HitN = new Rectangle((int)Position.X + 20, (int)Position.Y + 35, 138, 90);
                 if (!IsDead)
                 {
                     IsFlipped = player.Position.X > Position.X;
@@ -88,11 +88,11 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead)
                 {
-                    Death.DrawFrame(sb, new Vector2(HitN.X, HitN.Y), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 else
                 {
-                    Idle.DrawFrame(sb, new Vector2(HitN.X, HitN.Y), IsFlipped);
+                    Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HitN, Color.Red * 0.4f);
             }
