@@ -50,12 +50,12 @@ namespace DimmedLight.GamePlay.Isplayer
         #region action timings
         private float attackDuration = 0.4f;
         private float attackTimer = 0f;
-        private float attackDelay = 0.55f;
+        private float attackDelay = 0.50f;
         private float attackDelayTimer = 0f;
 
         private float parryDuration = 0.22f;
         private float parryTimer = 0f;
-        private float parryDelay = 0.35f;
+        private float parryDelay = 0.23f;
         private float parryDelayTimer = 0f;
 
         //private float actionDelay = 1f;
@@ -305,8 +305,8 @@ namespace DimmedLight.GamePlay.Isplayer
             }
             else
             {
-                parryDelay = 0.35f;
-                attackDelay = 0.55f;
+                parryDelay = 0.23f;
+                attackDelay = 0.5f;
                 jumpPower = -15f;
                 attackDuration = 0.32f;
             }
