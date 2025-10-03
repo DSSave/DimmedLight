@@ -312,7 +312,7 @@ namespace DimmedLight.GamePlay
             player.Draw(_spriteBatch, hurtBoxTex, hitBoxTex);
             delisaster.Draw(_spriteBatch);
 
-            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health);
+            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health, player);
             scoreManager.Draw(_spriteBatch, font);
 
             pauseMenu.Draw(_spriteBatch);
