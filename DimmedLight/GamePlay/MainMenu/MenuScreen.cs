@@ -1,0 +1,219 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+
+namespace MainMenu_02
+{
+    public class MenuScreen : Screen
+    {
+        private SpriteFont _menuFont;
+        // private SpriteFont _titleFont; // ลบออก ไม่ได้ใช้แล้ว
+        private MouseState _previousMouseState;
+        private KeyboardState _previousKeyboardState;
+        private GamePadState _previousGamePadState;
+
+        // --- Texture ---
+        private Texture2D _backgroundTexture;
+        private Texture2D _selectedButtonTexture;
+        private Texture2D _titleTexture; // << เพิ่ม: ตัวแปรสำหรับรูปภาพ Title
+
+        // --- ตำแหน่งข้อความ ---
+        private Vector2 _titlePosition; 
+
+        // --- ระบบปุ่มเมนู ---
+        private List<Rectangle> _buttons = new List<Rectangle>();
+        private List<string> _buttonLabels = new List<string>();
+        private int _selectedButtonIndex = 0;
+
+        public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
+            : base(game, graphicsDeviceManager, graphicsDevice, content)
+        {
+        }
+
+        public override void LoadContent()
+        {
+            _menuFont = Content.Load<SpriteFont>("MyCustomFont");
+            // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
+            _backgroundTexture = Content.Load<Texture2D>("MainMenu_page");
+            _selectedButtonTexture = Content.Load<Texture2D>("Memu_Frame02");
+            _titleTexture = Content.Load<Texture2D>("title"); // << เพิ่ม: โหลดรูปภาพ title
+
+            // --- ปุ่ม ---
+            int buttonWidth = 450;
+            int buttonHeight = 90;
+            int startX = (int)(GraphicsDevice.Viewport.Width / 2f - buttonWidth / 2f + 590);
+            int startY = (int)(GraphicsDevice.Viewport.Height * 0.40f);
+            int spacingY = 110;
+
+            AddButton(new Rectangle(startX, startY, buttonWidth, buttonHeight), "PLAY");
+            AddButton(new Rectangle(startX, startY + spacingY, buttonWidth, buttonHeight), "UPGRADE");
+            AddButton(new Rectangle(startX, startY + (spacingY * 2), buttonWidth, buttonHeight), "SETTING");
+            AddButton(new Rectangle(startX, startY + (spacingY * 3), buttonWidth, buttonHeight), "CREDIT");
+            AddButton(new Rectangle(startX, startY + (spacingY * 4), buttonWidth, buttonHeight), "EXIT");
+
+            // --- รูปภาพ Title ---
+            // << แก้ไข: กำหนดตำแหน่งรูปภาพ
+            _titlePosition = new Vector2(
+                GraphicsDevice.Viewport.Width / 2f + 400, // ปรับตำแหน่งแกน X ตามต้องการ
+                GraphicsDevice.Viewport.Height * 0.22f    // ปรับตำแหน่งแกน Y ตามต้องการ
+            );
+
+            _previousMouseState = Mouse.GetState();
+            _previousKeyboardState = Keyboard.GetState();
+            _previousGamePadState = GamePad.GetState(PlayerIndex.One);
+        }
+
+        private void AddButton(Rectangle bounds, string label)
+        {
+            _buttons.Add(bounds);
+            _buttonLabels.Add(label);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            var mouse = Mouse.GetState();
+            var keyboard = Keyboard.GetState();
+            var gamePad = GamePad.GetState(PlayerIndex.One);
+
+            // --- เลื่อนลง/ขึ้น ---
+            bool movedDown = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
+                                (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
+            bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
+                                (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
+
+            if (movedDown)
+            {
+                _selectedButtonIndex = (_selectedButtonIndex + 1) % _buttons.Count;
+            }
+            else if (movedUp)
+            {
+                _selectedButtonIndex--;
+                if (_selectedButtonIndex < 0) _selectedButtonIndex = _buttons.Count - 1;
+            }
+
+            // --- เมาส์ชี้ ---
+            var mousePos = new Point(mouse.X, mouse.Y);
+            if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
+            {
+                for (int i = 0; i < _buttons.Count; i++)
+                {
+                    if (_buttons[i].Contains(mousePos))
+                    {
+                        _selectedButtonIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // --- ยืนยัน ---
+            bool isConfirmPressed = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released) ||
+                                      (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
+                                      (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
+
+            if (isConfirmPressed)
+            {
+                bool wasClicked = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released);
+                if (!wasClicked || (wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos)))
+                {
+                    ExecuteButtonAction(_selectedButtonIndex);
+                }
+            }
+
+            _previousMouseState = mouse;
+            _previousKeyboardState = keyboard;
+            _previousGamePadState = gamePad;
+        }
+
+        private void ExecuteButtonAction(int buttonIndex)
+        {
+            switch (buttonIndex)
+            {
+                case 0: // Play
+                    if (SettingScreen.ShowTutorial)
+                        Game.ChangeScreen(new TutorialScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    else
+                    {
+                        // Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    }
+                    break;
+                case 1: // Upgrade
+                    Game.ChangeScreen(new UpgradeScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    break;
+                case 2: // Setting
+                    Game.ChangeScreen(new SettingScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    break;
+                case 3: // Credit
+                    Game.ChangeScreen(new CreditScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    break;
+                case 4: // Exit
+                    Game.ChangeScreen(new ExitScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    break;
+            }
+        }
+
+        private void DrawStringWithShadow(SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, float scale, Color color, Color shadowColor)
+        {
+            float shadowOffset = 2.0f * scale;
+
+            // --- วาดเงา ---
+            spriteBatch.DrawString(font, text, position + new Vector2(shadowOffset, shadowOffset), shadowColor, 0f, font.MeasureString(text) / 2f, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position + new Vector2(-shadowOffset, shadowOffset), shadowColor, 0f, font.MeasureString(text) / 2f, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position + new Vector2(shadowOffset, -shadowOffset), shadowColor, 0f, font.MeasureString(text) / 2f, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position + new Vector2(-shadowOffset, -shadowOffset), shadowColor, 0f, font.MeasureString(text) / 2f, scale, SpriteEffects.None, 0f);
+
+            // --- วาดข้อความหลัก ---
+            spriteBatch.DrawString(font, text, position, color, 0f, font.MeasureString(text) / 2f, scale, SpriteEffects.None, 0f);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+
+            // --- พื้นหลัง ---
+            spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+
+            // --- Title Image ---
+            // << แก้ไข: วาดรูปภาพแทนข้อความ LOOP และ DIMMEDLIGHT
+            spriteBatch.Draw(
+                _titleTexture,
+                _titlePosition,
+                null,
+                Color.White,
+                0f,
+                new Vector2(_titleTexture.Width / 2f, _titleTexture.Height / 2f), // ตั้งจุดหมุนไว้กึ่งกลางรูป
+                1.0f, // ขนาดของรูปภาพ (ปรับได้)
+                SpriteEffects.None,
+                0f
+            );
+
+            // --- ปุ่ม ---
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                Rectangle buttonRect = _buttons[i];
+                string buttonLabel = _buttonLabels[i];
+
+                if (i == _selectedButtonIndex)
+                {
+                    spriteBatch.Draw(_selectedButtonTexture, buttonRect, Color.White);
+                }
+
+                Vector2 textSize = _menuFont.MeasureString(buttonLabel);
+                spriteBatch.DrawString(
+                    _menuFont,
+                    buttonLabel,
+                    new Vector2(buttonRect.Center.X, buttonRect.Center.Y),
+                    Color.White,
+                    0f,
+                    textSize / 2f,
+                    0.9f,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+
+            spriteBatch.End();
+        }
+    }
+}

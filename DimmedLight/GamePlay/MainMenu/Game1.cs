@@ -1,23 +1,11 @@
-﻿using DimmedLight.GamePlay;
-using MainMenu_02;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Drawing;
-using System.Reflection.Metadata;
 
-namespace DimmedLight
+namespace MainMenu_02
 {
     public class Game1 : Game
     {
-        //private GraphicsDeviceManager _graphics;
-        //private SpriteBatch _spriteBatch;
-        private SpriteFont font;
-
-        private Gameplay _gamePlay;
-
         public GraphicsDeviceManager Graphics { get; private set; }
         public SpriteBatch SpriteBatch { get; private set; }
 
@@ -87,6 +75,7 @@ namespace DimmedLight
             }
             base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
             // ล้างหน้าจอด้วยสีปกติเมื่อไม่มีหน้าจอพื้นหลังให้วาด
