@@ -14,7 +14,7 @@ namespace DimmedLight.MainMenu
     public class MenuScreen : Screen
     {
         private SpriteFont _menuFont;
-        private SpriteFont _titleFont; // 1. ประกาศตัวแปร Font ใหม่สำหรับหัวข้อ
+        // private SpriteFont _titleFont; // ลบออก ไม่ได้ใช้แล้ว
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private GamePadState _previousGamePadState;
@@ -22,11 +22,10 @@ namespace DimmedLight.MainMenu
         // --- Texture ---
         private Texture2D _backgroundTexture;
         private Texture2D _selectedButtonTexture;
-        private Texture2D LogoLoop;
+        private Texture2D _titleTexture; // << เพิ่ม: ตัวแปรสำหรับรูปภาพ Title
 
         // --- ตำแหน่งข้อความ ---
-        private Vector2 _loopTextPosition;
-        private Vector2 _dimmedLightTextPosition;
+        private Vector2 _titlePosition;
 
         // --- ระบบปุ่มเมนู ---
         private List<Rectangle> _buttons = new List<Rectangle>();
@@ -41,33 +40,29 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             _menuFont = Content.Load<SpriteFont>("gameFont");
-            //_titleFont = Content.Load<SpriteFont>("TitleFont"); // 2. โหลด Font จาก TitleFont.spritefont
+            // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
             //_backgroundTexture = Content.Load<Texture2D>("MainMenu_page");
             _selectedButtonTexture = Content.Load<Texture2D>("bottonCursor");
-            LogoLoop = Content.Load<Texture2D>("MenuAsset/Title");
+            _titleTexture = Content.Load<Texture2D>("MenuAsset/Title"); // << เพิ่ม: โหลดรูปภาพ title
 
-            // --- ปุ่ม (จัดกึ่งกลางจอ) ---
-            int buttonWidth = 280;
-            int buttonHeight = 70;
-            int startX = (int)(GraphicsDevice.Viewport.Width / 2f - buttonWidth / 2f + 490);
+            // --- ปุ่ม ---
+            int buttonWidth = 450;
+            int buttonHeight = 90;
+            int startX = (int)(GraphicsDevice.Viewport.Width / 2f - buttonWidth / 2f + 590);
             int startY = (int)(GraphicsDevice.Viewport.Height * 0.40f);
-            int spacingY = 90;
+            int spacingY = 110;
 
             AddButton(new Rectangle(startX, startY, buttonWidth, buttonHeight), "PLAY");
             AddButton(new Rectangle(startX, startY + spacingY, buttonWidth, buttonHeight), "UPGRADE");
-            AddButton(new Rectangle(startX, startY + spacingY * 2, buttonWidth, buttonHeight), "SETTING");
-            AddButton(new Rectangle(startX, startY + spacingY * 3, buttonWidth, buttonHeight), "CREDIT");
-            AddButton(new Rectangle(startX, startY + spacingY * 4, buttonWidth, buttonHeight), "EXIT");
+            AddButton(new Rectangle(startX, startY + (spacingY * 2), buttonWidth, buttonHeight), "SETTING");
+            AddButton(new Rectangle(startX, startY + (spacingY * 3), buttonWidth, buttonHeight), "CREDIT");
+            AddButton(new Rectangle(startX, startY + (spacingY * 4), buttonWidth, buttonHeight), "EXIT");
 
-            // --- ข้อความ LOOP & DIMMEDLIGHT ---
-            _loopTextPosition = new Vector2(
-                GraphicsDevice.Viewport.Width / 2f + 150,
-                GraphicsDevice.Viewport.Height * 0.20f
-            );
-
-            _dimmedLightTextPosition = new Vector2(
-                GraphicsDevice.Viewport.Width / 2f + 500,
-                GraphicsDevice.Viewport.Height * 0.31f
+            // --- รูปภาพ Title ---
+            // << แก้ไข: กำหนดตำแหน่งรูปภาพ
+            _titlePosition = new Vector2(
+                GraphicsDevice.Viewport.Width / 2f + 400, // ปรับตำแหน่งแกน X ตามต้องการ
+                GraphicsDevice.Viewport.Height * 0.22f    // ปรับตำแหน่งแกน Y ตามต้องการ
             );
 
             _previousMouseState = Mouse.GetState();
@@ -88,10 +83,10 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
             // --- เลื่อนลง/ขึ้น ---
-            bool movedDown = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
-                                 gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown);
-            bool movedUp = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
-                               gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp);
+            bool movedDown = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
+                                (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
+            bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
+                                (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
 
             if (movedDown)
             {
@@ -118,14 +113,14 @@ namespace DimmedLight.MainMenu
             }
 
             // --- ยืนยัน ---
-            bool isConfirmPressed = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released ||
-                                      keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
-                                      gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A);
+            bool isConfirmPressed = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released) ||
+                                      (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
+                                      (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
 
             if (isConfirmPressed)
             {
-                bool wasClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
-                if (!wasClicked || wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos))
+                bool wasClicked = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released);
+                if (!wasClicked || (wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos)))
                 {
                     ExecuteButtonAction(_selectedButtonIndex);
                 }
@@ -148,9 +143,9 @@ namespace DimmedLight.MainMenu
                         // Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
                     }
                     break;
-                /*case 1: // Upgrade
+                case 1: // Upgrade
                     Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
-                    break;*/
+                    break;
                 case 2: // Setting
                     Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content));
                     break;
@@ -183,32 +178,21 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin();
 
             // --- พื้นหลัง ---
-            //spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.Black);
-            spriteBatch.Draw(LogoLoop, new Vector2(1283, 0), Color.White);
+            //spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.White);
 
-            Color shadowColor = Color.Black * 0.7f;
-
-            // --- LOOP ---
-            /*DrawStringWithShadow(
-                spriteBatch,
-                _titleFont, // 3. เปลี่ยนมาใช้ _titleFont
-                "LOOP",
-                _loopTextPosition,
-                1.5f,
+            // --- Title Image ---
+            // << แก้ไข: วาดรูปภาพแทนข้อความ LOOP และ DIMMEDLIGHT
+            spriteBatch.Draw(
+                _titleTexture,
+                _titlePosition,
+                null,
                 Color.White,
-                shadowColor
-            );*/
-
-            // --- DIMMEDLIGHT ---
-            /*DrawStringWithShadow(
-                spriteBatch,
-                _titleFont, // 3. เปลี่ยนมาใช้ _titleFont
-                "DIMMEDLIGHT",
-                _dimmedLightTextPosition,
-                1.0f,
-                Color.White,
-                shadowColor
-            );*/
+                0f,
+                new Vector2(_titleTexture.Width / 2f, _titleTexture.Height / 2f), // ตั้งจุดหมุนไว้กึ่งกลางรูป
+                1.0f, // ขนาดของรูปภาพ (ปรับได้)
+                SpriteEffects.None,
+                0f
+            );
 
             // --- ปุ่ม ---
             for (int i = 0; i < _buttons.Count; i++)

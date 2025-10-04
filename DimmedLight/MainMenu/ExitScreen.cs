@@ -12,8 +12,10 @@ namespace DimmedLight.MainMenu
 {
     public class ExitScreen : Screen
     {
-        private SpriteFont _menuFont; // แก้ไข: เปลี่ยนชื่อตัวแปร
+        private SpriteFont _menuFont;
         private Texture2D _pixelTexture;
+        private Texture2D _exitFrameTexture;
+        private Texture2D _buttonFrameTexture;
 
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
@@ -25,9 +27,9 @@ namespace DimmedLight.MainMenu
 
         private int _selectedButtonIndex = 1; // 0 for Yes, 1 for No (เริ่มที่ No)
 
-        // --- เพิ่มตัวแปรสำหรับ Alpha-fade highlight ---
-        private float[] _buttonAlphas = new float[2] { 0f, 0f };
-        private const float FADE_SPEED = 7f;
+        // REMOVED: ไม่ต้องใช้ Alpha fade แล้ว
+        // private float[] _buttonAlphas = new float[2] { 0f, 0f };
+        // private const float FADE_SPEED = 7f;
 
         public ExitScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDeviceManager, graphicsDevice, content)
@@ -36,23 +38,31 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            _menuFont = Content.Load<SpriteFont>("gameFont"); // แก้ไข: เปลี่ยนชื่อฟอนต์
+            _menuFont = Content.Load<SpriteFont>("gameFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
+            _exitFrameTexture = Content.Load<Texture2D>("MenuAsset/exit");
+            _buttonFrameTexture = Content.Load<Texture2D>("bottonCursor");
 
-            int dialogWidth = 400;
-            int dialogHeight = 200;
+            // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
+            int dialogWidth = 600;
+            int dialogHeight = 300;
             int screenCenterX = GraphicsDevice.Viewport.Width / 2;
             int screenCenterY = GraphicsDevice.Viewport.Height / 2;
 
             _dialogBox = new Rectangle(screenCenterX - dialogWidth / 2, screenCenterY - dialogHeight / 2, dialogWidth, dialogHeight);
 
-            int buttonWidth = 100;
-            int buttonHeight = 50;
-            int buttonY = _dialogBox.Bottom - buttonHeight - 30;
-            int buttonSpacing = 40; // ระยะห่างระหว่างปุ่ม
-            _yesButton = new Rectangle(_dialogBox.Center.X - buttonWidth - buttonSpacing / 2, buttonY, buttonWidth, buttonHeight);
-            _noButton = new Rectangle(_dialogBox.Center.X + buttonSpacing / 2, buttonY, buttonWidth, buttonHeight);
+            int buttonWidth = 280;
+            int buttonHeight = 80;
+            int buttonSpacing = 10;
+            int buttonX = _dialogBox.Center.X - buttonWidth / 2;
+
+            // ปรับตำแหน่ง Y ของปุ่มให้คล้ายในรูป
+            int yesButtonY = _dialogBox.Y + 95; // Y ของ Yes
+            int noButtonY = yesButtonY + buttonHeight - buttonSpacing; // Y ของ No
+
+            _yesButton = new Rectangle(buttonX, yesButtonY, buttonWidth, buttonHeight);
+            _noButton = new Rectangle(buttonX, noButtonY, buttonWidth, buttonHeight);
 
             _previousMouseState = Mouse.GetState();
             _previousKeyboardState = Keyboard.GetState();
@@ -70,12 +80,14 @@ namespace DimmedLight.MainMenu
 
             bool isConfirmPressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
                                     (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
-            bool isLeftPressed = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left)) ||
-                                 (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft)) ||
-                                 (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f);
-            bool isRightPressed = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right)) ||
-                                  (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight)) ||
-                                  (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f);
+
+            bool isUpPressed = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
+                             (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp)) ||
+                             (gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f);
+            bool isDownPressed = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
+                               (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown)) ||
+                               (gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f);
+
             bool isBackPressed = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
                                  (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
@@ -86,13 +98,13 @@ namespace DimmedLight.MainMenu
                 else if (_noButton.Contains(mousePos)) _selectedButtonIndex = 1;
             }
 
-            // Keyboard/Gamepad navigation
-            if (isRightPressed || isLeftPressed)
+            // Keyboard/Gamepad navigation (Up/Down)
+            if (isUpPressed || isDownPressed)
             {
-                _selectedButtonIndex = (_selectedButtonIndex + 1) % 2; // สลับระหว่าง 0 และ 1
+                _selectedButtonIndex = (_selectedButtonIndex + 1) % 2;
             }
 
-            // Action on confirmation (Click or Enter/A)
+            // Action on confirmation
             if (isConfirmPressed || isMouseClicked)
             {
                 bool confirmed = false;
@@ -108,31 +120,18 @@ namespace DimmedLight.MainMenu
 
                 if (confirmed)
                 {
-                    if (_selectedButtonIndex == 0) // Yes
-                    {
-                        Game.Exit();
-                    }
-                    else // No
-                    {
-                        Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
-                    }
+                    if (_selectedButtonIndex == 0) Game.Exit();
+                    else Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
             }
 
-            // Back button returns to menu
             if (isBackPressed)
             {
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 
-            // Update alphas for fade effect
-            for (int i = 0; i < _buttonAlphas.Length; i++)
-            {
-                float targetAlpha = (i == _selectedButtonIndex) ? 0.5f : 0f;
-                _buttonAlphas[i] += (targetAlpha - _buttonAlphas[i]) * FADE_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
+            // REMOVED: ไม่ต้องอัปเดต Alpha แล้ว
 
-            // Update states for next frame
             _previousMouseState = mouse;
             _previousKeyboardState = keyboard;
             _previousGamePadState = gamePad;
@@ -140,49 +139,48 @@ namespace DimmedLight.MainMenu
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // ไม่ต้อง clear หน้าจอ เพื่อให้เห็นฉากก่อนหน้าเป็นพื้นหลัง
             spriteBatch.Begin();
 
-            // Draw a semi-transparent overlay to dim the background
+            // วาด Overlay สีดำโปร่งแสง
             spriteBatch.Draw(_pixelTexture, GraphicsDevice.Viewport.Bounds, Color.Black * 0.7f);
 
-            // Draw the dialog box
-            spriteBatch.Draw(_pixelTexture, _dialogBox, Color.DarkSlateGray);
-            DrawBorder(spriteBatch, _dialogBox, Color.Black, 2);
+            // --- CHANGE: วาดกรอบ Exit หลักให้โปร่งแสง ---
+            spriteBatch.Draw(_exitFrameTexture, _dialogBox, Color.White * 0.85f);
 
-            // Draw the question text
-            string text = "Are you sure?";
-            Vector2 textSize = _menuFont.MeasureString(text);
-            Vector2 textPosition = new Vector2(_dialogBox.Center.X - textSize.X / 2, _dialogBox.Y + 30);
-            spriteBatch.DrawString(_menuFont, text, textPosition, Color.White);
+            // --- CHANGE: ตรรกะการวาดปุ่มใหม่ทั้งหมด ---
+            if (_selectedButtonIndex == 0) // ถ้าเลือก "Yes"
+            {
+                // วาด "Yes" พร้อมกรอบ
+                spriteBatch.Draw(_buttonFrameTexture, _yesButton, Color.White);
+                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, true);
 
-            // --- Draw buttons with alpha-fade highlighting ---
-            // Yes Button
-            spriteBatch.Draw(_pixelTexture, _yesButton, Color.DarkGreen);
-            spriteBatch.Draw(_pixelTexture, _yesButton, Color.White * _buttonAlphas[0]); // Highlight
-            DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton);
+                // วาด "No" แบบไม่มีกรอบ
+                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, false);
+            }
+            else // ถ้าเลือก "No"
+            {
+                // วาด "Yes" แบบไม่มีกรอบ
+                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, false);
 
-            // No Button
-            spriteBatch.Draw(_pixelTexture, _noButton, Color.Maroon);
-            spriteBatch.Draw(_pixelTexture, _noButton, Color.White * _buttonAlphas[1]); // Highlight
-            DrawTextInBox(spriteBatch, _menuFont, "No", _noButton);
+                // วาด "No" พร้อมกรอบ
+                spriteBatch.Draw(_buttonFrameTexture, _noButton, Color.White);
+                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, true);
+            }
 
             spriteBatch.End();
         }
 
-        private void DrawTextInBox(SpriteBatch spriteBatch, SpriteFont font, string text, Rectangle box)
+        // --- CHANGE: ปรับฟังก์ชัน DrawTextInBox เล็กน้อย ---
+        private void DrawTextInBox(SpriteBatch spriteBatch, SpriteFont font, string text, Rectangle box, bool isSelected)
         {
             Vector2 size = font.MeasureString(text);
             Vector2 pos = new Vector2(box.Center.X - size.X / 2, box.Center.Y - size.Y / 2);
-            spriteBatch.DrawString(font, text, pos, Color.White);
-        }
 
-        private void DrawBorder(SpriteBatch spriteBatch, Rectangle rect, Color color, int thickness)
-        {
-            spriteBatch.Draw(_pixelTexture, new Rectangle(rect.X, rect.Y, rect.Width, thickness), color);
-            spriteBatch.Draw(_pixelTexture, new Rectangle(rect.X, rect.Y + rect.Height - thickness, rect.Width, thickness), color);
-            spriteBatch.Draw(_pixelTexture, new Rectangle(rect.X, rect.Y, thickness, rect.Height), color);
-            spriteBatch.Draw(_pixelTexture, new Rectangle(rect.X + rect.Width - thickness, rect.Y, thickness, rect.Height), color);
+            // ข้อความที่ไม่ได้เลือกจะจางลงเล็กน้อย
+            Color textColor = isSelected ? Color.White : Color.Gray;
+
+            spriteBatch.DrawString(font, text, pos + new Vector2(2, 2), Color.Black * 0.8f); // เงา
+            spriteBatch.DrawString(font, text, pos, textColor);
         }
     }
 }

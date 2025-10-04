@@ -24,8 +24,10 @@ namespace DimmedLight.MainMenu
             GraphicsDevice = graphicsDevice;
             Content = content;
         }
+
         public abstract void LoadContent();
         public abstract void Update(GameTime gameTime);
+
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
     }
 }

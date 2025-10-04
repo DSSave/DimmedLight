@@ -110,7 +110,7 @@ namespace DimmedLight.MainMenu
             var textSize = font.MeasureString(text);
             return new Vector2(
                 rect.Right + horizontalOffset,
-                rect.Y + rect.Height / 2 - textSize.Y / 2
+                rect.Y + (rect.Height / 2) - (textSize.Y / 2)
             );
         }
 
@@ -121,7 +121,7 @@ namespace DimmedLight.MainMenu
 
             AddTab(new Rectangle((int)menuStartPos.X, (int)menuStartPos.Y, 250, 50), "MODE");
             AddTab(new Rectangle((int)menuStartPos.X, (int)menuStartPos.Y + menuSpacing, 250, 50), "SOUND");
-            AddTab(new Rectangle((int)menuStartPos.X, (int)menuStartPos.Y + menuSpacing * 2, 250, 50), "CONTROLLER");
+            AddTab(new Rectangle((int)menuStartPos.X, (int)menuStartPos.Y + (menuSpacing * 2), 250, 50), "CONTROLLER");
 
             int rightColumnX = 450;
             int rightColumnYStart = 200;
@@ -189,23 +189,23 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
             var mousePos = new Point(mouse.X, mouse.Y);
 
-            bool movedRight = keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right) ||
-                             gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f ||
-                             gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight);
-            bool movedLeft = keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left) ||
-                             gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f ||
-                             gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft);
-            bool movedDown = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
-                             gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f ||
-                             gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown);
-            bool movedUp = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
-                           gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f ||
-                           gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp);
-            bool isConfirmPressed = keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
-                                     gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A) ||
-                                     mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
-            bool goBack = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape) ||
-                          gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
+            bool movedRight = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right)) ||
+                             (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f) ||
+                             (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight));
+            bool movedLeft = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left)) ||
+                             (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f) ||
+                             (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft));
+            bool movedDown = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
+                             (gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f) ||
+                             (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
+            bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
+                           (gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f) ||
+                           (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
+            bool isConfirmPressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
+                                     (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A)) ||
+                                     (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released);
+            bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
+                          (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
             if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
             {
@@ -267,7 +267,7 @@ namespace DimmedLight.MainMenu
         {
             // Check for mouse hover or click to update selection
             if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y ||
-                mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released))
             {
                 if (_fullscreenCheckbox.Contains(mousePos)) _selectedModeIndex = 0;
                 else if (_windowedCheckbox.Contains(mousePos)) _selectedModeIndex = 1;
@@ -345,8 +345,8 @@ namespace DimmedLight.MainMenu
 
             for (int i = 0; i < _tabAlphas.Count; i++)
             {
-                bool isSelectedTab = i == _selectedTabIndex && _isNavigatingTabs ||
-                                     i == (int)_currentTab && !_isNavigatingTabs;
+                bool isSelectedTab = (i == _selectedTabIndex && _isNavigatingTabs) ||
+                                     (i == (int)_currentTab && !_isNavigatingTabs);
                 float targetAlpha = isSelectedTab ? 0.5f : 0f;
                 _tabAlphas[i] = MathHelper.Lerp(_tabAlphas[i], targetAlpha, FADE_SPEED * dt);
             }
@@ -355,12 +355,12 @@ namespace DimmedLight.MainMenu
             {
                 for (int i = 0; i < _modeOptionAlphas.Length; i++)
                 {
-                    float target = _currentTab == SettingTab.Mode && i == _selectedModeIndex ? 0.5f : 0f;
+                    float target = (_currentTab == SettingTab.Mode && i == _selectedModeIndex) ? 0.5f : 0f;
                     _modeOptionAlphas[i] = MathHelper.Lerp(_modeOptionAlphas[i], target, FADE_SPEED * dt);
                 }
                 for (int i = 0; i < _soundOptionAlphas.Length; i++)
                 {
-                    float target = _currentTab == SettingTab.Sound && i == _selectedSoundIndex ? 0.5f : 0f;
+                    float target = (_currentTab == SettingTab.Sound && i == _selectedSoundIndex) ? 0.5f : 0f;
                     _soundOptionAlphas[i] = MathHelper.Lerp(_soundOptionAlphas[i], target, FADE_SPEED * dt);
                 }
             }
@@ -379,7 +379,7 @@ namespace DimmedLight.MainMenu
             {
                 case 0:
                 case 1:
-                    Game.SetFullScreen(_selectedModeIndex == 0);
+                    ((Game1)Game).SetFullScreen(_selectedModeIndex == 0);
                     break;
                 case 2:
                     ShowTutorial = !ShowTutorial;

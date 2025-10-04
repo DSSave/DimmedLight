@@ -155,7 +155,10 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 IsJumping = true;
                 velocityY = jumpPower;
-                jumpEffect.Play();
+                if (!inEvent)
+                {
+                    jumpEffect.Play();
+                }
                 Jump.Reset();
             }
             if (IsJumping) //กระโดดอยู่
@@ -290,6 +293,10 @@ namespace DimmedLight.GamePlay.Isplayer
                     IsReturning = false;
                     Position = OriginalPosition;
                 }
+            }
+            if (IsDead)
+            {
+                return;
             }
         }
         public void SetEvent(bool active)

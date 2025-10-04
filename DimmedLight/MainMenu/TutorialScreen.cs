@@ -13,6 +13,7 @@ namespace DimmedLight.MainMenu
 {
     public class TutorialScreen : Screen
     {
+        private Texture2D _background;
         private Texture2D _tutorialPage1;
         private Texture2D _tutorialPage2;
         private Texture2D _tutorialPage3;
@@ -27,6 +28,7 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
+            //_background = Content.Load<Texture2D>("Totorial_Background");
             _tutorialPage1 = Content.Load<Texture2D>("MenuAsset/keyboardTutorial");
             _tutorialPage2 = Content.Load<Texture2D>("MenuAsset/controllerTutorial");
             _tutorialPage3 = Content.Load<Texture2D>("MenuAsset/enemyTutorial");
@@ -41,18 +43,17 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
             // Handle navigation
-            bool advancePage = keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right) ||
-                               keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter) ||
-                               gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A) ||
-                               gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight) ||
-                               gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f;
+            bool advancePage = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right)) ||
+                               (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter)) ||
+                               (gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A)) ||
+                               (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight)) ||
+                               (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f);
 
-            bool backPage = keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left) ||
-                            gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B) ||
-                            gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft) ||
-                            gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f;
+            bool backPage = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left)) ||
+                            (gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B)) ||
+                            (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft)) ||
+                            (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f);
 
-            // Added logic for the Escape key
             bool escapePressed = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape);
 
             if (advancePage)
@@ -74,10 +75,9 @@ namespace DimmedLight.MainMenu
                 }
                 else
                 {
-                    Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
             }
-            // Check if the escape key was pressed
             else if (escapePressed)
             {
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
@@ -93,17 +93,38 @@ namespace DimmedLight.MainMenu
 
             spriteBatch.Begin();
 
+            // 1. วาดพื้นหลังให้เต็มหน้าจอก่อนเสมอ
+            //spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
+
+            // 2. เลือก Texture ของหน้าปัจจุบันที่จะวาด
+            Texture2D currentPageTexture = null;
             if (_currentPage == 1)
             {
-                spriteBatch.Draw(_tutorialPage1, GraphicsDevice.Viewport.Bounds, Color.White);
+                currentPageTexture = _tutorialPage1;
             }
             else if (_currentPage == 2)
             {
-                spriteBatch.Draw(_tutorialPage2, GraphicsDevice.Viewport.Bounds, Color.White);
+                currentPageTexture = _tutorialPage2;
             }
             else if (_currentPage == 3)
             {
-                spriteBatch.Draw(_tutorialPage3, GraphicsDevice.Viewport.Bounds, Color.White);
+                currentPageTexture = _tutorialPage3;
+            }
+
+            // --- CHANGE IS HERE ---
+            // 3. บังคับให้วาดภาพลงในพื้นที่สี่เหลี่ยมขนาดเดียวกันเสมอ
+            if (currentPageTexture != null)
+            {
+                // กำหนดขนาดและคำนวณตำแหน่งของกรอบที่จะวาดภาพลงไป
+                int destWidth = 1600;
+                int destHeight = 900;
+                int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;  // จัดกลางแนวนอน
+                int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2; // จัดกลางแนวตั้ง
+
+                Rectangle destinationRectangle = new Rectangle(destX, destY, destWidth, destHeight);
+
+                // สั่งวาดภาพให้พอดีกับกรอบสี่เหลี่ยมที่กำหนดไว้
+                spriteBatch.Draw(currentPageTexture, destinationRectangle, Color.White);
             }
 
             spriteBatch.End();

@@ -33,7 +33,7 @@ namespace DimmedLight.GamePlay.Enemies
         private bool IsDashReturning = false;
         private Vector2 DashStart;
         private Vector2 DashTarget;
-        private float DashForwardSpeed = 550f;
+        private float DashForwardSpeed = 650f;
         public float DashReturnSpeed = 25f;
         public bool IsFlipped = false;
         public bool IsInEvent { get; set; } = false;

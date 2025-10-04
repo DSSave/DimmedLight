@@ -44,8 +44,8 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            //_background = Content.Load<Texture2D>("UpgradeScreen");
-            //_menuFont = Content.Load<SpriteFont>("gameFont");
+            //_background = Content.Load<Texture2D>("background");
+            _menuFont = Content.Load<SpriteFont>("gameFont");
 
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
@@ -60,9 +60,13 @@ namespace DimmedLight.MainMenu
         private void InitializeUpgradeNodes()
         {
             int screenWidth = GraphicsDevice.Viewport.Width;
+            int screenHeight = GraphicsDevice.Viewport.Height;
             int totalWidth = 1000;
             int startX = (screenWidth - totalWidth) / 2;
-            int yPos = 600;
+
+            // --- CHANGE HERE: Adjust Y position to be relative to the screen center ---
+            int yPos = screenHeight / 2 + 150;
+
             int spacing = 250;
             int iconSize = 128;
 
@@ -88,7 +92,7 @@ namespace DimmedLight.MainMenu
                 Description = "Increase Max Ultimate Gauge",
                 CurrentLevel = 1,
                 MaxLevel = 3,
-                StatDisplayFunc = level => $"Gauge: {100 * level} -> {100 * (level + 1)}"
+                StatDisplayFunc = level => $"Gauge: {100 * (level)} -> {100 * (level + 1)}"
             });
             _nodes.Add(new UpgradeNode
             {
@@ -114,13 +118,13 @@ namespace DimmedLight.MainMenu
             var mousePos = new Point(mouse.X, mouse.Y);
 
             // Handle navigation with keyboard and gamepad
-            bool moveRight = keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right) ||
-                             gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f ||
-                             gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight);
+            bool moveRight = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right)) ||
+                             (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f) ||
+                             (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight));
 
-            bool moveLeft = keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left) ||
-                            gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f ||
-                            gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft);
+            bool moveLeft = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left)) ||
+                            (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f) ||
+                            (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft));
 
             if (moveRight)
             {
@@ -147,12 +151,14 @@ namespace DimmedLight.MainMenu
 
             // Handle upgrade and downgrade logic
             var selectedNode = _nodes[_selectedIndex];
-            bool upgradePressed = keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
-                                  gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A) ||
-                                  mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released && GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos);
 
-            bool downgradePressed = keyboard.IsKeyDown(Keys.B) && _previousKeyboardState.IsKeyUp(Keys.B) ||
-                                    gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
+            // ----- THIS LINE IS CORRECTED -----
+            bool upgradePressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
+                                  (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A)) ||
+                                  (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released && GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos));
+
+            bool downgradePressed = (keyboard.IsKeyDown(Keys.B) && _previousKeyboardState.IsKeyUp(Keys.B)) ||
+                                    (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
             if (upgradePressed && selectedNode.CurrentLevel < selectedNode.MaxLevel)
             {
@@ -165,7 +171,7 @@ namespace DimmedLight.MainMenu
             }
 
             // Back to Menu logic
-            bool goBack = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape);
+            bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape));
 
             if (goBack)
             {
@@ -175,7 +181,7 @@ namespace DimmedLight.MainMenu
             // Update scale based on selection
             for (int i = 0; i < _nodes.Count; i++)
             {
-                float targetScale = i == _selectedIndex ? 1.25f : 1.0f;
+                float targetScale = (i == _selectedIndex) ? 1.25f : 1.0f;
                 _nodeScales[i] += (targetScale - _nodeScales[i]) * SCALE_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
@@ -183,43 +189,51 @@ namespace DimmedLight.MainMenu
             _previousKeyboardState = keyboard;
             _previousGamePadState = gamePad;
         }
-
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            // Set background to white
-            GraphicsDevice.Clear(Color.White);
-
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            // Draw a solid white background instead of the image
-            // Note: Since GraphicsDevice.Clear(Color.White) is used, this line isn't strictly necessary but is kept for clarity
-            // spriteBatch.Draw(_pixelTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+            //spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
             Vector2 screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-            Color textColor = Color.Black;
+
+            Color textColor = Color.White;
+            Color shadowColor = Color.Black;
+            Vector2 shadowOffset = new Vector2(2, 2);
 
             var selectedNode = _nodes[_selectedIndex];
 
-            // Draw selected node information
+            // --- วาดข้อมูลของ Node ที่เลือก (พร้อมเงา) ---
+            // หัวข้อ "UPGRADE"
+            spriteBatch.DrawString(_menuFont, "UPGRADE", new Vector2(50, 50) + shadowOffset, shadowColor);
             spriteBatch.DrawString(_menuFont, "UPGRADE", new Vector2(50, 50), textColor);
-            Vector2 descriptionSize = _menuFont.MeasureString(selectedNode.Description);
-            spriteBatch.DrawString(_menuFont, selectedNode.Description, new Vector2(screenCenter.X - descriptionSize.X / 2, 200), textColor);
 
+            // คำอธิบาย (Description)
+            Vector2 descriptionSize = _menuFont.MeasureString(selectedNode.Description);
+            Vector2 descriptionPosition = new Vector2(screenCenter.X - descriptionSize.X / 2, screenCenter.Y - 150);
+            spriteBatch.DrawString(_menuFont, selectedNode.Description, descriptionPosition + shadowOffset, shadowColor);
+            spriteBatch.DrawString(_menuFont, selectedNode.Description, descriptionPosition, textColor);
+
+            // ค่าสถานะ (Stat Text)
             string statText = selectedNode.StatDisplayFunc(selectedNode.CurrentLevel);
             if (selectedNode.CurrentLevel >= selectedNode.MaxLevel) statText = "Max Level Reached";
             else if (selectedNode.CurrentLevel == 0) statText = "Not Unlocked";
 
             Vector2 statTextSize = _menuFont.MeasureString(statText);
-            spriteBatch.DrawString(_menuFont, statText, new Vector2(screenCenter.X - statTextSize.X / 2, 300), textColor);
+            Vector2 statTextPosition = new Vector2(screenCenter.X - statTextSize.X / 2, screenCenter.Y - 50);
+            spriteBatch.DrawString(_menuFont, statText, statTextPosition + shadowOffset, shadowColor);
+            spriteBatch.DrawString(_menuFont, statText, statTextPosition, textColor);
 
-            // Draw upgrade nodes
+
+            // --- วาด Node ทั้งหมด (พร้อมเงาสำหรับชื่อ) ---
             for (int i = 0; i < _nodes.Count; i++)
             {
                 var node = _nodes[i];
                 var scale = _nodeScales[i];
                 Rectangle scaledBounds = GetScaledBounds(node.Bounds, scale);
 
-                Color nodeColor = i == _selectedIndex ? Color.Gold : Color.DarkGray;
+                Color nodeColor = (i == _selectedIndex) ? Color.Gold : Color.DarkGray;
                 spriteBatch.Draw(_pixelTexture, scaledBounds, nodeColor);
 
                 string placeholderText = $"[{node.Name.First()}]";
@@ -227,8 +241,15 @@ namespace DimmedLight.MainMenu
                 Vector2 textPosition = new Vector2(scaledBounds.Center.X - textSize.X / 2, scaledBounds.Center.Y - textSize.Y / 2);
                 spriteBatch.DrawString(_menuFont, placeholderText, textPosition, Color.White);
 
+                // --- CHANGE HERE: Added a manual horizontal adjustment ---
+                // เพิ่มค่าบวกเพื่อขยับไปทางขวา, ลดค่าลบเพื่อขยับไปทางซ้าย
+                // ลองปรับค่าเลข 5 ดูจนกว่าจะพอดี
+                int horizontalAdjust = 5;
+
                 Vector2 nameSize = _menuFont.MeasureString(node.Name);
-                Vector2 namePosition = new Vector2(scaledBounds.Center.X - nameSize.X / 2, scaledBounds.Bottom + 10);
+                Vector2 namePosition = new Vector2(scaledBounds.Center.X - nameSize.X / 2 + horizontalAdjust, scaledBounds.Bottom + 10);
+
+                spriteBatch.DrawString(_menuFont, node.Name, namePosition + shadowOffset, shadowColor);
                 spriteBatch.DrawString(_menuFont, node.Name, namePosition, textColor);
             }
 
@@ -238,8 +259,8 @@ namespace DimmedLight.MainMenu
         private Rectangle GetScaledBounds(Rectangle originalBounds, float scale)
         {
             return new Rectangle(
-                (int)(originalBounds.Center.X - originalBounds.Width * scale / 2),
-                (int)(originalBounds.Center.Y - originalBounds.Height * scale / 2),
+                (int)(originalBounds.Center.X - (originalBounds.Width * scale) / 2),
+                (int)(originalBounds.Center.Y - (originalBounds.Height * scale) / 2),
                 (int)(originalBounds.Width * scale),
                 (int)(originalBounds.Height * scale));
         }

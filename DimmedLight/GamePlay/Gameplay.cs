@@ -298,7 +298,7 @@ namespace DimmedLight.GamePlay
 
         public void Draw(GameTime gameTime)
         {
-            game.GraphicsDevice.Clear(Color.CornflowerBlue);
+            game.GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, transformMatrix: camera.GetViewMatrix());
 
             skyLayer.Draw(_spriteBatch);

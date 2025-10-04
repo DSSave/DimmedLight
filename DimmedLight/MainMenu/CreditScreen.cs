@@ -13,9 +13,9 @@ namespace DimmedLight.MainMenu
 {
     public class CreditScreen : Screen
     {
-        private Texture2D _background;
+        private Texture2D _mainBackground;
+        private Texture2D _creditsOverlay;
 
-        // --- Input States ---
         private KeyboardState _previousKeyboardState;
         private GamePadState _previousGamePadState;
 
@@ -26,30 +26,27 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            _background = Content.Load<Texture2D>("MenuAsset/credits");
+            //_mainBackground = Content.Load<Texture2D>("Background");
+            _creditsOverlay = Content.Load<Texture2D>("MenuAsset/credits");
 
-            // --- FIX: Reset input states on screen load to prevent "leak" ---
             _previousKeyboardState = Keyboard.GetState();
             _previousGamePadState = GamePad.GetState(PlayerIndex.One);
         }
 
         public override void Update(GameTime gameTime)
         {
-            // Get the current keyboard and gamepad states
             KeyboardState currentKeyboardState = Keyboard.GetState();
             GamePadState currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
-            // Check for Escape key or B button press
+            // Check for Escape key or B button press to go back
             bool isEscapePressed = currentKeyboardState.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape);
             bool isBButtonPressed = currentGamePadState.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
 
-            // If either is pressed, change to the main menu screen
             if (isEscapePressed || isBButtonPressed)
             {
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 
-            // Update previous states for the next frame
             _previousKeyboardState = currentKeyboardState;
             _previousGamePadState = currentGamePadState;
         }
@@ -59,7 +56,22 @@ namespace DimmedLight.MainMenu
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+            // 1. วาดพื้นหลัง (Background.jpg) ให้เต็มหน้าจอก่อน
+            //spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
+
+            // --- CHANGE IS HERE ---
+            // 2. กำหนดขนาดและตำแหน่งของกรอบ 16:9 ที่จะวาดภาพเครดิตลงไป
+            int destWidth = 1600;
+            int destHeight = 900;
+            int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;  // จัดกลางแนวนอน
+            int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2; // จัดกลางแนวตั้ง
+
+            Rectangle destinationRectangle = new Rectangle(destX, destY, destWidth, destHeight);
+
+            // 3. สั่งวาดภาพ credits.png ให้พอดีกับกรอบสี่เหลี่ยมที่กำหนดไว้
+            spriteBatch.Draw(_creditsOverlay, destinationRectangle, Color.White);
+
             spriteBatch.End();
         }
     }
