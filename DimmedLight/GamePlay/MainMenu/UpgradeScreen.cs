@@ -6,8 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public class UpgradeNode
     {
@@ -42,8 +41,8 @@ namespace MainMenu_02
 
         public override void LoadContent()
         {
-            _background = Content.Load<Texture2D>("background");
-            _menuFont = Content.Load<SpriteFont>("TextFont");
+            _background = Content.Load<Texture2D>("UX_UI/background");
+            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
 
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
@@ -61,10 +60,7 @@ namespace MainMenu_02
             int screenHeight = GraphicsDevice.Viewport.Height;
             int totalWidth = 1000;
             int startX = (screenWidth - totalWidth) / 2;
-
-            // --- CHANGE HERE: Adjust Y position to be relative to the screen center ---
             int yPos = screenHeight / 2 + 150;
-
             int spacing = 250;
             int iconSize = 128;
 
@@ -115,7 +111,7 @@ namespace MainMenu_02
 
             var mousePos = new Point(mouse.X, mouse.Y);
 
-            // Handle navigation with keyboard and gamepad
+            // Handle navigation with keyboard and gamepad (D-Pad and Analog Stick)
             bool moveRight = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right)) ||
                              (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f) ||
                              (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight));
@@ -150,13 +146,14 @@ namespace MainMenu_02
             // Handle upgrade and downgrade logic
             var selectedNode = _nodes[_selectedIndex];
 
-            // ----- THIS LINE IS CORRECTED -----
+            // Upgrade: Enter key, A button (gamepad), or Left Click
             bool upgradePressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
                                   (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A)) ||
-                                  (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released && GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos));
+                                  (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released &&
+                                   GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos));
 
-            bool downgradePressed = (keyboard.IsKeyDown(Keys.B) && _previousKeyboardState.IsKeyUp(Keys.B)) ||
-                                    (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
+            // Downgrade: X button (gamepad only)
+            bool downgradePressed = (gamePad.IsButtonDown(Buttons.X) && _previousGamePadState.IsButtonUp(Buttons.X));
 
             if (upgradePressed && selectedNode.CurrentLevel < selectedNode.MaxLevel)
             {
@@ -168,8 +165,9 @@ namespace MainMenu_02
                 selectedNode.CurrentLevel--;
             }
 
-            // Back to Menu logic
-            bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape));
+            // Back to Menu: Escape key or B button (gamepad)
+            bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
+                          (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
             if (goBack)
             {
@@ -187,6 +185,7 @@ namespace MainMenu_02
             _previousKeyboardState = keyboard;
             _previousGamePadState = gamePad;
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
@@ -201,18 +200,15 @@ namespace MainMenu_02
 
             var selectedNode = _nodes[_selectedIndex];
 
-            // --- วาดข้อมูลของ Node ที่เลือก (พร้อมเงา) ---
-            // หัวข้อ "UPGRADE"
+            // Draw selected node info with shadow
             spriteBatch.DrawString(_menuFont, "UPGRADE", new Vector2(50, 50) + shadowOffset, shadowColor);
             spriteBatch.DrawString(_menuFont, "UPGRADE", new Vector2(50, 50), textColor);
 
-            // คำอธิบาย (Description)
             Vector2 descriptionSize = _menuFont.MeasureString(selectedNode.Description);
             Vector2 descriptionPosition = new Vector2(screenCenter.X - descriptionSize.X / 2, screenCenter.Y - 150);
             spriteBatch.DrawString(_menuFont, selectedNode.Description, descriptionPosition + shadowOffset, shadowColor);
             spriteBatch.DrawString(_menuFont, selectedNode.Description, descriptionPosition, textColor);
 
-            // ค่าสถานะ (Stat Text)
             string statText = selectedNode.StatDisplayFunc(selectedNode.CurrentLevel);
             if (selectedNode.CurrentLevel >= selectedNode.MaxLevel) statText = "Max Level Reached";
             else if (selectedNode.CurrentLevel == 0) statText = "Not Unlocked";
@@ -222,8 +218,7 @@ namespace MainMenu_02
             spriteBatch.DrawString(_menuFont, statText, statTextPosition + shadowOffset, shadowColor);
             spriteBatch.DrawString(_menuFont, statText, statTextPosition, textColor);
 
-
-            // --- วาด Node ทั้งหมด (พร้อมเงาสำหรับชื่อ) ---
+            // Draw all nodes
             for (int i = 0; i < _nodes.Count; i++)
             {
                 var node = _nodes[i];
@@ -238,11 +233,7 @@ namespace MainMenu_02
                 Vector2 textPosition = new Vector2(scaledBounds.Center.X - textSize.X / 2, scaledBounds.Center.Y - textSize.Y / 2);
                 spriteBatch.DrawString(_menuFont, placeholderText, textPosition, Color.White);
 
-                // --- CHANGE HERE: Added a manual horizontal adjustment ---
-                // เพิ่มค่าบวกเพื่อขยับไปทางขวา, ลดค่าลบเพื่อขยับไปทางซ้าย
-                // ลองปรับค่าเลข 5 ดูจนกว่าจะพอดี
                 int horizontalAdjust = 5;
-
                 Vector2 nameSize = _menuFont.MeasureString(node.Name);
                 Vector2 namePosition = new Vector2(scaledBounds.Center.X - nameSize.X / 2 + horizontalAdjust, scaledBounds.Bottom + 10);
 

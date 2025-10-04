@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public class ExitScreen : Screen
     {
@@ -33,11 +33,11 @@ namespace MainMenu_02
 
         public override void LoadContent()
         {
-            _menuFont = Content.Load<SpriteFont>("TextFont");
+            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
-            _exitFrameTexture = Content.Load<Texture2D>("exit");
-            _buttonFrameTexture = Content.Load<Texture2D>("Memu_Frame02");
+            _exitFrameTexture = Content.Load<Texture2D>("UX_UI/exit");
+            _buttonFrameTexture = Content.Load<Texture2D>("UX_UI/Memu_Frame02");
 
             // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
             int dialogWidth = 600;

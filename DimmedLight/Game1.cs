@@ -1,5 +1,4 @@
 ﻿using DimmedLight.GamePlay;
-using MainMenu_02;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,76 +6,58 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Drawing;
 using System.Reflection.Metadata;
+using DimmedLight.Gameplay.MainMenu;
 
 namespace DimmedLight
 {
-    public class Game1 : Game
+    public class Game1 : Game //local
     {
-        //private GraphicsDeviceManager _graphics;
-        //private SpriteBatch _spriteBatch;
-        private SpriteFont font;
-
-        private Gameplay _gamePlay;
-
-        public GraphicsDeviceManager Graphics { get; private set; }
-        public SpriteBatch SpriteBatch { get; private set; }
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
 
         private Screen _currentScreen;
-        private Screen _previousScreen;
 
-        // ตัวแปรสำหรับเก็บขนาดหน้าจอที่ต้องการ
-        private int _screenWidth;
-        private int _screenHeight;
+        // --- FIX #2: สร้าง Public Property ให้คลาสอื่นเรียกใช้ _graphics ได้ ---
+        public GraphicsDeviceManager Graphics => _graphics;
 
         public Game1()
         {
-            Graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
+        public void ChangeScreen(Screen newScreen)
+        {
+            _currentScreen = newScreen;
+            if (Content != null && GraphicsDevice != null)
+            {
+                _currentScreen.LoadContent();
+            }
+        }
+
+        // --- FIX #3: สร้างเมธอด SetFullScreen ---
+        public void SetFullScreen(bool isFullScreen)
+        {
+            _graphics.IsFullScreen = isFullScreen;
+            _graphics.ApplyChanges();
+        }
+
         protected override void Initialize()
         {
-            // กำหนดความละเอียดหน้าจอที่ต้องการ
-            _screenWidth = 1920;
-            _screenHeight = 1080;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
 
-            Graphics.PreferredBackBufferWidth = _screenWidth;
-            Graphics.PreferredBackBufferHeight = _screenHeight;
-            Graphics.IsFullScreen = false; // กำหนดค่าเริ่มต้นเป็น Windowed
-
-            Graphics.ApplyChanges();
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // กำหนดหน้าจอเริ่มต้น
-            var menuScreen = new MenuScreen(this, Graphics, GraphicsDevice, Content);
-            ChangeScreen(menuScreen);
-        }
-
-        /// <summary>
-        /// เปลี่ยนหน้าจอ
-        /// </summary>
-        public void ChangeScreen(Screen newScreen)
-        {
-            _previousScreen = _currentScreen;
-            _currentScreen = newScreen;
-
-            // เรียก LoadContent() ของหน้าจอใหม่
-            _currentScreen?.LoadContent();
-        }
-
-        /// <summary>
-        /// เมธอดสำหรับเปลี่ยนโหมดหน้าจอ Fullscreen/Windowed
-        /// </summary>
-        public void SetFullScreen(bool fullScreen)
-        {
-            Graphics.IsFullScreen = fullScreen;
-            Graphics.ApplyChanges();
+            // เปลี่ยนหน้าจอตอนเริ่มต้น
+            ChangeScreen(new MenuScreen(this, _graphics, GraphicsDevice, Content));
         }
 
         protected override void Update(GameTime gameTime)
@@ -85,21 +66,16 @@ namespace DimmedLight
             {
                 _currentScreen.Update(gameTime);
             }
+
             base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
-            // ล้างหน้าจอด้วยสีปกติเมื่อไม่มีหน้าจอพื้นหลังให้วาด
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // วาดหน้าจอพื้นหลังก่อน ถ้าหน้าจอปัจจุบันเป็น ExitScreen
-            if (_currentScreen is ExitScreen && _previousScreen != null)
+            if (_currentScreen != null)
             {
-                _previousScreen.Draw(gameTime, SpriteBatch);
+                _currentScreen.Draw(gameTime, _spriteBatch);
             }
-
-            // วาดหน้าจอปัจจุบัน
-            _currentScreen?.Draw(gameTime, SpriteBatch);
 
             base.Draw(gameTime);
         }

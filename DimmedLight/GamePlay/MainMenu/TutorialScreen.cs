@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public class TutorialScreen : Screen
     {
@@ -22,10 +22,10 @@ namespace MainMenu_02
 
         public override void LoadContent()
         {
-            _background = Content.Load<Texture2D>("Totorial_Background");
-            _tutorialPage1 = Content.Load<Texture2D>("Tutorial01_04");
-            _tutorialPage2 = Content.Load<Texture2D>("Tutorial02_04");
-            _tutorialPage3 = Content.Load<Texture2D>("Tutorial03_04");
+            _background = Content.Load<Texture2D>("UX_UI/Totorial_Background");
+            _tutorialPage1 = Content.Load<Texture2D>("UX_UI/Tutorial01_04");
+            _tutorialPage2 = Content.Load<Texture2D>("UX_UI/Tutorial02_04");
+            _tutorialPage3 = Content.Load<Texture2D>("UX_UI/Tutorial03_04");
 
             _previousKeyboard = Keyboard.GetState();
             _previousGamePad = GamePad.GetState(PlayerIndex.One);
@@ -58,7 +58,8 @@ namespace MainMenu_02
                 }
                 else
                 {
-                    Game.ChangeScreen(new MenuScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    // ไปหน้า Gameplay เมื่อกด Enter ที่หน้า 3
+                    Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
                 }
             }
             else if (backPage)
@@ -87,10 +88,10 @@ namespace MainMenu_02
 
             spriteBatch.Begin();
 
-            // 1. วาดพื้นหลังให้เต็มหน้าจอก่อนเสมอ
+            // วาดพื้นหลังให้เต็มหน้าจอ
             spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
-            // 2. เลือก Texture ของหน้าปัจจุบันที่จะวาด
+            // เลือก Texture ของหน้าปัจจุบัน
             Texture2D currentPageTexture = null;
             if (_currentPage == 1)
             {
@@ -105,19 +106,15 @@ namespace MainMenu_02
                 currentPageTexture = _tutorialPage3;
             }
 
-            // --- CHANGE IS HERE ---
-            // 3. บังคับให้วาดภาพลงในพื้นที่สี่เหลี่ยมขนาดเดียวกันเสมอ
+            // วาดภาพในกรอบขนาดคงที่
             if (currentPageTexture != null)
             {
-                // กำหนดขนาดและคำนวณตำแหน่งของกรอบที่จะวาดภาพลงไป
                 int destWidth = 1600;
                 int destHeight = 900;
-                int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;  // จัดกลางแนวนอน
-                int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2; // จัดกลางแนวตั้ง
+                int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;
+                int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2;
 
                 Rectangle destinationRectangle = new Rectangle(destX, destY, destWidth, destHeight);
-
-                // สั่งวาดภาพให้พอดีกับกรอบสี่เหลี่ยมที่กำหนดไว้
                 spriteBatch.Draw(currentPageTexture, destinationRectangle, Color.White);
             }
 

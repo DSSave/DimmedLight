@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public class SettingScreen : Screen
     {
@@ -77,9 +77,9 @@ namespace MainMenu_02
 
         public override void LoadContent()
         {
-            _background = Content.Load<Texture2D>("SettingScreen_02");
-            _menuFont = Content.Load<SpriteFont>("TextFont");
-            _headingFont = Content.Load<SpriteFont>("TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
+            _background = Content.Load<Texture2D>("UX_UI/SettingScreen_02");
+            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
+            _headingFont = Content.Load<SpriteFont>("UX_UI/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
 

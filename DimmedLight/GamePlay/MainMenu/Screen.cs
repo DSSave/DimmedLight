@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public abstract class Screen
     {

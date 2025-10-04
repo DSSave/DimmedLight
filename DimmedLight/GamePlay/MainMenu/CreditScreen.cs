@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace MainMenu_02
+namespace DimmedLight.Gameplay.MainMenu
 {
     public class CreditScreen : Screen
     {
@@ -25,8 +25,8 @@ namespace MainMenu_02
 
         public override void LoadContent()
         {
-            _mainBackground = Content.Load<Texture2D>("Background");
-            _creditsOverlay = Content.Load<Texture2D>("credits");
+            _mainBackground = Content.Load<Texture2D>("UX_UI/Background");
+            _creditsOverlay = Content.Load<Texture2D>("UX_UI/credits");
 
             _previousKeyboardState = Keyboard.GetState();
             _previousGamePadState = GamePad.GetState(PlayerIndex.One);
