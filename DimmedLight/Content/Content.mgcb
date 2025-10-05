@@ -261,12 +261,12 @@
 /processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
 
-#begin gamefont02.spritefont
+#begin gameFont02.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:gamefont02.spritefont
+/build:gameFont02.spritefont
 
 #begin Guilt_idle.png
 /importer:TextureImporter
