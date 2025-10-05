@@ -165,15 +165,15 @@ namespace DimmedLight.GamePlay.UI
                 lightDisplayTime = lightDisplayDuration;
             }
         }
-        public void Draw(SpriteBatch sb, SpriteFont font)
+        public void Draw(SpriteBatch sb, SpriteFont fontNumber)
         {
-            sb.DrawString(font, $"{Score}", new Vector2(1750, 50), Color.White);
-            sb.DrawString(font, $"HIGH: {HighScore}", new Vector2(710, 50), Color.Gold);
+            sb.DrawString(fontNumber, $"{Score}", new Vector2(1750, 50), Color.White);
+            sb.DrawString(fontNumber, $"HIGH: {HighScore}", new Vector2(710, 50), Color.Gold);
             if (lightDisplayTime > 0)
             {
                 float alpha = MathHelper.Clamp(lightDisplayTime / lightDisplayDuration, 0f, 1f);
                 Color color = Color.White * alpha;
-                sb.DrawString(font, $"{light}", new Vector2(1750, 150), color);
+                sb.DrawString(fontNumber, $"{light}", new Vector2(1750, 150), color);
             }
 
             int barWidth = 500;
@@ -196,7 +196,7 @@ namespace DimmedLight.GamePlay.UI
 
             foreach (var ft in floatingTexts)
             {
-                ft.Draw(sb, font);
+                ft.Draw(sb, fontNumber);
             }
         }
         public void EventBonus()

@@ -20,6 +20,7 @@ namespace DimmedLight.GamePlay
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
+        private SpriteFont fontnumber;
 
         #region Assets
         Texture2D skyTex, backTex, frontTex;
@@ -97,6 +98,7 @@ namespace DimmedLight.GamePlay
             parryProjecTex = game.Content.Load<Texture2D>("bullet1");
 
             font = game.Content.Load<SpriteFont>("gameFont02");
+            fontnumber = game.Content.Load<SpriteFont>("gameFont_number");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
             tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
             pauseImage = game.Content.Load<Texture2D>("Frame");
