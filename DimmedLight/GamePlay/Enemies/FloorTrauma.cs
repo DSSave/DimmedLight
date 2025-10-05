@@ -31,9 +31,6 @@ namespace DimmedLight.GamePlay.Enemies
 
         public override void Load(ContentManager content)
         {
-            Idle.Load(content, "Enemy2_Idle", 6, 1, 15);
-            AttackAnim.Load(content, "Enemy2_Attack", 8, 1, 15);
-            Death.Load(content, "Enemy2_Death", 8, 2, 15);
         }
         public override void SetSpeed(float speed)
         {
@@ -47,11 +44,11 @@ namespace DimmedLight.GamePlay.Enemies
             if (!player.IsDead)
             {
                 Position.X -= speed * delta * 60;
-                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 112, 135);
+                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 109, 175);
                 float distance = Vector2.Distance(Position, player.Position); // คำนวณระยะห่างระหว่างศัตรูกับผู้เล่น
                 if (!IsDead)
                 {
-                    IsFlipped = player.Position.X < Position.X; // หันหน้าไปทางผู้เล่น
+                    IsFlipped = player.Position.X > Position.X; // หันหน้าไปทางผู้เล่น
                     if (!HitTriggered && !ProjectileObj.Active && distance <= AttackRange && !IsAttacking) // ถ้าศัตรูยังไม่โจมตีและโปรเจกไทล์ไม่ทำงาน และผู้เล่นอยู่ในระยะโจมตี
                     {
                         IsAttacking = true;
@@ -170,15 +167,15 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead) // ถ้าแอนิเมชันตายกำลังเล่นอยู่
                 {
-                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
                 }
                 else if (IsAttacking)
                 {
-                    AttackAnim.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    AttackAnim.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
                 }
                 else
                 {
-                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y) + new Vector2(-50, -45), IsFlipped);
+                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
                 if (ProjectileObj.Active) // ถ้าโปรเจกไทล์กำลังทำงาน

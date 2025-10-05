@@ -50,12 +50,12 @@ namespace DimmedLight.GamePlay.Isplayer
         #region action timings
         private float attackDuration = 0.4f;
         private float attackTimer = 0f;
-        private float attackDelay = 0.55f;
+        private float attackDelay = 0.50f;
         private float attackDelayTimer = 0f;
 
         private float parryDuration = 0.22f;
         private float parryTimer = 0f;
-        private float parryDelay = 0.35f;
+        private float parryDelay = 0.23f;
         private float parryDelayTimer = 0f;
 
         //private float actionDelay = 1f;
@@ -122,12 +122,12 @@ namespace DimmedLight.GamePlay.Isplayer
 
         public void Load(ContentManager content)
         {
-            Idle.Load(content, "Test_Idle", 6, 1, 15); //โหลดไฟล์ใส่อนิเมชั่น กำหนด frame count, row, fps 
+            Idle.Load(content, "player_idle", 1, 1, 15); //โหลดไฟล์ใส่อนิเมชั่น กำหนด frame count, row, fps 
             Walk.Load(content, "Player-running-spritesheet", 10, 1, 24); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
-            Jump.Load(content, "Test_Jump", 8, 2, 15);
+            Jump.Load(content, "player_jumping_Spritesheet", 9, 1, 8);
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
-            Parry.Load(content, "Test_Parry", 8, 1, 15);
-            Death.Load(content, "Test_Die", 8, 2, 15);
+            Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
+            Death.Load(content, "game_over_spritesheet", 1, 22, 10);
 
             #region Sound&Effect
             attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_เสียงฟัน");
@@ -155,7 +155,11 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 IsJumping = true;
                 velocityY = jumpPower;
-                jumpEffect.Play();
+                if (!inEvent)
+                {
+                    jumpEffect.Play();
+                }
+                Jump.Reset();
             }
             if (IsJumping) //กระโดดอยู่
             {
@@ -290,6 +294,10 @@ namespace DimmedLight.GamePlay.Isplayer
                     Position = OriginalPosition;
                 }
             }
+            if (IsDead)
+            {
+                return;
+            }
         }
         public void SetEvent(bool active)
         {
@@ -304,8 +312,8 @@ namespace DimmedLight.GamePlay.Isplayer
             }
             else
             {
-                parryDelay = 0.35f;
-                attackDelay = 0.55f;
+                parryDelay = 0.23f;
+                attackDelay = 0.5f;
                 jumpPower = -15f;
                 attackDuration = 0.32f;
             }
@@ -316,6 +324,10 @@ namespace DimmedLight.GamePlay.Isplayer
             if (!DeathAnimationStarted)
             {
                 DeathAnimationStarted = true;
+                IsAttacking = false;
+                IsParrying = false;
+                IsJumping = false;
+                Position = new Vector2(195, 655);
                 Death.Reset();
                 Death.Loop = false;
             }
@@ -346,12 +358,12 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsAttacking)
             {
                 Attack.DrawFrame(sb, Position, false);
-                sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
+                //sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
             }
             else if (IsParrying)
             {
-                Parry.DrawFrame(sb, Position, false);
-                sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
+                Parry.DrawFrame(sb, Position, Color.LightSkyBlue * 1f, false);
+                //sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
             }
             else if (IsJumping)
             {
@@ -366,7 +378,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 if (IsVisible) 
                     Walk.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
             }
-            sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+            //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
         }
         public void SetPhaseManager(PhaseManager manager) 
         { 
