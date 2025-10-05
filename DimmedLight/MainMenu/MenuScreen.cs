@@ -42,8 +42,8 @@ namespace DimmedLight.MainMenu
             _menuFont = Content.Load<SpriteFont>("UX_UI/MyCustomFont");
             // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
             //_backgroundTexture = Content.Load<Texture2D>("MainMenu_page");
-            _selectedButtonTexture = Content.Load<Texture2D>("bottonCursor");
-            _titleTexture = Content.Load<Texture2D>("MenuAsset/Title"); // << เพิ่ม: โหลดรูปภาพ title
+            _selectedButtonTexture = Content.Load<Texture2D>("UX_UI/Memu_Frame02");
+            _titleTexture = Content.Load<Texture2D>("UX_UI/title"); // << เพิ่ม: โหลดรูปภาพ title
 
             // --- ปุ่ม ---
             int buttonWidth = 450;

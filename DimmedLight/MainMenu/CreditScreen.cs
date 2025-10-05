@@ -27,7 +27,7 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             //_mainBackground = Content.Load<Texture2D>("Background");
-            _creditsOverlay = Content.Load<Texture2D>("MenuAsset/credits");
+            _creditsOverlay = Content.Load<Texture2D>("UX_UI/credits");
 
             _previousKeyboardState = Keyboard.GetState();
             _previousGamePadState = GamePad.GetState(PlayerIndex.One);
