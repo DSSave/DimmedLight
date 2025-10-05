@@ -39,7 +39,7 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            _menuFont = Content.Load<SpriteFont>("gameFont");
+            _menuFont = Content.Load<SpriteFont>("UX_UI/MyCustomFont");
             // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
             //_backgroundTexture = Content.Load<Texture2D>("MainMenu_page");
             _selectedButtonTexture = Content.Load<Texture2D>("bottonCursor");
