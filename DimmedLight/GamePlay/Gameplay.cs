@@ -84,7 +84,7 @@ namespace DimmedLight.GamePlay
         public void LoadContent()
         {
             _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            
+
             #region Assets
             platformTex = game.Content.Load<Texture2D>("platform-remake");
             platformAsset = game.Content.Load<Texture2D>("floating-platform");
@@ -209,7 +209,7 @@ namespace DimmedLight.GamePlay
             pauseMenu.Update(keyState, previousKeyState);
             //float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
-            
+
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)

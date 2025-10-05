@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Reflection.Metadata;
 
-namespace DimmedLight //git
+namespace DimmedLight
 {
     public class Game1 : Game
     {
