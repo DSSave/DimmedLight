@@ -82,8 +82,8 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             //_background = Content.Load<Texture2D>("SettingScreen_02");
-            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
-            _headingFont = Content.Load<SpriteFont>("UX_UI/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
+            _menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
+            _headingFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
 

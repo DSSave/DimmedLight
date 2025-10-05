@@ -45,7 +45,7 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             //_background = Content.Load<Texture2D>("background");
-            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
+            _menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
 
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
