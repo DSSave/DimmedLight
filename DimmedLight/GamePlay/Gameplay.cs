@@ -1,21 +1,22 @@
 ﻿using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Background;
+using DimmedLight.GamePlay.Enemies;
+using DimmedLight.GamePlay.ETC;
+using DimmedLight.GamePlay.Isplayer;
+using DimmedLight.GamePlay.Managers;
+using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using DimmedLight.GamePlay.Enemies;
-using DimmedLight.GamePlay.ETC;
-using DimmedLight.GamePlay.UI;
-using DimmedLight.GamePlay.Managers;
-using DimmedLight.GamePlay.Isplayer;
 
 namespace DimmedLight.GamePlay
 {
     public class Gameplay
     {
-        private Game game;
+        private Game1 game;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
@@ -23,10 +24,13 @@ namespace DimmedLight.GamePlay
         #region Assets
         Texture2D skyTex, backTex, frontTex;
         Texture2D platformTex, platformAsset;
-        Texture2D projectileTex, attackProjecTex;
+        Texture2D projectileTex, attackProjecTex, parryProjecTex;
 
         Texture2D hurtBoxTex, hitBoxTex;
         Texture2D hellCloakTheme;
+        Texture2D tutorialImage;
+        Texture2D pauseImage;
+        Texture2D bottonCursor;
         #endregion
 
         #region Background & Platforms
@@ -63,13 +67,15 @@ namespace DimmedLight.GamePlay
 
         private Texture2D redOverlay;
         private bool delisasterHasDashed = false;
-
+        private Color attack = new Color(37, 150, 190);
+        private GameOver gameOverScreen;
+        private bool showGameOver = false;
         public static class Texture2DHelper
         {
             public static Texture2D Pixel { get; set; }
         }
 
-        public Gameplay(Game game, GraphicsDeviceManager graphics)
+        public Gameplay(Game1 game, GraphicsDeviceManager graphics)
         {
             this.game = game;
             _graphics = graphics;
@@ -85,10 +91,17 @@ namespace DimmedLight.GamePlay
             skyTex = game.Content.Load<Texture2D>("Sky_sky");
             backTex = game.Content.Load<Texture2D>("Sky_back_mountain");
             frontTex = game.Content.Load<Texture2D>("Sky_front_mountain");
-            projectileTex = game.Content.Load<Texture2D>("attackProjectile");
-            attackProjecTex = game.Content.Load<Texture2D>("Projectile_Trauma");
+
+            projectileTex = game.Content.Load<Texture2D>("bullet4");
+            attackProjecTex = game.Content.Load<Texture2D>("bullet2");
+            parryProjecTex = game.Content.Load<Texture2D>("bullet1");
+
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
+            tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
+            pauseImage = game.Content.Load<Texture2D>("Frame");
+            bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
+
             parryHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
             BMG = game.Content.Load<Song>("Audio/SunYaNaFon");
             EventSound = game.Content.Load<Song>("Audio/TaLayJai");
@@ -99,13 +112,15 @@ namespace DimmedLight.GamePlay
             MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f;
+            gameOverScreen = new GameOver(game, _graphics);
+            gameOverScreen.LoadContent();
             #endregion
 
             #region Hurt&HitBox
             hurtBoxTex = new Texture2D(game.GraphicsDevice, 1, 1);
             hurtBoxTex.SetData(new[] { Color.Red });
             hitBoxTex = new Texture2D(game.GraphicsDevice, 1, 1);
-            hitBoxTex.SetData(new[] { Color.Blue });
+            hitBoxTex.SetData(new[] { attack });
 
             Texture2D pixel = new Texture2D(game.GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
@@ -133,37 +148,53 @@ namespace DimmedLight.GamePlay
             delisaster.Load(game.Content);
             hud = new HUD();
             camera = new Camera();
-            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font);
+            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor);
+            pauseMenu.ClickExit = () =>
+            {
+                if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
+                    MediaPlayer.Stop();
+
+                game.ChangeScreen(new MenuScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+            };
+            pauseMenu.ClickOption = () =>
+            {
+                if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
+                    MediaPlayer.Stop();
+
+                game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+            };
             #endregion
 
             #region Enemy&Factory
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            guiltIdle.Load(game.Content, "Enemy1_Idle", 6, 1, 15);
-            guiltAttack.Load(game.Content, "Enemy1_Attack", 8, 1, 15);
+            guiltIdle.Load(game.Content, "Guilt_idle", 1, 1, 15);
+            guiltAttack.Load(game.Content, "Guilt_idle", 1, 1, 15);
             guiltDeath.Load(game.Content, "Enemy1_Death", 8, 2, 15);
 
             var traumaIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            traumaIdle.Load(game.Content, "Enemy2_Idle", 6, 1, 15);
-            traumaAttack.Load(game.Content, "Enemy2_Attack", 8, 1, 15);
+            traumaIdle.Load(game.Content, "trauma", 1, 1, 15);
+            traumaAttack.Load(game.Content, "trauma", 1, 1, 15);
             traumaDeath.Load(game.Content, "Enemy2_Death", 8, 2, 15);
 
             var judgementIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var judgementDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            judgementIdle.Load(game.Content, "ObstacleUpSize", 1, 1, 15);
-            judgementDeath.Load(game.Content, "ObstacleUpSize", 1, 1, 15);
+            judgementIdle.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
+            judgementDeath.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
 
             enemyFactory = new EnemyFactory(
                 guiltIdle, guiltAttack, guiltDeath,
                 traumaIdle, traumaAttack, traumaDeath,
                 judgementIdle, judgementDeath,
-                projectileTex
+                projectileTex,
+                parryProjecTex
             );
 
-            phaseManager = new PhaseManager(enemyFactory, player, delisaster, camera, hellCloakTheme, projectileTex, attackProjecTex, parryHit, EventSound, BMG);
+            phaseManager = new PhaseManager(enemyFactory, player, delisaster, camera, hellCloakTheme, tutorialImage,
+                parryProjecTex, attackProjecTex, parryHit, EventSound, BMG, game.GraphicsDevice);
             #endregion
 
             player.SetPhaseManager(phaseManager);
@@ -176,8 +207,9 @@ namespace DimmedLight.GamePlay
             GamePadState gpState = GamePad.GetState(PlayerIndex.One);
 
             pauseMenu.Update(keyState, previousKeyState);
-
-            if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+            //float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+            
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
@@ -199,7 +231,13 @@ namespace DimmedLight.GamePlay
             if (!pauseMenu.IsPaused)
             {
                 float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                
+                if (phaseManager.TutorialEvent != null && phaseManager.TutorialEvent.IsActive)
+                {
+                    phaseManager.TutorialEvent.Update(keyState, previousKeyState);
+                    previousKeyState = keyState;
+                    previousGamePadState = gpState;
+                    return;
+                }
                 if (!player.IsDead)
                 {
                     float bgSpeed = player.canWalk ? phaseManager.PlatformSpeed : 0f;
@@ -211,7 +249,7 @@ namespace DimmedLight.GamePlay
                     player.Update(gameTime, keyState, gpState, previousKeyState, previousGamePadState, delta);
                     delisaster.Update(delta, player);
 
-                    phaseManager.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+                    phaseManager.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager, keyState, previousKeyState);
 
                     if (player.Health <= 0) player.IsDead = true;
 
@@ -221,24 +259,38 @@ namespace DimmedLight.GamePlay
 
                     scoreManager.Update(gameTime, player);
                 }
-                else
+                else if (player.IsDead)
                 {
                     player.UpdateDeathAnimation(delta);
                     delisaster.Update(delta, player);
+                    if (MediaPlayer.State == MediaState.Playing)
+                        MediaPlayer.Stop();
                     if (!delisasterHasDashed)
                     {
-                        delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
+                        delisaster.DashForward(new Vector2(0, delisaster.Position.Y));
                         delisasterHasDashed = true;
                     }
                     if (player.DeathDelayStarted && player.DeathDelayTimer >= player.PostDeathDelay)
                     {
-                        ResetGame();
+                        showGameOver = true;
                     }
+                }
+                if (showGameOver)
+                {
+                    gameOverScreen.Update(gameTime);
+                    if (gameOverScreen.RestartRequested)
+                    {
+                        ResetGame();
+                        gameOverScreen.Reset();
+                        showGameOver = false;
+                    }
+                    return;
                 }
 
                 camera.MoveCamTocenter(delta);
             }
-
+            if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5))
+                showGameOver = true;
             previousKeyState = keyState;
             previousGamePadState = gpState;
             pauseMenu.ClickRestart = () => ResetGame();
@@ -246,7 +298,7 @@ namespace DimmedLight.GamePlay
 
         public void Draw(GameTime gameTime)
         {
-            game.GraphicsDevice.Clear(Color.CornflowerBlue);
+            game.GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, transformMatrix: camera.GetViewMatrix());
 
             skyLayer.Draw(_spriteBatch);
@@ -260,7 +312,7 @@ namespace DimmedLight.GamePlay
             player.Draw(_spriteBatch, hurtBoxTex, hitBoxTex);
             delisaster.Draw(_spriteBatch);
 
-            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health);
+            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health, player);
             scoreManager.Draw(_spriteBatch, font);
 
             pauseMenu.Draw(_spriteBatch);
@@ -276,9 +328,16 @@ namespace DimmedLight.GamePlay
                     Color.Red * alpha
                 );
             }
-
             _spriteBatch.End();
+            if (showGameOver)
+            {
+                _spriteBatch.Begin();
 
+                gameOverScreen.Draw(_spriteBatch);
+                _spriteBatch.End();
+
+                return;
+            }
         }
 
         private void ResetGame()
@@ -294,12 +353,13 @@ namespace DimmedLight.GamePlay
             scoreManager.Reset();
 
             platformManager.Reset();
+            showGameOver = false;
 
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Stop();
             MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f;
+            MediaPlayer.Volume = 0.01f;
         }
     }
 }

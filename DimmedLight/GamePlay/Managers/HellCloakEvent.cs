@@ -46,14 +46,15 @@ namespace DimmedLight.GamePlay.Managers
         private SoundEffect parryHit;
         private Song eventSong;
         private Song bmg;
-
+        public Action OnPrepareFinished;
         public void Prepare()
         {
             IsPreparing = true;
             prepareTimer = 0f;
             camera.StartShake(prepareTime, 20f);
         }
-        public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera, Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg)
+        public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera, 
+            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg)
         {
             HellCloakTheme = hellCloakTheme;
             this.player = player;
@@ -88,8 +89,8 @@ namespace DimmedLight.GamePlay.Managers
 
             player.SetEvent(true);
             delisaster.IsInEvent = true;
-            delisaster.movetToRight(new Vector2(1508, 298));
-            camera.MoveTo(new Vector2(0, 150));
+            delisaster.movetToRight(new Vector2(1220, -50));
+            camera.MoveTo(new Vector2(0, 130));
 
             player.canWalk = false;
         }
@@ -103,7 +104,8 @@ namespace DimmedLight.GamePlay.Managers
                 if (prepareTimer >= prepareTime)
                 {
                     IsPreparing = false;
-                    StartEvent();
+                    OnPrepareFinished?.Invoke();
+                    return;
                 }
                 return;
             }

@@ -16,9 +16,9 @@ namespace DimmedLight.GamePlay.Managers
 
         private (string type, Vector2 pos)[] fixedEnemies = new (string, Vector2)[]
         {
-            ("Guilt", new Vector2(2100, 695)),
+            ("Guilt", new Vector2(2100, 670)),
             ("Trauma", new Vector2(2100, 380)),
-            ("Judgement", new Vector2(2100, 763))
+            ("Judgement", new Vector2(2100, 720))
         };
         public TutorialPhase(float startSpeed = 6f)
         {
