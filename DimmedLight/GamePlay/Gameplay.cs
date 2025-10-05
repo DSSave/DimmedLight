@@ -22,7 +22,7 @@ namespace DimmedLight.GamePlay
         private SpriteFont font;
 
         #region Assets
-        Texture2D skyTex, backTex, frontTex;
+        Texture2D bg1Tex, bg2Tex, bg3Tex, bg4Tex, bg5Tex;
         Texture2D platformTex, platformAsset;
         Texture2D projectileTex, attackProjecTex, parryProjecTex;
 
@@ -34,7 +34,7 @@ namespace DimmedLight.GamePlay
         #endregion
 
         #region Background & Platforms
-        BackgroundLayer skyLayer, backLayer, frontLayer;
+        BackgroundLayer bg1, bg2, bg3, bg4, bg5;
         PlatformManager platformManager;
         #endregion
 
@@ -88,9 +88,11 @@ namespace DimmedLight.GamePlay
             #region Assets
             platformTex = game.Content.Load<Texture2D>("platform-remake");
             platformAsset = game.Content.Load<Texture2D>("floating-platform");
-            skyTex = game.Content.Load<Texture2D>("Sky_sky");
-            backTex = game.Content.Load<Texture2D>("Sky_back_mountain");
-            frontTex = game.Content.Load<Texture2D>("Sky_front_mountain");
+            bg1Tex = game.Content.Load<Texture2D>("Background/back1");
+            bg2Tex = game.Content.Load<Texture2D>("Background/back2");
+            bg3Tex = game.Content.Load<Texture2D>("Background/back3");
+            bg4Tex = game.Content.Load<Texture2D>("Background/back4");
+            bg5Tex = game.Content.Load<Texture2D>("Background/back5");
 
             projectileTex = game.Content.Load<Texture2D>("bullet4");
             attackProjecTex = game.Content.Load<Texture2D>("bullet2");
@@ -98,7 +100,7 @@ namespace DimmedLight.GamePlay
 
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
-            tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
+            tutorialImage = game.Content.Load<Texture2D>("eventTutorial");
             pauseImage = game.Content.Load<Texture2D>("Frame");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
@@ -131,9 +133,11 @@ namespace DimmedLight.GamePlay
             #endregion
 
             #region BG&Platform
-            skyLayer = new BackgroundLayer(skyTex, 3, 0.2f);
-            backLayer = new BackgroundLayer(backTex, 3, 0.5f);
-            frontLayer = new BackgroundLayer(frontTex, 3, 0.8f);
+            bg1 = new BackgroundLayer(bg1Tex, 3, 0.1f);
+            bg2 = new BackgroundLayer(bg2Tex, 3, 0.3f);
+            bg3 = new BackgroundLayer(bg3Tex, 3, 0.5f);
+            bg4 = new BackgroundLayer(bg4Tex, 3, 0.7f);
+            bg5 = new BackgroundLayer(bg5Tex, 3, 0.9f);
             platformManager = new PlatformManager(platformTex, platformAsset, 6);
             #endregion
 
@@ -241,9 +245,11 @@ namespace DimmedLight.GamePlay
                 if (!player.IsDead)
                 {
                     float bgSpeed = player.canWalk ? phaseManager.PlatformSpeed : 0f;
-                    skyLayer.Update(bgSpeed);
-                    backLayer.Update(bgSpeed);
-                    frontLayer.Update(bgSpeed);
+                    bg1.Update(bgSpeed);
+                    bg2.Update(bgSpeed);
+                    bg3.Update(bgSpeed);
+                    bg4.Update(bgSpeed);
+                    bg5.Update(bgSpeed);
                     platformManager.Update(bgSpeed, delta);
 
                     player.Update(gameTime, keyState, gpState, previousKeyState, previousGamePadState, delta);
@@ -301,18 +307,21 @@ namespace DimmedLight.GamePlay
             game.GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, transformMatrix: camera.GetViewMatrix());
 
-            skyLayer.Draw(_spriteBatch);
-            backLayer.Draw(_spriteBatch);
-            frontLayer.Draw(_spriteBatch);
+            bg1.Draw(_spriteBatch);
+            bg2.Draw(_spriteBatch);
+            bg3.Draw(_spriteBatch);
+            bg4.Draw(_spriteBatch);
+            bg5.Draw(_spriteBatch);
 
             platformManager.Draw(_spriteBatch);
 
-            phaseManager.Draw(_spriteBatch, hurtBoxTex, hitBoxTex, isFlipped);
-
             player.Draw(_spriteBatch, hurtBoxTex, hitBoxTex);
+            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health, player);
+
+            phaseManager.Draw(_spriteBatch, hurtBoxTex, hitBoxTex, isFlipped);
             delisaster.Draw(_spriteBatch);
 
-            hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health, player);
+            
             scoreManager.Draw(_spriteBatch, font);
 
             pauseMenu.Draw(_spriteBatch);
