@@ -294,10 +294,7 @@ namespace DimmedLight.GamePlay.Isplayer
                     Position = OriginalPosition;
                 }
             }
-            if (IsDead)
-            {
-                return;
-            }
+
         }
         public void SetEvent(bool active)
         {
@@ -327,7 +324,11 @@ namespace DimmedLight.GamePlay.Isplayer
                 IsAttacking = false;
                 IsParrying = false;
                 IsJumping = false;
+                IsInvincible = false;
+                IsReturning = false;
+
                 Position = new Vector2(195, 655);
+
                 Death.Reset();
                 Death.Loop = false;
             }
