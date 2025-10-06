@@ -226,7 +226,7 @@ namespace DimmedLight.MainMenu
             {
                 if (_isNavigatingTabs)
                 {
-                    Game.ChangeScreen(new MenuScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                    Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
                 else
                 {
