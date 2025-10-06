@@ -36,7 +36,7 @@ namespace DimmedLight.GamePlay.UI
         private Texture2D soulGaugeBar;
         private Texture2D soulGaugeFrame1;
         private Texture2D soulGaugeFrame2;
-        private Vector2 gaugePosition = new Vector2(260, 600);
+        private Vector2 gaugePosition = new Vector2(260, 100);
 
         private Vector2 barOffset = new Vector2(165, 235); // ปรับจุดเริ่มของแถบในเฟรม
         private int barWidth = 1211;
@@ -50,9 +50,9 @@ namespace DimmedLight.GamePlay.UI
         }
         public void LoadContent(ContentManager content)
         {
-            soulGaugeBar = content.Load<Texture2D>("ultimateGauge");
-            soulGaugeFrame1 = content.Load<Texture2D>("ultimatebar");
-            soulGaugeFrame2 = content.Load<Texture2D>("ultimatebarMax");
+            soulGaugeBar = content.Load<Texture2D>("MenuAsset/ultimateGauge");
+            soulGaugeFrame1 = content.Load<Texture2D>("MenuAsset/ultimatebar");
+            soulGaugeFrame2 = content.Load<Texture2D>("MenuAsset/ultimatebarMax");
         }
         public void SaveHighScore()
         {

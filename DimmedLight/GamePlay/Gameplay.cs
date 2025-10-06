@@ -145,6 +145,7 @@ namespace DimmedLight.GamePlay
             scoreManager = new ScoreManager();
             player = new Player(null, scoreManager);
             player.Load(game.Content);
+            scoreManager.LoadContent(game.Content);
             #endregion
 
             #region Disaster&UI
