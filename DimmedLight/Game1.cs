@@ -22,6 +22,8 @@ namespace DimmedLight
 
         private int _screenWidth;
         private int _screenHeight;
+
+       
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);

@@ -612,7 +612,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Totorial_Background.png
+/build:UX_UIAsset/tutorial_page/Totorial_Background.png;UX_UIAsset/tutorial_page/Totorial_Background
 
 #begin UX_UIAsset/tutorial_page/Tutorial01_keybord.png
 /importer:TextureImporter
@@ -624,7 +624,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png
+/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png;UX_UIAsset/tutorial_page/Tutorial01_keybord
 
 #begin UX_UIAsset/tutorial_page/Tutorial02_controller.png
 /importer:TextureImporter
@@ -636,7 +636,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png
+/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png;UX_UIAsset/tutorial_page/Tutorial02_controller
 
 #begin UX_UIAsset/tutorial_page/Tutorial03_enemy.png
 /importer:TextureImporter
@@ -648,5 +648,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png
+/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png;UX_UIAsset/tutorial_page/Tutorial03_enemy
 

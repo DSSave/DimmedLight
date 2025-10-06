@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DimmedLight.GamePlay.UI
+namespace DimmedLight.MainMenu
 {
     public class PauseMenu
     {
@@ -28,8 +28,8 @@ namespace DimmedLight.GamePlay.UI
         {
             this.graphics = graphics;
             this.font = font;
-            this.pauseMenu = pauseImage;
-            this.holder = bottonCursor;
+            pauseMenu = pauseImage;
+            holder = bottonCursor;
 
             SetupMenus();
 

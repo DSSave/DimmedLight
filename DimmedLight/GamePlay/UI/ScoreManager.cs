@@ -168,7 +168,7 @@ namespace DimmedLight.GamePlay.UI
         public void Draw(SpriteBatch sb, SpriteFont fontnumber, SpriteFont font)
         {
             sb.DrawString(fontnumber, $"{Score}", new Vector2(1750, 50), Color.White);
-            sb.DrawString(font, $"HIGH: {HighScore}", new Vector2(710, 50), Color.Gold);
+            sb.DrawString(fontnumber, $"HIGH: {HighScore}", new Vector2(710, 50), Color.Gold);
             if (lightDisplayTime > 0)
             {
                 float alpha = MathHelper.Clamp(lightDisplayTime / lightDisplayDuration, 0f, 1f);
