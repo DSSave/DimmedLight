@@ -568,18 +568,6 @@
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/cursor/cursor_frame.png
 
-#begin UX_UIAsset/exit_page/exitNew.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:UX_UIAsset/exit_page/exitNew.png
-
 #begin UX_UIAsset/exit_page/ExitScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -666,6 +654,30 @@
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png
 
+#begin UX_UIAsset/tutorial_page/Tutorial01_keybord.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png
+
+#begin UX_UIAsset/tutorial_page/Tutorial01_keybord.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png
+
 #begin UX_UIAsset/tutorial_page/Tutorial02_controller.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -677,6 +689,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/tutorial_page/Tutorial02_controller.png
+
+#begin UX_UIAsset/tutorial_page/Tutorial02_controller.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png
+
+#begin UX_UIAsset/tutorial_page/Tutorial02_controller.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png
+
+#begin UX_UIAsset/tutorial_page/Tutorial03_enemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png
+
+#begin UX_UIAsset/tutorial_page/Tutorial03_enemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png
 
 #begin UX_UIAsset/tutorial_page/Tutorial03_enemy.png
 /importer:TextureImporter

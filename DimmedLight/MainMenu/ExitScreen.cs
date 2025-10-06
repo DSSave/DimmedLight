@@ -44,7 +44,7 @@ namespace DimmedLight.MainMenu
             _menuFont = Content.Load<SpriteFont>("gameFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
-            _exitFrameTexture = Content.Load<Texture2D>("UX_UI/exit");
+            _exitFrameTexture = Content.Load<Texture2D>("UX_UIAsset/exit_page/ExitScreen");
             _buttonFrameTexture = Content.Load<Texture2D>("UX_UI/Memu_Frame02");
 
             // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
@@ -54,7 +54,7 @@ namespace DimmedLight.MainMenu
             int screenCenterY = GraphicsDevice.Viewport.Height / 2;
 
             _dialogBox = new Rectangle(screenCenterX - dialogWidth / 2, screenCenterY - dialogHeight / 2, dialogWidth, dialogHeight);
-
+            
             int buttonWidth = 280;
             int buttonHeight = 80;
             int buttonSpacing = 10;
