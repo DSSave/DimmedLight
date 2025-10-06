@@ -251,11 +251,7 @@
 /copy:gameFont_number.spritefont
 
 #begin gameFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:gameFont.spritefont
+/copy:gameFont.spritefont
 
 #begin gameFont02.spritefont
 /copy:gameFont02.spritefont
@@ -512,6 +508,18 @@
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/credit_page/CreditScreen.png;UX_UIAsset/credit_page/CreditScreen
 
+#begin UX_UIAsset/credit_page/CreditScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/credit_page/CreditScreen.png
+
 #begin UX_UIAsset/cursor/cursor_frame.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -522,7 +530,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/cursor/cursor_frame.png;UX_UIAsset/cursor/cursor_frame
+/build:UX_UIAsset/cursor/cursor_frame.png
 
 #begin UX_UIAsset/exit_page/ExitScreen.png
 /importer:TextureImporter
@@ -536,24 +544,29 @@
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/exit_page/ExitScreen.png;UX_UIAsset/exit_page/ExitScreen
 
-#begin UX_UIAsset/Font/MyCustomFont.spritefont
-/copy:UX_UIAsset/Font/MyCustomFont.spritefont;UX_UIAsset/Font/MyCustomFont
+#begin UX_UIAsset/exit_page/ExitScreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/exit_page/ExitScreen.png
 
-#begin UX_UIAsset/Font/NumberFont.spritefont
-/copy:UX_UIAsset/Font/NumberFont.spritefont;UX_UIAsset/Font/NumberFont
+#begin UX_UIAsset/Font/MyCustomFont.spritefont
+/copy:UX_UIAsset/Font/MyCustomFont.spritefont
+
+#begin UX_UIAsset/Font/NumberFont02.spritefont
+/copy:UX_UIAsset/Font/NumberFont02.spritefont
 
 #begin UX_UIAsset/Font/TextFont.fx
-/copy:UX_UIAsset/Font/TextFont.fx;UX_UIAsset/Font/TextFont
-
-#begin UX_UIAsset/Font/TextFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/TextFont.spritefont;UX_UIAsset/Font/TextFont
-
-#begin UX_UIAsset/Font/TitleFont.spritefont
-/copy:UX_UIAsset/Font/TitleFont.spritefont;UX_UIAsset/Font/TitleFont
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:UX_UIAsset/Font/TextFont.fx
 
 #begin UX_UIAsset/mainmenu_page/Title.png
 /importer:TextureImporter
@@ -565,7 +578,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/mainmenu_page/Title.png;UX_UIAsset/mainmenu_page/Title
+/build:UX_UIAsset/mainmenu_page/Title.png
 
 #begin UX_UIAsset/setting_page/SettingScreen_02.png
 /importer:TextureImporter
@@ -577,7 +590,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/setting_page/SettingScreen_02.png;UX_UIAsset/setting_page/SettingScreen_02
+/build:UX_UIAsset/setting_page/SettingScreen_02.png
 
 #begin UX_UIAsset/tutorial_page/Totorial_Background.png
 /importer:TextureImporter
@@ -589,7 +602,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Totorial_Background.png;UX_UIAsset/tutorial_page/Totorial_Background
+/build:UX_UIAsset/tutorial_page/Totorial_Background.png
 
 #begin UX_UIAsset/tutorial_page/Tutorial01_keybord.png
 /importer:TextureImporter
@@ -601,7 +614,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png;UX_UIAsset/tutorial_page/Tutorial01_keybord
+/build:UX_UIAsset/tutorial_page/Tutorial01_keybord.png
 
 #begin UX_UIAsset/tutorial_page/Tutorial02_controller.png
 /importer:TextureImporter
@@ -613,7 +626,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png;UX_UIAsset/tutorial_page/Tutorial02_controller
+/build:UX_UIAsset/tutorial_page/Tutorial02_controller.png
 
 #begin UX_UIAsset/tutorial_page/Tutorial03_enemy.png
 /importer:TextureImporter
@@ -625,5 +638,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png;UX_UIAsset/tutorial_page/Tutorial03_enemy
+/build:UX_UIAsset/tutorial_page/Tutorial03_enemy.png
 
