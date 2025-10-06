@@ -1,16 +1,17 @@
 ﻿using DimmedLight.GamePlay.Enemies;
+using DimmedLight.GamePlay.Isplayer;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 using static DimmedLight.Game1;
-using static System.Formats.Asn1.AsnWriter;
 using static DimmedLight.GamePlay.Gameplay;
-using DimmedLight.GamePlay.Isplayer;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace DimmedLight.GamePlay.UI
 {
@@ -31,13 +32,21 @@ namespace DimmedLight.GamePlay.UI
 
         public int HighScore { get; private set; }
         private string highScoreFile = "highscore.txt";
-
+        private Texture2D soulGaugeBar;
+        private Texture2D soulGaugeFrame1;
+        private Texture2D soulGaugeFrame2;
         public ScoreManager()
         {
             score = 0;
             light = 0;
             soulGauge = 0;
             LoadHighScore();
+        }
+        public void LoadContent(ContentManager content)
+        {
+            soulGaugeBar = content.Load<Texture2D>("ultimateGauge");
+            soulGaugeFrame1 = content.Load<Texture2D>("ultimatebar");
+            soulGaugeFrame2 = content.Load<Texture2D>("ultimatebarMax");
         }
         public void SaveHighScore()
         {
@@ -176,23 +185,26 @@ namespace DimmedLight.GamePlay.UI
                 sb.DrawString(font, $"{light}", new Vector2(1750, 150), color);
             }
 
-            int barWidth = 500;
-            int barHeight = 30;
+            int barWidth = 1211;
             Vector2 barPos = new Vector2(710, 100);
 
-            // Background (เทา)
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X, (int)barPos.Y, barWidth, barHeight), Color.Gray * 0.5f);
-
-            // แถบสีเหลือง
             float fillRatio = MathHelper.Clamp((float)soulGauge / MaxGauge, 0f, 1f);
             int fillWidth = (int)(barWidth * fillRatio);
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X, (int)barPos.Y, fillWidth, barHeight), Color.Yellow);
+            if (soulGaugeBar != null)
+            {
+                int fullWidth = soulGaugeBar.Width;
+                int fullHeight = soulGaugeBar.Height;
 
-            // กรอบขาว
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X, (int)barPos.Y, barWidth, 1), Color.White); // top
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X, (int)barPos.Y + barHeight - 1, barWidth, 1), Color.White); // bottom
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X, (int)barPos.Y, 1, barHeight), Color.White); // left
-            sb.Draw(Texture2DHelper.Pixel, new Rectangle((int)barPos.X + barWidth - 1, (int)barPos.Y, 1, barHeight), Color.White); // right
+                Rectangle srcRect = new Rectangle(0, 0, (int)(fullWidth * fillRatio), fullHeight);
+
+                sb.Draw(soulGaugeBar, barPos, srcRect, Color.White);
+            }
+            Texture2D currentFrame = (soulGauge >= MaxGauge) ? soulGaugeFrame2 : soulGaugeFrame1;
+
+            if (currentFrame != null)
+            {
+                sb.Draw(currentFrame, barPos, Color.White);
+            }
 
             foreach (var ft in floatingTexts)
             {
