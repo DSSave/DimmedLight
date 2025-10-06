@@ -194,6 +194,18 @@
 #begin judgement_Spritesheet.png
 /copy:judgement_Spritesheet.png
 
+#begin MenuAsset/controllerTutorial.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/controllerTutorial.png
+
 #begin MenuAsset/credits.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -206,6 +218,18 @@
 /processorParam:TextureFormat=Color
 /build:MenuAsset/credits.png
 
+#begin MenuAsset/enemyTutorial.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/enemyTutorial.png
+
 #begin MenuAsset/exit.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -217,6 +241,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:MenuAsset/exit.png
+
+#begin MenuAsset/keyboardTutorial.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/keyboardTutorial.png
 
 #begin MenuAsset/no.png
 /importer:TextureImporter
@@ -242,7 +278,7 @@
 /processorParam:TextureFormat=Color
 /build:MenuAsset/Title.png
 
-#begin MenuAsset/tutorialController_New.png
+#begin MenuAsset/ultimatebar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -252,9 +288,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MenuAsset/tutorialController_New.png
+/build:MenuAsset/ultimatebar.png
 
-#begin MenuAsset/tutorialEnemy_New.png
+#begin MenuAsset/ultimatebarMax.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -264,9 +300,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MenuAsset/tutorialEnemy_New.png
+/build:MenuAsset/ultimatebarMax.png
 
-#begin MenuAsset/tutorialKeyboard_New.png
+#begin MenuAsset/ultimateGauge.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -276,7 +312,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:MenuAsset/tutorialKeyboard_New.png
+/build:MenuAsset/ultimateGauge.png
 
 #begin MenuAsset/yes.png
 /importer:TextureImporter
