@@ -317,13 +317,14 @@ namespace DimmedLight.GamePlay
             platformManager.Draw(_spriteBatch);
 
             player.Draw(_spriteBatch, hurtBoxTex, hitBoxTex);
+            scoreManager.Draw(_spriteBatch, font);
             hud.DrawHealth(_spriteBatch, hurtBoxTex, player.Health, player);
 
             phaseManager.Draw(_spriteBatch, hurtBoxTex, hitBoxTex, isFlipped);
             delisaster.Draw(_spriteBatch);
 
             
-            scoreManager.Draw(_spriteBatch, font);
+            
 
             pauseMenu.Draw(_spriteBatch);
 

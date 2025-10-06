@@ -36,9 +36,9 @@ namespace DimmedLight.GamePlay.UI
         private Texture2D soulGaugeBar;
         private Texture2D soulGaugeFrame1;
         private Texture2D soulGaugeFrame2;
-        private Vector2 gaugePosition = new Vector2(260, 100);
+        private Vector2 gaugePosition = new Vector2(680, 20);
 
-        private Vector2 barOffset = new Vector2(165, 235); // ปรับจุดเริ่มของแถบในเฟรม
+        private Vector2 barOffset = new Vector2(66, 94); // ปรับจุดเริ่มของแถบในเฟรม
         private int barWidth = 1211;
         private int barHeight = 67;
         public ScoreManager()
@@ -183,7 +183,7 @@ namespace DimmedLight.GamePlay.UI
         public void Draw(SpriteBatch sb, SpriteFont font)
         {
             sb.DrawString(font, $"{Score}", new Vector2(1750, 50), Color.White);
-            sb.DrawString(font, $"HIGH: {HighScore}", new Vector2(710, 50), Color.Gold);
+            sb.DrawString(font, $"HIGH: {HighScore}", new Vector2(790, 50), Color.Gold);
             if (lightDisplayTime > 0)
             {
                 float alpha = MathHelper.Clamp(lightDisplayTime / lightDisplayDuration, 0f, 1f);
