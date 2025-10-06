@@ -340,6 +340,18 @@
 /processorParam:TextureFormat=Color
 /build:pause.png
 
+#begin PauseNew.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PauseNew.png
+
 #begin platform-remake.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -496,6 +508,18 @@
 /processorParam:TextureFormat=Color
 /build:trauma.png
 
+#begin tutorialEvent_New.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tutorialEvent_New.png
+
 #begin tutorialEvent.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -520,6 +544,18 @@
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/credit_page/CreditScreen.png
 
+#begin UX_UIAsset/credit_page/creditsNew.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/credit_page/creditsNew.png
+
 #begin UX_UIAsset/cursor/cursor_frame.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -531,6 +567,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/cursor/cursor_frame.png
+
+#begin UX_UIAsset/exit_page/exitNew.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UX_UIAsset/exit_page/exitNew.png
 
 #begin UX_UIAsset/exit_page/ExitScreen.png
 /importer:TextureImporter
@@ -605,18 +653,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:UX_UIAsset/setting_page/SettingScreen_02.png
-
-#begin UX_UIAsset/tutorial_page/Totorial_Background.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:UX_UIAsset/tutorial_page/Totorial_Background.png
 
 #begin UX_UIAsset/tutorial_page/Tutorial01_keybord.png
 /importer:TextureImporter
