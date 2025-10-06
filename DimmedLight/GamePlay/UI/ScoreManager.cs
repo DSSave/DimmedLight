@@ -32,9 +32,15 @@ namespace DimmedLight.GamePlay.UI
 
         public int HighScore { get; private set; }
         private string highScoreFile = "highscore.txt";
+
         private Texture2D soulGaugeBar;
         private Texture2D soulGaugeFrame1;
         private Texture2D soulGaugeFrame2;
+        private Vector2 gaugePosition = new Vector2(260, 600);
+
+        private Vector2 barOffset = new Vector2(165, 235); // ปรับจุดเริ่มของแถบในเฟรม
+        private int barWidth = 1211;
+        private int barHeight = 67;
         public ScoreManager()
         {
             score = 0;
@@ -185,25 +191,19 @@ namespace DimmedLight.GamePlay.UI
                 sb.DrawString(font, $"{light}", new Vector2(1750, 150), color);
             }
 
-            int barWidth = 1211;
-            Vector2 barPos = new Vector2(710, 100);
-
             float fillRatio = MathHelper.Clamp((float)soulGauge / MaxGauge, 0f, 1f);
             int fillWidth = (int)(barWidth * fillRatio);
+
+            Texture2D currentFrame = (soulGauge >= MaxGauge) ? soulGaugeFrame2 : soulGaugeFrame1;
+            if (currentFrame != null)
+                sb.Draw(currentFrame, gaugePosition, Color.White);
+
             if (soulGaugeBar != null)
             {
-                int fullWidth = soulGaugeBar.Width;
-                int fullHeight = soulGaugeBar.Height;
-
-                Rectangle srcRect = new Rectangle(0, 0, (int)(fullWidth * fillRatio), fullHeight);
+                Rectangle srcRect = new Rectangle(0, 0, fillWidth, barHeight);
+                Vector2 barPos = gaugePosition + barOffset;
 
                 sb.Draw(soulGaugeBar, barPos, srcRect, Color.White);
-            }
-            Texture2D currentFrame = (soulGauge >= MaxGauge) ? soulGaugeFrame2 : soulGaugeFrame1;
-
-            if (currentFrame != null)
-            {
-                sb.Draw(currentFrame, barPos, Color.White);
             }
 
             foreach (var ft in floatingTexts)
