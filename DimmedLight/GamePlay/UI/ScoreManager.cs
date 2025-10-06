@@ -193,18 +193,19 @@ namespace DimmedLight.GamePlay.UI
 
             float fillRatio = MathHelper.Clamp((float)soulGauge / MaxGauge, 0f, 1f);
             int fillWidth = (int)(barWidth * fillRatio);
-
-            Texture2D currentFrame = (soulGauge >= MaxGauge) ? soulGaugeFrame2 : soulGaugeFrame1;
-            if (currentFrame != null)
-                sb.Draw(currentFrame, gaugePosition, Color.White);
+            float scale = 0.4f;
 
             if (soulGaugeBar != null)
             {
                 Rectangle srcRect = new Rectangle(0, 0, fillWidth, barHeight);
                 Vector2 barPos = gaugePosition + barOffset;
 
-                sb.Draw(soulGaugeBar, barPos, srcRect, Color.White);
+                sb.Draw(soulGaugeBar, barPos, srcRect, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
+
+            Texture2D currentFrame = (soulGauge >= MaxGauge) ? soulGaugeFrame2 : soulGaugeFrame1;
+            if (currentFrame != null)
+                sb.Draw(currentFrame, gaugePosition, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
             foreach (var ft in floatingTexts)
             {
