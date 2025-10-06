@@ -248,18 +248,7 @@
 /build:game_over_spritesheet.png
 
 #begin gameFont_number.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:gameFont_number.spritefont
-
-#begin gameFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:gameFont.spritefont
+/copy:gameFont_number.spritefont
 
 #begin gameFont.spritefont
 /importer:FontDescriptionImporter
@@ -269,11 +258,7 @@
 /build:gameFont.spritefont
 
 #begin gameFont02.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:gameFont02.spritefont
+/copy:gameFont02.spritefont
 
 #begin Guilt_idle.png
 /importer:TextureImporter
@@ -552,58 +537,13 @@
 /build:UX_UIAsset/exit_page/ExitScreen.png;UX_UIAsset/exit_page/ExitScreen
 
 #begin UX_UIAsset/Font/MyCustomFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/MyCustomFont.spritefont;UX_UIAsset/Font/MyCustomFont
-
-#begin UX_UIAsset/Font/MyCustomFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/MyCustomFont.spritefont;UX_UIAsset/Font/MyCustomFont
+/copy:UX_UIAsset/Font/MyCustomFont.spritefont;UX_UIAsset/Font/MyCustomFont
 
 #begin UX_UIAsset/Font/NumberFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/NumberFont.spritefont;UX_UIAsset/Font/NumberFont
-
-#begin UX_UIAsset/Font/NumberFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/NumberFont.spritefont;UX_UIAsset/Font/NumberFont
+/copy:UX_UIAsset/Font/NumberFont.spritefont;UX_UIAsset/Font/NumberFont
 
 #begin UX_UIAsset/Font/TextFont.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:UX_UIAsset/Font/TextFont.fx;UX_UIAsset/Font/TextFont
-
-#begin UX_UIAsset/Font/TextFont.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:UX_UIAsset/Font/TextFont.fx;UX_UIAsset/Font/TextFont
-
-#begin UX_UIAsset/Font/TextFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/TextFont.spritefont;UX_UIAsset/Font/TextFont
-
-#begin UX_UIAsset/Font/TextFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/TextFont.spritefont;UX_UIAsset/Font/TextFont
+/copy:UX_UIAsset/Font/TextFont.fx;UX_UIAsset/Font/TextFont
 
 #begin UX_UIAsset/Font/TextFont.spritefont
 /importer:FontDescriptionImporter
@@ -613,18 +553,7 @@
 /build:UX_UIAsset/Font/TextFont.spritefont;UX_UIAsset/Font/TextFont
 
 #begin UX_UIAsset/Font/TitleFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/TitleFont.spritefont;UX_UIAsset/Font/TitleFont
-
-#begin UX_UIAsset/Font/TitleFont.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:UX_UIAsset/Font/TitleFont.spritefont;UX_UIAsset/Font/TitleFont
+/copy:UX_UIAsset/Font/TitleFont.spritefont;UX_UIAsset/Font/TitleFont
 
 #begin UX_UIAsset/mainmenu_page/Title.png
 /importer:TextureImporter
