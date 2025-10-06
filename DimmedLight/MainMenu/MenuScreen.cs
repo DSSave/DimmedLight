@@ -140,7 +140,7 @@ namespace DimmedLight.MainMenu
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else
                     {
-                        // Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                        Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
                     }
                     break;
                 case 1: // Upgrade

@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DimmedLight.MainMenu
 {
-    public class PauseMenu
+    public class PauseMenu 
     {
         private Texture2D pauseMenu;
         private Texture2D holder;
@@ -24,6 +25,7 @@ namespace DimmedLight.MainMenu
 
         private List<(string text, Rectangle rect, Action onClick)> menuItems;
         private List<(string text, Rectangle rect, Action onClick)> exitMenuItems;
+
         public PauseMenu(GraphicsDevice graphics, SpriteFont font, Texture2D pauseImage, Texture2D bottonCursor)
         {
             this.graphics = graphics;
