@@ -158,12 +158,38 @@
 /copy:game_over_spritesheet.png
 
 #begin gameFont.spritefont
-/importer:
-/processor:
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
 
 #begin Guilt_idle.png
 /copy:Guilt_idle.png
+
+#begin guiltdead_Spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:guiltdead_Spritesheet.png
+
+#begin judgement_dead_Spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:judgement_dead_Spritesheet.png
 
 #begin judgement_Spritesheet.png
 /copy:judgement_Spritesheet.png
@@ -282,8 +308,17 @@
 #begin player_jumping_Spritesheet.png
 /copy:player_jumping_Spritesheet.png
 
-#begin Player-running-spritesheet.png
-/copy:Player-running-spritesheet.png
+#begin player_running_Spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:player_running_Spritesheet.png
 
 #begin restart.png
 /copy:restart.png
@@ -297,6 +332,27 @@
 #begin ThemeEvent.png
 /copy:ThemeEvent.png
 
-#begin trauma.png
-/copy:trauma.png
+#begin trauma-re.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:trauma-re.png
+
+#begin traumadead_Spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:traumadead_Spritesheet.png
 

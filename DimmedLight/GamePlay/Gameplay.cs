@@ -175,19 +175,19 @@ namespace DimmedLight.GamePlay
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltIdle.Load(game.Content, "Guilt_idle", 1, 1, 15);
             guiltAttack.Load(game.Content, "Guilt_idle", 1, 1, 15);
-            guiltDeath.Load(game.Content, "Enemy1_Death", 8, 2, 15);
+            guiltDeath.Load(game.Content, "guiltdead_Spritesheet", 7, 1, 8);
 
             var traumaIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var traumaDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            traumaIdle.Load(game.Content, "trauma", 1, 1, 15);
-            traumaAttack.Load(game.Content, "trauma", 1, 1, 15);
-            traumaDeath.Load(game.Content, "Enemy2_Death", 8, 2, 15);
+            traumaIdle.Load(game.Content, "trauma-re", 1, 1, 15);
+            traumaAttack.Load(game.Content, "trauma-re", 1, 1, 15);
+            traumaDeath.Load(game.Content, "traumadead_Spritesheet", 7, 1, 8);
 
             var judgementIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var judgementDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             judgementIdle.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
-            judgementDeath.Load(game.Content, "judgement_Spritesheet", 10, 1, 15);
+            judgementDeath.Load(game.Content, "judgement_dead_Spritesheet", 8, 1, 9);
 
             enemyFactory = new EnemyFactory(
                 guiltIdle, guiltAttack, guiltDeath,
