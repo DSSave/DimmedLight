@@ -29,9 +29,9 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             //_background = Content.Load<Texture2D>("Totorial_Background");
-            _tutorialPage1 = Content.Load<Texture2D>("MenuAsset/keyboardTutorial");
-            _tutorialPage2 = Content.Load<Texture2D>("MenuAsset/controllerTutorial");
-            _tutorialPage3 = Content.Load<Texture2D>("MenuAsset/enemyTutorial");
+            _tutorialPage1 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial01_keybord");
+            _tutorialPage2 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial02_controller");
+            _tutorialPage3 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial03_enemy");
 
             _previousKeyboard = Keyboard.GetState();
             _previousGamePad = GamePad.GetState(PlayerIndex.One);
