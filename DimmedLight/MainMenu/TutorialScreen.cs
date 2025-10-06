@@ -28,7 +28,7 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            //_background = Content.Load<Texture2D>("Totorial_Background");
+            _background = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
             _tutorialPage1 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial01_keybord");
             _tutorialPage2 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial02_controller");
             _tutorialPage3 = Content.Load<Texture2D>("UX_UIAsset/tutorial_page/Tutorial03_enemy");
@@ -94,7 +94,7 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin();
 
             // 1. วาดพื้นหลังให้เต็มหน้าจอก่อนเสมอ
-            //spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
+            spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
             // 2. เลือก Texture ของหน้าปัจจุบันที่จะวาด
             Texture2D currentPageTexture = null;

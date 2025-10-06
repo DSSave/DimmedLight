@@ -13,6 +13,7 @@ namespace DimmedLight.MainMenu
 {
     public class SettingScreen : Screen
     {
+
         // --- Global Setting State ---
         public static bool ShowTutorial = true;
 
@@ -74,6 +75,9 @@ namespace DimmedLight.MainMenu
         private Keys[] _keyMappings = new Keys[4] { Keys.Space, Keys.D, Keys.J, Keys.F };
         private Buttons[] _gamepadMappings = new Buttons[4] { Buttons.A, Buttons.X, Buttons.LeftTrigger, Buttons.LeftShoulder };
 
+        // --- state ---
+        private SettingSource _source;
+
         public SettingScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
@@ -81,9 +85,11 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            //_background = Content.Load<Texture2D>("SettingScreen_02");
-            _menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
-            _headingFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
+            _background = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
+            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
+            //_headingFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
+            _menuFont = Content.Load<SpriteFont>("gameFont");
+            _headingFont = Content.Load<SpriteFont>("gameFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
 
@@ -233,6 +239,27 @@ namespace DimmedLight.MainMenu
                     _isNavigatingTabs = true;
                 }
             }
+
+            /*if (goBack)
+            {
+                if (_isNavigatingTabs)
+                {
+                    if (_source == SettingSource.MainMenu)
+                    {
+                        Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
+
+                    }
+                    else if (_source == SettingSource.PauseMenu)
+                    {
+                        Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
+                    }
+                }
+                else
+                {
+                    _isNavigatingTabs = true;
+                }
+            }*/
+
 
             if (_isNavigatingTabs)
             {
@@ -404,7 +431,7 @@ namespace DimmedLight.MainMenu
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(samplerState: SamplerState.PointClamp); // Use PointClamp for sharp pixels
 
-            //spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
+            spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
             for (int i = 0; i < _tabButtons.Count; i++)
             {

@@ -248,13 +248,25 @@
 /build:game_over_spritesheet.png
 
 #begin gameFont_number.spritefont
-/copy:gameFont_number.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:gameFont_number.spritefont
 
 #begin gameFont.spritefont
-/copy:gameFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:gameFont.spritefont
 
 #begin gameFont02.spritefont
-/copy:gameFont02.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:gameFont02.spritefont
 
 #begin Guilt_idle.png
 /importer:TextureImporter
@@ -506,18 +518,6 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/credit_page/CreditScreen.png;UX_UIAsset/credit_page/CreditScreen
-
-#begin UX_UIAsset/credit_page/CreditScreen.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
 /build:UX_UIAsset/credit_page/CreditScreen.png
 
 #begin UX_UIAsset/cursor/cursor_frame.png
@@ -542,9 +542,35 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/exit_page/ExitScreen.png;UX_UIAsset/exit_page/ExitScreen
+/build:UX_UIAsset/exit_page/ExitScreen.png
 
-#begin UX_UIAsset/exit_page/ExitScreen.png
+#begin UX_UIAsset/Font/MyCustomFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:UX_UIAsset/Font/MyCustomFont.spritefont
+
+#begin UX_UIAsset/Font/NumberFont02.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:UX_UIAsset/Font/NumberFont02.spritefont
+
+#begin UX_UIAsset/Font/TextFont.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:UX_UIAsset/Font/TextFont.fx
+
+#begin UX_UIAsset/Font/TextFont02.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:UX_UIAsset/Font/TextFont02.fx
+
+#begin UX_UIAsset/mainmenu_page/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -554,19 +580,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:UX_UIAsset/exit_page/ExitScreen.png
-
-#begin UX_UIAsset/Font/MyCustomFont.spritefont
-/copy:UX_UIAsset/Font/MyCustomFont.spritefont
-
-#begin UX_UIAsset/Font/NumberFont02.spritefont
-/copy:UX_UIAsset/Font/NumberFont02.spritefont
-
-#begin UX_UIAsset/Font/TextFont.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:UX_UIAsset/Font/TextFont.fx
+/build:UX_UIAsset/mainmenu_page/Background.png
 
 #begin UX_UIAsset/mainmenu_page/Title.png
 /importer:TextureImporter

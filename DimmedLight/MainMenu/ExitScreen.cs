@@ -16,6 +16,7 @@ namespace DimmedLight.MainMenu
         private Texture2D _pixelTexture;
         private Texture2D _exitFrameTexture;
         private Texture2D _buttonFrameTexture;
+        private Texture2D _mainBackground;
 
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
@@ -38,7 +39,9 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            _menuFont = Content.Load<SpriteFont>("UX_UI/TextFont");
+            //_menuFont = Content.Load<SpriteFont>("UX_UI/TextFont"); gameFont
+            _mainBackground = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
+            _menuFont = Content.Load<SpriteFont>("gameFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
             _exitFrameTexture = Content.Load<Texture2D>("UX_UI/exit");
@@ -140,6 +143,9 @@ namespace DimmedLight.MainMenu
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+
+            //--- Draw: Background ---
+            spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
 
             // วาด Overlay สีดำโปร่งแสง
             spriteBatch.Draw(_pixelTexture, GraphicsDevice.Viewport.Bounds, Color.Black * 0.7f);
