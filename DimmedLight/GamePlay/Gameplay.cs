@@ -101,7 +101,7 @@ namespace DimmedLight.GamePlay
             fontnumber = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
             tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
-            pauseImage = game.Content.Load<Texture2D>("Frame");
+            pauseImage = game.Content.Load<Texture2D>("PauseNew");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
             parryHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");

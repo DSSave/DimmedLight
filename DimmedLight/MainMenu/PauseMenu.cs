@@ -117,14 +117,16 @@ namespace DimmedLight.MainMenu
             Texture2D blackPixel = new Texture2D(graphics, 1, 1);
             blackPixel.SetData(new[] { Color.White });
             spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
+            //spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.White * 0.7f);
 
             spriteBatch.Draw(pauseMenu, new Rectangle(graphics.Viewport.Width / 2 - 576, graphics.Viewport.Height / 2 - 324, 1152, 648), Color.White);
 
-            string title = inExitMenu ? "Exit" : "Game Paused";
+            //string title = inExitMenu ? "Exit" : "Game Paused";
+            string title = inExitMenu ? "Exit" : "";
             Vector2 titleSize = font.MeasureString(title) * 1.5f;
             Vector2 titlePos = new Vector2((graphics.Viewport.Width - titleSize.X) / 2, graphics.Viewport.Height / 2 - 200);
-            spriteBatch.DrawString(font, title, titlePos, Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
-
+            //spriteBatch.DrawString(font, title, titlePos, Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, title, titlePos, Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
             MouseState mouse = Mouse.GetState();
 
             if (!inExitMenu)
@@ -138,7 +140,8 @@ namespace DimmedLight.MainMenu
 
                     Vector2 textSize = font.MeasureString(item.text);
                     Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2, item.rect.Y + (item.rect.Height - textSize.Y) / 2);
-                    spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    //spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
                 }
             }
             else
@@ -152,7 +155,8 @@ namespace DimmedLight.MainMenu
 
                     Vector2 textSize = font.MeasureString(item.text);
                     Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2, item.rect.Y + (item.rect.Height - textSize.Y) / 2);
-                    spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    //spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
                 }
             }
         }
