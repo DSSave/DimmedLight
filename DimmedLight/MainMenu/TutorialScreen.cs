@@ -116,15 +116,34 @@ namespace DimmedLight.MainMenu
             if (currentPageTexture != null)
             {
                 // กำหนดขนาดและคำนวณตำแหน่งของกรอบที่จะวาดภาพลงไป
-                int destWidth = 1600;
-                int destHeight = 900;
-                int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;  // จัดกลางแนวนอน
-                int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2; // จัดกลางแนวตั้ง
+                /*int destWidth = 1600;
+                int destHeight = 900;*/
 
-                Rectangle destinationRectangle = new Rectangle(destX, destY, destWidth, destHeight);
+                /*int destWidth = 1578;
+                int destHeight = 1116;*/
+
+                /*int destWidth = 1920;
+                int destHeight = 1080;*/
+
+                /*int destX = (GraphicsDevice.Viewport.Width - destWidth) / 2;  // จัดกลางแนวนอน
+                int destY = (GraphicsDevice.Viewport.Height - destHeight) / 2; // จัดกลางแนวตั้ง*/
+
+                int destX = (GraphicsDevice.Viewport.Width - currentPageTexture.Width) / 2;  // จัดกลางแนวนอน
+                int destY = (GraphicsDevice.Viewport.Height - currentPageTexture.Height ) / 2; // จัดกลางแนวตั้ง
+
+                //Rectangle destinationRectangle = new Rectangle(destX, destY, destWidth, destHeight);
 
                 // สั่งวาดภาพให้พอดีกับกรอบสี่เหลี่ยมที่กำหนดไว้
-                spriteBatch.Draw(currentPageTexture, destinationRectangle, Color.White);
+                //spriteBatch.Draw(currentPageTexture, destinationRectangle, Color.White);
+
+                Vector2 position = new Vector2(
+                (GraphicsDevice.Viewport.Width - currentPageTexture.Width) / 2,
+                (GraphicsDevice.Viewport.Height - currentPageTexture.Height) / 2);
+
+                //spriteBatch.Draw(currentPageTexture, position, Color.White);
+
+                spriteBatch.Draw(currentPageTexture, new Vector2(destX,destY), Color.White);
+
             }
 
             spriteBatch.End();
