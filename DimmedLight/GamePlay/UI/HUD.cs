@@ -16,7 +16,7 @@ namespace DimmedLight.GamePlay.UI
         {
             for (int i = 0; i < health; i++)
             {
-                sb.Draw(boxTex, new Rectangle(((int)player.Position.X + 40) + i * 40, 920, 30, 30), Color.Red);
+                sb.Draw(boxTex, new Rectangle(((int)player.Position.X + 90) + i * 40, 920, 30, 30), Color.Red);
             }
         }
     }
