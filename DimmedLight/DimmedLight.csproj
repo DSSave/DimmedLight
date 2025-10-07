@@ -11,6 +11,11 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Content\AssetGameplay\**" />
+    <EmbeddedResource Remove="Content\AssetGameplay\**" />
+    <None Remove="Content\AssetGameplay\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Content\MyCustomFont.spritefont" />
     <None Remove="Content\UX_UIAsset\Font\NumberFont.spritefont" />
     <None Remove="Icon.ico" />
@@ -30,7 +35,6 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.9" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\AssetGameplay\enemy\" />
     <Folder Include="Content\UX_UIAsset\tutorial_page\" />
     <Folder Include="Content\UX_UIAsset\upgrade_page\" />
   </ItemGroup>

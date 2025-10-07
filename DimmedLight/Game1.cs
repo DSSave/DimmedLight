@@ -13,17 +13,14 @@ namespace DimmedLight
     {
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
-        private SpriteFont font;
 
         private Gameplay _gamePlay;
 
         private Screen _currentScreen;
         private Screen _previousScreen;
 
-        private int _screenWidth;
-        private int _screenHeight;
+        public bool SettingScreenWasOpen = false;
 
-       
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);

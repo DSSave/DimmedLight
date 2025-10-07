@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DimmedLight.GamePlay;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,11 @@ namespace DimmedLight.MainMenu
 {
     public class SettingScreen : Screen
     {
-
+        public enum SettingSource
+        {
+            MainMenu,
+            PauseMenu
+        }
         // --- Global Setting State ---
         public static bool ShowTutorial = true;
 
@@ -77,10 +82,13 @@ namespace DimmedLight.MainMenu
 
         // --- state ---
         private SettingSource _source;
+        private Gameplay _previousGameplay;
 
-        public SettingScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
-            : base(game, graphicsDeviceManager, graphicsDevice, content)
+        public SettingScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content, SettingSource source, Gameplay previousGameplay = null)
+    : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
+            _source = source;
+            _previousGameplay = previousGameplay;
         }
 
         public override void LoadContent()
@@ -232,34 +240,19 @@ namespace DimmedLight.MainMenu
             {
                 if (_isNavigatingTabs)
                 {
-                    Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    if(_source == SettingSource.MainMenu) 
+                        Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    else if(_source == SettingSource.PauseMenu)
+                    {
+                        ((Game1)Game).SettingScreenWasOpen = true;
+                        Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content, _previousGameplay));
+                    }
                 }
                 else
                 {
                     _isNavigatingTabs = true;
                 }
             }
-
-            /*if (goBack)
-            {
-                if (_isNavigatingTabs)
-                {
-                    if (_source == SettingSource.MainMenu)
-                    {
-                        Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
-
-                    }
-                    else if (_source == SettingSource.PauseMenu)
-                    {
-                        Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
-                    }
-                }
-                else
-                {
-                    _isNavigatingTabs = true;
-                }
-            }*/
-
 
             if (_isNavigatingTabs)
             {
@@ -432,6 +425,10 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin(samplerState: SamplerState.PointClamp); // Use PointClamp for sharp pixels
 
             spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
+
+            Texture2D blackPixel = new Texture2D(GraphicsDevice, 1, 1);
+            blackPixel.SetData(new[] { Color.White });
+            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
 
             for (int i = 0; i < _tabButtons.Count; i++)
             {

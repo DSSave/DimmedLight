@@ -13,16 +13,32 @@ namespace DimmedLight.MainMenu
     public class GameplayScreen : Screen
     {
         private Gameplay _gameplay;
-
+        private bool _alreadyLoaded = false;
         public GameplayScreen(Game1 game, GraphicsDeviceManager graphics, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphics, graphicsDevice, content)
         {
             _gameplay = new Gameplay(game, graphics);
         }
+        public GameplayScreen(Game1 game, GraphicsDeviceManager graphics, GraphicsDevice graphicsDevice, ContentManager content, Gameplay existingGameplay)
+            : base(game, graphics, graphicsDevice, content)
+        {
+            _gameplay = existingGameplay;
+            _alreadyLoaded = true;
+        }
 
         public override void LoadContent()
         {
-            _gameplay.LoadContent();
+            if (!_alreadyLoaded)
+            {
+                _gameplay.LoadContent();
+                _alreadyLoaded = true;
+            }
+
+            if (Game.SettingScreenWasOpen)
+            {
+                _gameplay.SettingScreenWasOpen = true;
+                Game.SettingScreenWasOpen = false;
+            }
         }
 
         public override void Update(GameTime gameTime)

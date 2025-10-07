@@ -251,12 +251,12 @@ namespace DimmedLight.GamePlay.Isplayer
             }
 
                 bool ultiPressed = keyState.IsKeyDown(Keys.F) && keyState.IsKeyDown(Keys.J) || gpState.IsButtonDown(Buttons.RightShoulder) && gpState.IsButtonDown(Buttons.LeftShoulder);
-            if (scoreManager.SoulGauge >= 500 && ultiPressed && !IsDead)
+            if (scoreManager.SoulGauge >= 600 && ultiPressed && !IsDead)
             {
                 if (!phaseManager.IsInEvent)
                 {
                     UltimateReset();
-                    scoreManager.removeSoul(500);
+                    scoreManager.removeSoul(600);
                 }
                 
             }
@@ -359,12 +359,12 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsAttacking)
             {
                 Attack.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
-                sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
+                //sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
             }
             else if (IsParrying)
             {
                 Parry.DrawFrame(sb, Position, Color.LightSkyBlue * 1f, false);
-                sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
+                //sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
             }
             else if (IsJumping)
             {
@@ -379,7 +379,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 if (IsVisible) 
                     Walk.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
             }
-            sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+            //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
         }
         public void SetPhaseManager(PhaseManager manager) 
         { 

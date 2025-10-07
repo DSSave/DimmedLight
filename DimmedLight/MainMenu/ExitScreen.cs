@@ -48,8 +48,8 @@ namespace DimmedLight.MainMenu
             _buttonFrameTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
 
             // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
-            int dialogWidth = 600;
-            int dialogHeight = 300;
+            //int dialogWidth = 600;
+            //int dialogHeight = 300;
             int screenCenterX = GraphicsDevice.Viewport.Width / 2;
             int screenCenterY = GraphicsDevice.Viewport.Height / 2;
 
@@ -154,7 +154,7 @@ namespace DimmedLight.MainMenu
             spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
 
             // วาด Overlay สีดำโปร่งแสง
-            spriteBatch.Draw(_pixelTexture, GraphicsDevice.Viewport.Bounds, Color.Black * 0.7f);
+            spriteBatch.Draw(_pixelTexture, GraphicsDevice.Viewport.Bounds, Color.Black * 0.5f);
 
             // --- CHANGE: วาดกรอบ Exit หลักให้โปร่งแสง ---
             spriteBatch.Draw(_exitFrameTexture, _dialogBox, Color.White * 0.85f);

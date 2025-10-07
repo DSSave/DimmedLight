@@ -19,6 +19,9 @@ namespace DimmedLight.GamePlay.ETC
         private Vector2 shakeOffset = Vector2.Zero;
         private float shakeMagnitude = 0f;
         private float shakeDuration = 0f;
+        public Vector2 CurrentPosition => currentPosition;
+        public Vector2 ShakeOffset => shakeOffset;
+
         public Camera()
         {
             currentPosition = defaultPosition;

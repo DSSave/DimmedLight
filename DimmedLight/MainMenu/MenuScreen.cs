@@ -77,8 +77,8 @@ namespace DimmedLight.MainMenu
             // --- รูปภาพ Title ---
             // << แก้ไข: กำหนดตำแหน่งรูปภาพ
             _titlePosition = new Vector2(
-                GraphicsDevice.Viewport.Width / 2f + 400, // ปรับตำแหน่งแกน X ตามต้องการ
-                GraphicsDevice.Viewport.Height * 0.22f    // ปรับตำแหน่งแกน Y ตามต้องการ
+                GraphicsDevice.Viewport.Width / 2f + 580, // ปรับตำแหน่งแกน X ตามต้องการ
+                GraphicsDevice.Viewport.Height /2f - _titleTexture.Height + 30    // ปรับตำแหน่งแกน Y ตามต้องการ
             );
 
             _previousMouseState = Mouse.GetState();
@@ -168,7 +168,7 @@ namespace DimmedLight.MainMenu
                     break;
                 case 2: // Setting
                     //Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
-                    Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingScreen.SettingSource.MainMenu));
                     break;
                 case 3: // Credit
                     Game.ChangeScreen(new CreditScreen(Game, Game._graphics, GraphicsDevice, Content));
@@ -200,6 +200,10 @@ namespace DimmedLight.MainMenu
 
             // --- พื้นหลัง ---
             spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+
+            Texture2D blackPixel = new Texture2D(GraphicsDevice, 1, 1);
+            blackPixel.SetData(new[] { Color.White });
+            spriteBatch.Draw(blackPixel, new Rectangle(1250, 0, GraphicsDevice.Viewport.Width / 2 + 730, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
 
             // --- Title Image ---
             // << แก้ไข: วาดรูปภาพแทนข้อความ LOOP และ DIMMEDLIGHT

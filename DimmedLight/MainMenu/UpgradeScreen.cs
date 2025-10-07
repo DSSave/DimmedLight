@@ -197,6 +197,10 @@ namespace DimmedLight.MainMenu
 
             spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
+            Texture2D blackPixel = new Texture2D(GraphicsDevice, 1, 1);
+            blackPixel.SetData(new[] { Color.White });
+            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
+
             Vector2 screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
 
             Color textColor = Color.White;
