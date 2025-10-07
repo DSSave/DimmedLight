@@ -15,7 +15,6 @@ namespace DimmedLight.GamePlay.Managers
         private AnimatedTexture guiltIdleProto, guiltAttackProto, guiltDeathProto;
         private AnimatedTexture traumaIdleProto, traumaAttackProto, traumaDeathProto;
         private AnimatedTexture judgementIdleProto, judgementDeathProto;
-        private Texture2D projectileTex;
         private Texture2D bullet4Tex;
         private Texture2D bullet1Tex;
         public EnemyFactory(AnimatedTexture guiltIdle, AnimatedTexture guiltAttack, AnimatedTexture guiltDeath,

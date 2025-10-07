@@ -144,16 +144,16 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead)
                 {
-                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y - 68), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(Position.X - 6, Position.Y - 68), IsFlipped);
                 }
                 else if (IsAttacking)
                 {
-                    Attack.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), attack * 1f, IsFlipped);
+                    Attack.DrawFrame(sb, new Vector2(Position.X, Position.Y), attack * 1f, IsFlipped);
                     //sb.Draw(hitBoxTex, HitBox, Color.Blue * 0.4f);
                 }
                 else
                 {
-                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
+                    Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
             }

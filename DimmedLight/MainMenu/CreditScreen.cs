@@ -53,13 +53,13 @@ namespace DimmedLight.MainMenu
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            GraphicsDevice.Clear(Color.Black);
-
             spriteBatch.Begin();
-
             // 1. วาดพื้นหลัง (Background.jpg) ให้เต็มหน้าจอก่อน
             spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
 
+            Texture2D blackPixel = new Texture2D(GraphicsDevice, 1, 1);
+            blackPixel.SetData(new[] { Color.White });
+            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
             // --- CHANGE IS HERE ---
             // 2. กำหนดขนาดและตำแหน่งของกรอบ 16:9 ที่จะวาดภาพเครดิตลงไป
             int destWidth = 1600;

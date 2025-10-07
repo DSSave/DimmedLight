@@ -20,7 +20,6 @@ namespace DimmedLight.GamePlay
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
-        private SpriteFont fontnumber;
 
         #region Assets
         Texture2D bg1Tex, bg2Tex, bg3Tex, bg4Tex, bg5Tex;
@@ -71,6 +70,8 @@ namespace DimmedLight.GamePlay
         private Color attack = new Color(37, 150, 190);
         private GameOver gameOverScreen;
         private bool showGameOver = false;
+        public bool SettingScreenWasOpen { get; set; } = false;
+
         public static class Texture2DHelper
         {
             public static Texture2D Pixel { get; set; }
@@ -160,7 +161,7 @@ namespace DimmedLight.GamePlay
             delisaster.Load(game.Content);
             hud = new HUD();
             camera = new Camera();
-            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor);
+            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor, camera);
             pauseMenu.ClickExit = () =>
             {
                 if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
@@ -173,8 +174,7 @@ namespace DimmedLight.GamePlay
                 if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
                     MediaPlayer.Stop();
 
-                game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
-                /*game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content, SettingSource.MainMenu));*/
+                game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
             #endregion
             
@@ -223,10 +223,15 @@ namespace DimmedLight.GamePlay
             GamePadState gpState = GamePad.GetState(PlayerIndex.One);
 
             pauseMenu.Update(keyState, previousKeyState);
+            if (!pauseMenu.IsPaused && SettingScreenWasOpen)
+            {
+                pauseMenu.IsPaused = false;
+                SettingScreenWasOpen = false;
+            }
             //float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
 
-            if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
+            //if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
             {
