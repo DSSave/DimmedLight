@@ -62,7 +62,7 @@ namespace DimmedLight.GamePlay
         PauseMenu pauseMenu;
         #endregion
 
-        private SoundEffect parryHit;
+        private SoundEffect parryHit,enemiesDead,playerHit,ammoShoot;
         private Song BMG;
         private Song EventSound;
 
@@ -108,14 +108,17 @@ namespace DimmedLight.GamePlay
             pauseImage = game.Content.Load<Texture2D>("Frame");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
+            enemiesDead = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EnemiesDead");
+            ammoShoot = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EventParryAmmoAndGuilt");
+            playerHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
             parryHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
-            BMG = game.Content.Load<Song>("Audio/SunYaNaFon");
-            EventSound = game.Content.Load<Song>("Audio/TaLayJai");
+            BMG = game.Content.Load<Song>("Audio/TaLayJai");
+            EventSound = game.Content.Load<Song>("Audio/SunYaNaFon");
             if (MediaPlayer.State == MediaState.Playing && pauseMenu.IsPaused)
             {
                 MediaPlayer.Stop();
             }
-            MediaPlayer.Play(BMG);
+            //MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f;
             gameOverScreen = new GameOver(game, _graphics);
@@ -209,6 +212,9 @@ namespace DimmedLight.GamePlay
                         
             player.SetPhaseManager(phaseManager);
             EnemyBase.ParryHit = parryHit;
+            EnemyBase.EnemiesDead = enemiesDead;
+            EnemyBase.PlayerHit = playerHit;
+            EnemyBase.AmmoShoot = ammoShoot;
         }
 
         public void Update(GameTime gameTime)

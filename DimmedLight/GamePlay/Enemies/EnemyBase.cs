@@ -27,7 +27,7 @@ namespace DimmedLight.GamePlay.Enemies
         public float DeathDuration = 0.8f;
         public bool IsFlipped;
         protected float speed;
-        public static SoundEffect ParryHit;
+        public static SoundEffect ParryHit, EnemiesDead,PlayerHit, AmmoShoot;
 
         public EnemyBase()
         {
@@ -55,6 +55,7 @@ namespace DimmedLight.GamePlay.Enemies
         public virtual void OnKilled(ScoreManager scoreManager, string method)
         {
             scoreManager.AddPoints(EnemyType, method);
+            
         }
         public virtual void SetSpeed(float spd) => speed = spd;
         protected void PlayParryHit()

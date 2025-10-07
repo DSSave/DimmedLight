@@ -80,7 +80,7 @@ namespace DimmedLight.GamePlay.Enemies
                                         player.IsReturning = true;
                                     }
                                     player.Position += player.KnockBack;
-
+                                    PlayerHit?.Play();
                                     if (!delisaster.IsReturning)
                                     {
                                         delisaster.OriginalPosition = delisaster.Position;
@@ -117,6 +117,7 @@ namespace DimmedLight.GamePlay.Enemies
                         IsDead = true;
                         DeathAnimationStarted = true;
                         DeathTimer = 0;
+                        EnemiesDead?.Play();
                     }
                     if (Position.X < 0) // ถ้าศัตรูออกนอกหน้าจอด้านซ้าย
                     {
