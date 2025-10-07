@@ -1,11 +1,13 @@
 ﻿using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,6 +52,7 @@ namespace DimmedLight.GamePlay.Enemies
                         AttackAnim.Reset();
                         ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed); // ยิงโปรเจกไทล์ไปยังตำแหน่งผู้เล่น
                         HitTriggered = false;
+                        AmmoShoot?.Play();
                     }
 
                     if (IsAttacking)
@@ -97,7 +100,7 @@ namespace DimmedLight.GamePlay.Enemies
                                     player.IsReturning = true;
                                 }
                                 player.Position += player.KnockBack;
-
+                                PlayerHit?.Play();
                                 if (!delisaster.IsReturning)
                                 {
                                     delisaster.OriginalPosition = delisaster.Position;
@@ -132,6 +135,7 @@ namespace DimmedLight.GamePlay.Enemies
                         DeathAnimationStarted = true;
                         DeathTimer = 0f;
                         ProjectileObj.Active = false;
+                        EnemiesDead?.Play();
                     }
                     if (Position.X < 0) // ถ้าศัตรูออกนอกหน้าจอ
                     {

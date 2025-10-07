@@ -13,6 +13,24 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/LOOP_SFX_EnemiesDead.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_SFX_EnemiesDead.wav
+
+#begin Audio/LOOP_SFX_EventParryAmmoAndGuilt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_SFX_EventParryAmmoAndGuilt.wav
+
+#begin Audio/LOOP_SFX_JudgementDead.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_SFX_JudgementDead.wav
+
 #begin Audio/LOOP_SFX_Jump.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

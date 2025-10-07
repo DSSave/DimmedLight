@@ -102,7 +102,7 @@ namespace DimmedLight.GamePlay.Isplayer
         #endregion
 
         #region Sound&Music
-        private SoundEffect attackEffect, jumpEffect;
+        private SoundEffect attackEffect, jumpEffect,hitEffect;
         #endregion
 
         private PhaseManager phaseManager;
@@ -132,6 +132,7 @@ namespace DimmedLight.GamePlay.Isplayer
             #region Sound&Effect
             attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
             jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
+            hitEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
             #endregion
         }
 
