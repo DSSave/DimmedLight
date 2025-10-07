@@ -26,8 +26,8 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            //_mainBackground = Content.Load<Texture2D>("Background");
-            _creditsOverlay = Content.Load<Texture2D>("MenuAsset/credits");
+            _mainBackground = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
+            _creditsOverlay = Content.Load<Texture2D>("UX_UI/credits");
 
             _previousKeyboardState = Keyboard.GetState();
             _previousGamePadState = GamePad.GetState(PlayerIndex.One);
@@ -58,7 +58,7 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin();
 
             // 1. วาดพื้นหลัง (Background.jpg) ให้เต็มหน้าจอก่อน
-            //spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
+            spriteBatch.Draw(_mainBackground, GraphicsDevice.Viewport.Bounds, Color.White);
 
             // --- CHANGE IS HERE ---
             // 2. กำหนดขนาดและตำแหน่งของกรอบ 16:9 ที่จะวาดภาพเครดิตลงไป

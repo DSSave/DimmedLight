@@ -20,6 +20,7 @@ namespace DimmedLight.GamePlay
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont font;
+        private SpriteFont fontnumber;
 
         #region Assets
         Texture2D bg1Tex, bg2Tex, bg3Tex, bg4Tex, bg5Tex;
@@ -84,7 +85,7 @@ namespace DimmedLight.GamePlay
         public void LoadContent()
         {
             _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            
+
             #region Assets
             platformTex = game.Content.Load<Texture2D>("platform-remake");
             platformAsset = game.Content.Load<Texture2D>("floating-platform");
@@ -98,8 +99,12 @@ namespace DimmedLight.GamePlay
             attackProjecTex = game.Content.Load<Texture2D>("bullet2");
             parryProjecTex = game.Content.Load<Texture2D>("bullet1");
 
-            font = game.Content.Load<SpriteFont>("gameFont");
+            font = game.Content.Load<SpriteFont>("gameFont"); //
+            fontnumber = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
+
+            tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
+            pauseImage = game.Content.Load<Texture2D>("PauseNew");
             tutorialImage = game.Content.Load<Texture2D>("eventTutorial");
             pauseImage = game.Content.Load<Texture2D>("Frame");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
@@ -167,9 +172,10 @@ namespace DimmedLight.GamePlay
                     MediaPlayer.Stop();
 
                 game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+                /*game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content, SettingSource.MainMenu));*/
             };
             #endregion
-
+            
             #region Enemy&Factory
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -200,8 +206,8 @@ namespace DimmedLight.GamePlay
 
             phaseManager = new PhaseManager(enemyFactory, player, delisaster, camera, hellCloakTheme, tutorialImage,
                 parryProjecTex, attackProjecTex, parryHit, EventSound, BMG, game.GraphicsDevice);
-            #endregion
-
+            #endregion  
+                        
             player.SetPhaseManager(phaseManager);
             EnemyBase.ParryHit = parryHit;
         }
@@ -214,7 +220,7 @@ namespace DimmedLight.GamePlay
             pauseMenu.Update(keyState, previousKeyState);
             //float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //if (keyState.IsKeyDown(Keys.D5) && !previousKeyState.IsKeyDown(Keys.D5)) delisaster.DashForward(new Vector2(150, delisaster.Position.Y));
-            
+
             if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
             if (pauseMenu.IsPaused && !player.IsDead)
@@ -323,8 +329,6 @@ namespace DimmedLight.GamePlay
             phaseManager.Draw(_spriteBatch, hurtBoxTex, hitBoxTex, isFlipped);
             delisaster.Draw(_spriteBatch);
 
-            
-            
 
             pauseMenu.Draw(_spriteBatch);
 

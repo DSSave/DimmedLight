@@ -44,7 +44,8 @@ namespace DimmedLight.MainMenu
 
         public override void LoadContent()
         {
-            //_background = Content.Load<Texture2D>("background");
+            _background = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
+            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
             _menuFont = Content.Load<SpriteFont>("gameFont");
 
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -194,7 +195,7 @@ namespace DimmedLight.MainMenu
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            //spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
+            spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
 
             Vector2 screenCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
 

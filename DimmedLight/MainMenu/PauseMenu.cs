@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DimmedLight.GamePlay.UI
+namespace DimmedLight.MainMenu
 {
     public class PauseMenu
     {
@@ -19,21 +20,31 @@ namespace DimmedLight.GamePlay.UI
         public Action ClickRestart;
         public Action ClickExit;
         public Action ClickOption;
+        private int selectedIndex = 0;
+        private int exitSelectedIndex = 0;
+
+
+
+        private MouseState _previousMouseState;
+        private KeyboardState _previousKeyboardState;
+        private GamePadState _previousGamePadState;
         public bool IsPaused { get; private set; } = false;
         private bool inExitMenu = false;
 
         private List<(string text, Rectangle rect, Action onClick)> menuItems;
         private List<(string text, Rectangle rect, Action onClick)> exitMenuItems;
+
         public PauseMenu(GraphicsDevice graphics, SpriteFont font, Texture2D pauseImage, Texture2D bottonCursor)
         {
             this.graphics = graphics;
             this.font = font;
-            this.pauseMenu = pauseImage;
-            this.holder = bottonCursor;
+            pauseMenu = pauseImage;
+            holder = bottonCursor;
 
             SetupMenus();
 
         }
+        
         private void SetupMenus()
         {
             int centerX = graphics.Viewport.Width / 2;
@@ -56,6 +67,7 @@ namespace DimmedLight.GamePlay.UI
                 ("Yes", new Rectangle(centerX - 150, startY + spacing - 25, 300, 50), () => { ClickExit?.Invoke(); IsPaused = false; }),
                 ("No", new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { inExitMenu = false; }),
             };
+
         }
         public void Update(KeyboardState keyboardState, KeyboardState previousKeyboardState)
         {
@@ -76,12 +88,12 @@ namespace DimmedLight.GamePlay.UI
                 }
             }
 
-            if (IsPaused)
+            /*if (IsPaused)
             {
                 MouseState mouse = Mouse.GetState();
                 var mousePos = mouse.Position;
 
-                if (mouse.LeftButton == ButtonState.Pressed)
+                if (mouse.LeftButton == ButtonState.Pressed ) 
                 {
                     if (!inExitMenu)
                     {
@@ -106,6 +118,49 @@ namespace DimmedLight.GamePlay.UI
                         }
                     }
                 }
+            }*/
+
+            if (IsPaused)
+            {
+                MouseState mouse = Mouse.GetState();
+                var mousePos = mouse.Position;
+
+                if (!inExitMenu)
+                {
+                    for (int i = 0; i < menuItems.Count; i++)
+                    {
+                        if (menuItems[i].rect.Contains(mousePos))
+                        {
+                            selectedIndex = i; // เปลี่ยนตำแหน่ง holder ตามปุ่มที่เมาส์อยู่
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < exitMenuItems.Count; i++)
+                    {
+                        if (exitMenuItems[i].rect.Contains(mousePos))
+                        {
+                            exitSelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // ตรวจจับการคลิก
+                if (mouse.LeftButton == ButtonState.Pressed)
+                {
+                    if (!inExitMenu)
+                    {
+                        menuItems[selectedIndex].onClick?.Invoke();
+                    }
+                    else
+                    {
+                        exitMenuItems[exitSelectedIndex].onClick?.Invoke();
+                    }
+                }
+
             }
         }
         public void Draw(SpriteBatch spriteBatch)
@@ -115,17 +170,19 @@ namespace DimmedLight.GamePlay.UI
             Texture2D blackPixel = new Texture2D(graphics, 1, 1);
             blackPixel.SetData(new[] { Color.White });
             spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
+            //spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.White * 0.7f);
 
             spriteBatch.Draw(pauseMenu, new Rectangle(graphics.Viewport.Width / 2 - 576, graphics.Viewport.Height / 2 - 324, 1152, 648), Color.White);
 
-            string title = inExitMenu ? "Exit" : "Game Paused";
+            //string title = inExitMenu ? "Exit" : "Game Paused";
+            string title = inExitMenu ? "Exit" : "";
             Vector2 titleSize = font.MeasureString(title) * 1.5f;
             Vector2 titlePos = new Vector2((graphics.Viewport.Width - titleSize.X) / 2, graphics.Viewport.Height / 2 - 200);
-            spriteBatch.DrawString(font, title, titlePos, Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
-
+            //spriteBatch.DrawString(font, title, titlePos, Color.Black, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, title, titlePos, Color.White, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
             MouseState mouse = Mouse.GetState();
 
-            if (!inExitMenu)
+            /*if (!inExitMenu)
             {
                 foreach (var item in menuItems)
                 {
@@ -136,7 +193,8 @@ namespace DimmedLight.GamePlay.UI
 
                     Vector2 textSize = font.MeasureString(item.text);
                     Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2, item.rect.Y + (item.rect.Height - textSize.Y) / 2);
-                    spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    //spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
                 }
             }
             else
@@ -150,9 +208,45 @@ namespace DimmedLight.GamePlay.UI
 
                     Vector2 textSize = font.MeasureString(item.text);
                     Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2, item.rect.Y + (item.rect.Height - textSize.Y) / 2);
-                    spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    //spriteBatch.DrawString(font, item.text, textPos, Color.Black);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
+                }
+            }*/
+
+            if (!inExitMenu)
+            {
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    var item = menuItems[i];
+
+                    // แสดง holder เฉพาะปุ่มที่เลือก
+                    if (i == selectedIndex)
+                        spriteBatch.Draw(holder, item.rect, Color.White);
+
+                    Vector2 textSize = font.MeasureString(item.text);
+                    Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2,
+                                                  item.rect.Y + (item.rect.Height - textSize.Y) / 2);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
                 }
             }
+            else // วาด Exit Menu
+            {
+                for (int i = 0; i < exitMenuItems.Count; i++)
+                {
+                    var item = exitMenuItems[i];
+
+                    // วาด holder เฉพาะปุ่มที่เลือกใน Exit Menu
+                    if (i == exitSelectedIndex)
+                        spriteBatch.Draw(holder, item.rect, Color.White);
+
+                    Vector2 textSize = font.MeasureString(item.text);
+                    Vector2 textPos = new Vector2(item.rect.X + (item.rect.Width - textSize.X) / 2,
+                                                  item.rect.Y + (item.rect.Height - textSize.Y) / 2);
+                    spriteBatch.DrawString(font, item.text, textPos, Color.White);
+                }
+            }
+
+
         }
     }
 }

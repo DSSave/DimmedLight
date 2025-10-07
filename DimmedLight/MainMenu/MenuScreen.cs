@@ -33,17 +33,33 @@ namespace DimmedLight.MainMenu
         private int _selectedButtonIndex = 0;
 
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
-            : base(game, graphicsDeviceManager, graphicsDevice, content)
+                   : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
         }
+
+        // --- state ---
+        /*private SettingSource _source;
+        public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content, SettingSource source)
+            : base(game, graphicsDeviceManager, graphicsDevice, content)
+        {
+            _source = source;
+        }*/
+
+        /*public enum SettingSource
+        {
+            MainMenu,
+            PauseMenu
+        }*/
 
         public override void LoadContent()
         {
             _menuFont = Content.Load<SpriteFont>("gameFont");
+            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/MyCustomFont");
             // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
-            //_backgroundTexture = Content.Load<Texture2D>("MainMenu_page");
-            _selectedButtonTexture = Content.Load<Texture2D>("bottonCursor");
-            _titleTexture = Content.Load<Texture2D>("MenuAsset/Title"); // << เพิ่ม: โหลดรูปภาพ title
+            _backgroundTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
+            _selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
+            //_selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
+            _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title"); // << เพิ่ม: โหลดรูปภาพ title
 
             // --- ปุ่ม ---
             int buttonWidth = 450;
@@ -87,6 +103,10 @@ namespace DimmedLight.MainMenu
                                 (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
             bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
                                 (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
+
+            //--- curent state ---
+
+            //setteingSource = SettingSource.MainMenu;
 
             if (movedDown)
             {
@@ -140,13 +160,14 @@ namespace DimmedLight.MainMenu
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else
                     {
-                        // Game.ChangeScreen(new GameplayScreen(Game, Game.Graphics, GraphicsDevice, Content));
+                        Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content));
                     }
                     break;
                 case 1: // Upgrade
                     Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
                     break;
                 case 2: // Setting
+                    //Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
                     Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content));
                     break;
                 case 3: // Credit
@@ -178,7 +199,7 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin();
 
             // --- พื้นหลัง ---
-            //spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+            spriteBatch.Draw(_backgroundTexture, GraphicsDevice.Viewport.Bounds, Color.White);
 
             // --- Title Image ---
             // << แก้ไข: วาดรูปภาพแทนข้อความ LOOP และ DIMMEDLIGHT
