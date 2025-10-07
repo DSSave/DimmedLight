@@ -88,7 +88,7 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead)
                 {
-                    Death.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(Position.X + 5, Position.Y - 31), IsFlipped);
                 }
                 else
                 {

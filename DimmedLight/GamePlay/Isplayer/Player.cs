@@ -123,7 +123,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public void Load(ContentManager content)
         {
             Idle.Load(content, "player_idle", 1, 1, 15); //โหลดไฟล์ใส่อนิเมชั่น กำหนด frame count, row, fps 
-            Walk.Load(content, "Player-running-spritesheet", 10, 1, 24); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
+            Walk.Load(content, "player_running_Spritesheet", 14, 1, 24); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
             Jump.Load(content, "player_jumping_Spritesheet", 9, 1, 8);
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
             Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
@@ -294,10 +294,7 @@ namespace DimmedLight.GamePlay.Isplayer
                     Position = OriginalPosition;
                 }
             }
-            if (IsDead)
-            {
-                return;
-            }
+
         }
         public void SetEvent(bool active)
         {
@@ -327,7 +324,11 @@ namespace DimmedLight.GamePlay.Isplayer
                 IsAttacking = false;
                 IsParrying = false;
                 IsJumping = false;
+                IsInvincible = false;
+                IsReturning = false;
+
                 Position = new Vector2(195, 655);
+
                 Death.Reset();
                 Death.Loop = false;
             }
@@ -353,11 +354,11 @@ namespace DimmedLight.GamePlay.Isplayer
 
             if (!canWalk)
             {
-                Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
+                Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
             }
             else if (IsAttacking)
             {
-                Attack.DrawFrame(sb, Position, false);
+                Attack.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
                 //sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
             }
             else if (IsParrying)

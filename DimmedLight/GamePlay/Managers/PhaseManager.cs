@@ -221,7 +221,7 @@ namespace DimmedLight.GamePlay.Managers
 
                 hellCloakEvent.Reset();
                 phase3Timer = 0f;
-                nextEventTime = 30f;
+                nextEventTime = 18f;
             }
         }
     }

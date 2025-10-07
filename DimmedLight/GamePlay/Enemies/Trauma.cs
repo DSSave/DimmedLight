@@ -48,7 +48,7 @@ namespace DimmedLight.GamePlay.Enemies
                         IsAttacking = true;
                         AttackTimer = 0f;
                         AttackAnim.Reset();
-                        ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 50), new Vector2(player.Position.X + 250, 650), ProjectileSpeed); // ยิงโปรเจกไทล์ไปยังตำแหน่งผู้เล่น
+                        ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed); // ยิงโปรเจกไทล์ไปยังตำแหน่งผู้เล่น
                         HitTriggered = false;
                     }
 

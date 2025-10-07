@@ -30,7 +30,7 @@ namespace DimmedLight.GamePlay.Managers
                     string[] types = new[] { "Guilt", "Trauma", "Judgement", "FloorTrauma" }; // ประเภทของศัตรูที่สามารถเกิดได้
                     string type = types[rnd.Next(types.Length)]; // สุ่มเลือกประเภทของศัตรู
                     float x = 1920 + rnd.Next(200, 450) + i * 200; // ตำแหน่ง X ที่ศัตรูจะเกิด (นอกหน้าจอทางขวา)
-                    float y = type == "Guilt" ? 670f : type == "Trauma" ? 380f : type == "Judgement" ? 720f : 565f; // ตำแหน่ง Y ที่ศัตรูจะเกิด (ขึ้นอยู่กับประเภทของศัตรู)
+                    float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 515f; // ตำแหน่ง Y ที่ศัตรูจะเกิด (ขึ้นอยู่กับประเภทของศัตรู)
                     result.Add(new EnemySpawnInfo(type, new Vector2(x, y), PlatformSpeed)); // เพิ่มข้อมูลการเกิดศัตรูลงในรายการ
                 }
             }
