@@ -138,7 +138,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public void Update(GameTime gameTime, KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
         {
             // update hitboxes
-            HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 156, 174); //สร้าง hurtbox
+            HurtBox = new Rectangle((int)Position.X + 30, (int)Position.Y, 156, 174); //สร้าง hurtbox
 
             if (!canWalk) // delay before can walk
             {
@@ -195,7 +195,7 @@ namespace DimmedLight.GamePlay.Isplayer
             }
             if (IsAttacking)
             {
-                HitBoxAttack = new Rectangle((int)Position.X + 156, (int)Position.Y, 76, 174);//ต่ำแหน่ง x y width height
+                HitBoxAttack = new Rectangle((int)Position.X + 186, (int)Position.Y, 76, 174);//ต่ำแหน่ง x y width height
                 attackTimer -= delta;
                 Attack.UpdateFrame(delta);
                 if (attackTimer <= 0f) IsAttacking = false;
@@ -217,7 +217,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
                 if (IsParrying)
                 {
-                    HitBoxParry = new Rectangle((int)Position.X + 156, (int)Position.Y - 6, 54, 188);
+                    HitBoxParry = new Rectangle((int)Position.X + 186, (int)Position.Y - 6, 54, 188);
                     parryTimer -= delta;
                     Parry.UpdateFrame(delta);
                     if (parryTimer <= 0f) IsParrying = false;
@@ -239,7 +239,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
                 if (IsParrying)
                 {
-                    HitBoxParry = new Rectangle((int)Position.X + 120, (int)Position.Y + 45, 112, 135);
+                    HitBoxParry = new Rectangle((int)Position.X + 180, (int)Position.Y + 45, 112, 135);
                     parryTimer -= delta;
                     Parry.UpdateFrame(delta);
                     if (parryTimer <= 0f) IsParrying = false;
@@ -359,27 +359,27 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsAttacking)
             {
                 Attack.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
-                //sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
+                sb.Draw(hitBoxTex, HitBoxAttack, Color.Blue * 0.4f);
             }
             else if (IsParrying)
             {
                 Parry.DrawFrame(sb, Position, Color.LightSkyBlue * 1f, false);
-                //sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
+                sb.Draw(hitBoxTex, HitBoxParry, Color.Blue * 0.4f);
             }
             else if (IsJumping)
             {
-                Jump.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
+                Jump.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
             }
             else if (DeathAnimationStarted)
             {
-                Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
+                Death.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
             }
             else
             {
                 if (IsVisible) 
-                    Walk.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), false);
+                    Walk.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
             }
-            //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+            sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
         }
         public void SetPhaseManager(PhaseManager manager) 
         { 

@@ -45,7 +45,7 @@ namespace DimmedLight.MainMenu
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
             _exitFrameTexture = Content.Load<Texture2D>("UX_UIAsset/exit_page/ExitScreen");
-            _buttonFrameTexture = Content.Load<Texture2D>("UX_UI/Memu_Frame02");
+            _buttonFrameTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
 
             // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
             int dialogWidth = 600;
