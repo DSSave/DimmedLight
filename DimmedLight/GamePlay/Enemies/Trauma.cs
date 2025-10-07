@@ -38,7 +38,7 @@ namespace DimmedLight.GamePlay.Enemies
             if (!player.IsDead)
             {
                 Position.X -= speed * delta * 60;
-                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 109, 170);
+                HurtBox = new Rectangle((int)Position.X, (int)Position.Y + 50, 109, 170);
                 float distance = Vector2.Distance(Position, player.Position); // คำนวณระยะห่างระหว่างศัตรูกับผู้เล่น
                 if (!IsDead)
                 {
@@ -159,15 +159,15 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 if (DeathAnimationStarted && IsDead)
                 {
-                    Death.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
+                    Death.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 else if (IsAttacking)
                 {
-                    AttackAnim.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
+                    AttackAnim.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 else
                 {
-                    Idle.DrawFrame(sb, new Vector2(HurtBox.X, HurtBox.Y), IsFlipped);
+                    Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
                 if (ProjectileObj.Active)
