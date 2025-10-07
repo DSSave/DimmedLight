@@ -130,8 +130,8 @@ namespace DimmedLight.GamePlay.Isplayer
             Death.Load(content, "game_over_spritesheet", 1, 22, 10);
 
             #region Sound&Effect
-            attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_เสียงฟัน");
-            jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_กระโดด");
+            attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
+            jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
             #endregion
         }
 
