@@ -83,7 +83,7 @@ namespace DimmedLight.GamePlay.Managers
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Pause();
 
-            MediaPlayer.Play(eventSong);
+            //MediaPlayer.Play(eventSong);
             MediaPlayer.IsRepeating = false;
             MediaPlayer.Volume = 0.2f;
 

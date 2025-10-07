@@ -114,7 +114,7 @@ namespace DimmedLight.GamePlay
             {
                 MediaPlayer.Stop();
             }
-            MediaPlayer.Play(BMG);
+            //MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f;
             gameOverScreen = new GameOver(game, _graphics);
