@@ -53,15 +53,21 @@ namespace DimmedLight.MainMenu
             int screenCenterX = GraphicsDevice.Viewport.Width / 2;
             int screenCenterY = GraphicsDevice.Viewport.Height / 2;
 
-            _dialogBox = new Rectangle(screenCenterX - dialogWidth / 2, screenCenterY - dialogHeight / 2, dialogWidth, dialogHeight);
-            
-            int buttonWidth = 280;
+            // ปรับขนาด
+            //_dialogBox = new Rectangle(screenCenterX - dialogWidth / 2, screenCenterY - dialogHeight / 2, dialogWidth, dialogHeight);
+            _dialogBox = new Rectangle(screenCenterX - _exitFrameTexture.Width / 2, screenCenterY - _exitFrameTexture.Height / 2, _exitFrameTexture.Width, _exitFrameTexture.Height);
+
+            /*int buttonWidth = 280;
             int buttonHeight = 80;
-            int buttonSpacing = 10;
+            int buttonSpacing = 10;*/
+
+            int buttonWidth = 420;
+            int buttonHeight = 120;
+            int buttonSpacing = 30;
             int buttonX = _dialogBox.Center.X - buttonWidth / 2;
 
             // ปรับตำแหน่ง Y ของปุ่มให้คล้ายในรูป
-            int yesButtonY = _dialogBox.Y + 95; // Y ของ Yes
+            int yesButtonY = _dialogBox.Y + 320; // Y ของ Yes
             int noButtonY = yesButtonY + buttonHeight - buttonSpacing; // Y ของ No
 
             _yesButton = new Rectangle(buttonX, yesButtonY, buttonWidth, buttonHeight);
