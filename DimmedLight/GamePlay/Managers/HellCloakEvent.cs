@@ -223,7 +223,7 @@ namespace DimmedLight.GamePlay.Managers
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Stop();
 
-            MediaPlayer.Play(bmg);
+            //MediaPlayer.Play(bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.008f;
         }
