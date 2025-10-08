@@ -60,7 +60,7 @@ namespace DimmedLight.GamePlay.Enemies
         public virtual void SetSpeed(float spd) => speed = spd;
         protected void PlayParryHit()
         {
-            ParryHit?.Play();
+            ParryHit?.Play(0.3f, 0f, 0f);
         }
     }
 }

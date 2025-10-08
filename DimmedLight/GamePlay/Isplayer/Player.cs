@@ -158,7 +158,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 velocityY = jumpPower;
                 if (!inEvent)
                 {
-                    jumpEffect.Play();
+                    jumpEffect.Play(0.3f, 0f, 0f);
                 }
                 Jump.Reset();
             }
@@ -191,7 +191,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 Attack.Reset(); //เริ่มอนิเมชั่นโจมตีใหม่
                 if (canWalk)
                 {
-                    attackEffect.Play();
+                    attackEffect.Play(0.3f, 0f, 0f);
                 }
             }
             if (IsAttacking)

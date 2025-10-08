@@ -29,7 +29,7 @@ namespace DimmedLight.GamePlay
         Texture2D hurtBoxTex, hitBoxTex;
         Texture2D hellCloakTheme;
         Texture2D tutorialImage;
-        Texture2D pauseImage;
+        Texture2D pauseImage, frame;
         Texture2D bottonCursor;
         #endregion
 
@@ -106,7 +106,7 @@ namespace DimmedLight.GamePlay
             tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
             pauseImage = game.Content.Load<Texture2D>("PauseNew");
             tutorialImage = game.Content.Load<Texture2D>("eventTutorial");
-            pauseImage = game.Content.Load<Texture2D>("Frame");
+            frame = game.Content.Load<Texture2D>("Frame");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
             enemiesDead = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EnemiesDead");
@@ -161,7 +161,7 @@ namespace DimmedLight.GamePlay
             delisaster.Load(game.Content);
             hud = new HUD();
             camera = new Camera();
-            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, bottonCursor, camera);
+            pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, frame, bottonCursor, camera);
             pauseMenu.ClickExit = () =>
             {
                 if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
@@ -176,6 +176,7 @@ namespace DimmedLight.GamePlay
 
                 game.ChangeScreen(new SettingScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
+            pauseMenu.LoadContent(game.Content);
             #endregion
             
             #region Enemy&Factory

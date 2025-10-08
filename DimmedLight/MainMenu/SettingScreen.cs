@@ -221,7 +221,7 @@ namespace DimmedLight.MainMenu
             bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
                           (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
-            if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
+            /*if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
             {
                 if (_isNavigatingTabs)
                 {
@@ -234,46 +234,41 @@ namespace DimmedLight.MainMenu
                         }
                     }
                 }
-            }
+            }*/
 
             if (goBack)
             {
-                if (_isNavigatingTabs)
+                if (_source == SettingSource.MainMenu)
+                    Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
+                else if (_source == SettingSource.PauseMenu)
                 {
-                    if(_source == SettingSource.MainMenu) 
-                        Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
-                    else if(_source == SettingSource.PauseMenu)
-                    {
-                        ((Game1)Game).SettingScreenWasOpen = true;
-                        Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content, _previousGameplay));
-                    }
-                }
-                else
-                {
-                    _isNavigatingTabs = true;
+                    ((Game1)Game).SettingScreenWasOpen = true;
+                    Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content, _previousGameplay));
                 }
             }
 
-            if (_isNavigatingTabs)
+            if (movedDown) _selectedTabIndex = (_selectedTabIndex + 1) % _tabButtons.Count;
+            if (movedUp) _selectedTabIndex = (_selectedTabIndex - 1 + _tabButtons.Count) % _tabButtons.Count;
+            _currentTab = (SettingTab)_selectedTabIndex;
+            for (int i = 0; i < _tabButtons.Count; i++)
             {
-                if (movedDown) _selectedTabIndex = (_selectedTabIndex + 1) % _tabButtons.Count;
-                if (movedUp) _selectedTabIndex = (_selectedTabIndex - 1 + _tabButtons.Count) % _tabButtons.Count;
-                _currentTab = (SettingTab)_selectedTabIndex;
-
-                bool isTabClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
-                if (isConfirmPressed && (_tabButtons[_selectedTabIndex].Contains(mousePos) || !isTabClicked))
+                if (_tabButtons[i].Contains(mousePos) && isConfirmPressed)
                 {
-                    _isNavigatingTabs = false;
+                    _selectedTabIndex = i;
+                    _currentTab = (SettingTab)i;
                 }
             }
-            else
+            switch (_currentTab)
             {
-                switch (_currentTab)
-                {
-                    case SettingTab.Mode: HandleModeTabInput(isConfirmPressed, movedUp, movedDown, mousePos, mouse); break;
-                    case SettingTab.Sound: HandleSoundTabInput(movedUp, movedDown, movedLeft, movedRight, mouse); break;
-                    case SettingTab.Controller: HandleControllerTabInput(movedUp, movedDown, movedLeft, movedRight, mousePos); break;
-                }
+                case SettingTab.Mode:
+                    HandleModeTabInput(isConfirmPressed, movedUp, movedDown, mousePos, mouse);
+                    break;
+                case SettingTab.Sound:
+                    HandleSoundTabInput(movedUp, movedDown, movedLeft, movedRight, mouse);
+                    break;
+                case SettingTab.Controller:
+                    HandleControllerTabInput(movedUp, movedDown, movedLeft, movedRight, mousePos);
+                    break;
             }
 
             UpdateAlphas(gameTime);
@@ -285,9 +280,7 @@ namespace DimmedLight.MainMenu
 
         private void HandleModeTabInput(bool confirm, bool up, bool down, Point mousePos, MouseState mouse)
         {
-            // Check for mouse hover or click to update selection
-            if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y ||
-                (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released))
+            if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y || confirm)
             {
                 if (_fullscreenCheckbox.Contains(mousePos)) _selectedModeIndex = 0;
                 else if (_windowedCheckbox.Contains(mousePos)) _selectedModeIndex = 1;
@@ -297,7 +290,7 @@ namespace DimmedLight.MainMenu
             if (up) _selectedModeIndex = (_selectedModeIndex - 1 + 3) % 3;
             if (down) _selectedModeIndex = (_selectedModeIndex + 1) % 3;
 
-            if (confirm)
+            if (confirm || Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 ApplySelectedModeOption();
             }

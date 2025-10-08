@@ -164,7 +164,7 @@ namespace DimmedLight.MainMenu
                     }
                     break;
                 case 1: // Upgrade
-                    Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    //Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
                     break;
                 case 2: // Setting
                     //Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));

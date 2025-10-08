@@ -80,7 +80,7 @@ namespace DimmedLight.GamePlay.Enemies
                                         player.IsReturning = true;
                                     }
                                     player.Position += player.KnockBack;
-                                    PlayerHit?.Play();
+                                    PlayerHit?.Play(0.3f, 0f, 0f);
                                     if (!delisaster.IsReturning)
                                     {
                                         delisaster.OriginalPosition = delisaster.Position;
@@ -117,7 +117,7 @@ namespace DimmedLight.GamePlay.Enemies
                         IsDead = true;
                         DeathAnimationStarted = true;
                         DeathTimer = 0;
-                        EnemiesDead?.Play();
+                        EnemiesDead?.Play(0.3f, 0f, 0f);
                     }
                     if (Position.X < 0) // ถ้าศัตรูออกนอกหน้าจอด้านซ้าย
                     {
@@ -148,7 +148,7 @@ namespace DimmedLight.GamePlay.Enemies
                 }
                 else if (IsAttacking)
                 {
-                    Attack.DrawFrame(sb, new Vector2(Position.X, Position.Y), attack * 1f, IsFlipped);
+                    Attack.DrawFrame(sb, new Vector2(Position.X - 45, Position.Y), attack * 1f, IsFlipped);
                     //sb.Draw(hitBoxTex, HitBox, Color.Blue * 0.4f);
                 }
                 else

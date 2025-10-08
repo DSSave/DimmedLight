@@ -52,7 +52,7 @@ namespace DimmedLight.GamePlay.Enemies
                         AttackAnim.Reset();
                         ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed); // ยิงโปรเจกไทล์ไปยังตำแหน่งผู้เล่น
                         HitTriggered = false;
-                        AmmoShoot?.Play();
+                        AmmoShoot?.Play(0.3f, 0f, 0f);
                     }
 
                     if (IsAttacking)
@@ -100,7 +100,7 @@ namespace DimmedLight.GamePlay.Enemies
                                     player.IsReturning = true;
                                 }
                                 player.Position += player.KnockBack;
-                                PlayerHit?.Play();
+                                PlayerHit?.Play(0.3f, 0f, 0f);
                                 if (!delisaster.IsReturning)
                                 {
                                     delisaster.OriginalPosition = delisaster.Position;
@@ -135,7 +135,7 @@ namespace DimmedLight.GamePlay.Enemies
                         DeathAnimationStarted = true;
                         DeathTimer = 0f;
                         ProjectileObj.Active = false;
-                        EnemiesDead?.Play();
+                        EnemiesDead?.Play(0.3f, 0f, 0f);
                     }
                     if (Position.X < 0) // ถ้าศัตรูออกนอกหน้าจอ
                     {
