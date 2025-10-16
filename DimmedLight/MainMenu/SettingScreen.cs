@@ -24,8 +24,8 @@ namespace DimmedLight.MainMenu
 
         #region Assets
         private Texture2D _background;
-        private SpriteFont _menuFont;
-        private SpriteFont _headingFont;
+        //private SpriteFont _menuFont;
+        private SpriteFont Stepalange;
         private Texture2D _pixelTexture;
         private SoundEffect _testSfx;
         #endregion
@@ -98,10 +98,8 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             _background = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
-            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont");
-            //_headingFont = Content.Load<SpriteFont>("UX_UIAsset/Font/TextFont"); // คุณสามารถเปลี่ยนไปใช้ Font อื่นสำหรับหัวข้อได้ที่นี่
-            _menuFont = Content.Load<SpriteFont>("gameFont");
-            _headingFont = Content.Load<SpriteFont>("gameFont");
+            //_menuFont = Content.Load<SpriteFont>("gameFont");
+            Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
 
@@ -161,18 +159,18 @@ namespace DimmedLight.MainMenu
             _screenHeadingTextPos = new Vector2(rightColumnX, y);
             y += headingToOptionSpacing;
             _fullscreenCheckbox = new Rectangle(rightColumnX + optionIndent, y, checkboxSize, checkboxSize);
-            _fullscreenTextPosition = AlignTextToRectangle(_fullscreenCheckbox, "Fullscreen", _menuFont, textOffset);
+            _fullscreenTextPosition = AlignTextToRectangle(_fullscreenCheckbox, "Fullscreen", Stepalange, textOffset);
 
             y += optionToOptionSpacing;
             _windowedCheckbox = new Rectangle(rightColumnX + optionIndent, y, checkboxSize, checkboxSize);
-            _windowedTextPosition = AlignTextToRectangle(_windowedCheckbox, "Windowed", _menuFont, textOffset);
+            _windowedTextPosition = AlignTextToRectangle(_windowedCheckbox, "Windowed", Stepalange, textOffset);
 
             y += groupSpacing;
             _generalHeadingTextPos = new Vector2(rightColumnX, y);
 
             y += headingToOptionSpacing;
             _tutorialCheckbox = new Rectangle(rightColumnX + optionIndent, y, checkboxSize, checkboxSize);
-            _tutorialTextPosition = AlignTextToRectangle(_tutorialCheckbox, "Show Tutorial on Start", _menuFont, textOffset);
+            _tutorialTextPosition = AlignTextToRectangle(_tutorialCheckbox, "Show Tutorial on Start", Stepalange, textOffset);
 
             // --- Sound Tab Layout ---
             y = rightColumnYStart;
@@ -441,12 +439,12 @@ namespace DimmedLight.MainMenu
                 spriteBatch.Draw(_pixelTexture, _tabButtons[i], baseColor);
                 spriteBatch.Draw(_pixelTexture, _tabButtons[i], Color.White * _tabAlphas[i]);
 
-                var textSize = _menuFont.MeasureString(_tabLabels[i]);
+                var textSize = Stepalange.MeasureString(_tabLabels[i]);
                 var textPos = new Vector2(
                     _tabButtons[i].X + (_tabButtons[i].Width - textSize.X) / 2,
                     _tabButtons[i].Y + (_tabButtons[i].Height - textSize.Y) / 2
                 );
-                spriteBatch.DrawString(_menuFont, _tabLabels[i], textPos, Color.White);
+                spriteBatch.DrawString(Stepalange, _tabLabels[i], textPos, Color.White);
             }
 
             switch (_currentTab)
@@ -467,9 +465,9 @@ namespace DimmedLight.MainMenu
             Color tutorialColor = _selectedModeIndex == 2 && !_isNavigatingTabs ? Color.Yellow : Color.White;
 
             // --- Draw Screen Section ---
-            spriteBatch.DrawString(_headingFont, "SCREEN", _screenHeadingTextPos, Color.White * 0.8f);
+            spriteBatch.DrawString(Stepalange, "SCREEN", _screenHeadingTextPos, Color.White * 0.8f);
 
-            spriteBatch.DrawString(_menuFont, "Fullscreen", _fullscreenTextPosition, fullscreenColor);
+            spriteBatch.DrawString(Stepalange, "Fullscreen", _fullscreenTextPosition, fullscreenColor);
             DrawBorder(spriteBatch, _fullscreenCheckbox, Color.White, 2);
             spriteBatch.Draw(_pixelTexture, _fullscreenCheckbox, Color.White * _modeOptionAlphas[0]);
             if (GraphicsDeviceManager.IsFullScreen)
@@ -477,7 +475,7 @@ namespace DimmedLight.MainMenu
                 spriteBatch.Draw(_pixelTexture, new Rectangle(_fullscreenCheckbox.X + 5, _fullscreenCheckbox.Y + 5, _fullscreenCheckbox.Width - 10, _fullscreenCheckbox.Height - 10), Color.LimeGreen);
             }
 
-            spriteBatch.DrawString(_menuFont, "Windowed", _windowedTextPosition, windowedColor);
+            spriteBatch.DrawString(Stepalange, "Windowed", _windowedTextPosition, windowedColor);
             DrawBorder(spriteBatch, _windowedCheckbox, Color.White, 2);
             spriteBatch.Draw(_pixelTexture, _windowedCheckbox, Color.White * _modeOptionAlphas[1]);
             if (!GraphicsDeviceManager.IsFullScreen)
@@ -486,9 +484,9 @@ namespace DimmedLight.MainMenu
             }
 
             // --- Draw General Section ---
-            spriteBatch.DrawString(_headingFont, "GENERAL", _generalHeadingTextPos, Color.White * 0.8f);
+            spriteBatch.DrawString(Stepalange, "GENERAL", _generalHeadingTextPos, Color.White * 0.8f);
 
-            spriteBatch.DrawString(_menuFont, "Show Tutorial on Start", _tutorialTextPosition, tutorialColor);
+            spriteBatch.DrawString(Stepalange, "Show Tutorial on Start", _tutorialTextPosition, tutorialColor);
             DrawBorder(spriteBatch, _tutorialCheckbox, Color.White, 2);
             spriteBatch.Draw(_pixelTexture, _tutorialCheckbox, Color.White * _modeOptionAlphas[2]);
             if (ShowTutorial)
@@ -499,12 +497,12 @@ namespace DimmedLight.MainMenu
 
         private void DrawSoundSection(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_menuFont, "BG Volume", _bgTextPosition, _selectedSoundIndex == 0 && !_isNavigatingTabs ? Color.Yellow : Color.White);
+            spriteBatch.DrawString(Stepalange, "BG Volume", _bgTextPosition, _selectedSoundIndex == 0 && !_isNavigatingTabs ? Color.Yellow : Color.White);
             spriteBatch.Draw(_pixelTexture, _bgSliderBar, Color.LightGray);
             spriteBatch.Draw(_pixelTexture, new Rectangle(_bgSliderBar.X, _bgSliderBar.Y, (int)(_bgSliderBar.Width * _bgVolume), _bgSliderBar.Height), Color.White);
             spriteBatch.Draw(_pixelTexture, _bgSliderKnob, Color.White);
 
-            spriteBatch.DrawString(_menuFont, "SFX Volume", _sfxTextPosition, _selectedSoundIndex == 1 && !_isNavigatingTabs ? Color.Yellow : Color.White);
+            spriteBatch.DrawString(Stepalange, "SFX Volume", _sfxTextPosition, _selectedSoundIndex == 1 && !_isNavigatingTabs ? Color.Yellow : Color.White);
             spriteBatch.Draw(_pixelTexture, _sfxSliderBar, Color.LightGray);
             spriteBatch.Draw(_pixelTexture, new Rectangle(_sfxSliderBar.X, _sfxSliderBar.Y, (int)(_sfxSliderBar.Width * _sfxVolume), _sfxSliderBar.Height), Color.White);
             spriteBatch.Draw(_pixelTexture, _sfxSliderKnob, Color.White);
@@ -512,8 +510,8 @@ namespace DimmedLight.MainMenu
 
         private void DrawControllerSection(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_menuFont, "Keyboard", _keyboardTextPosition, _selectedControllerIndex == 0 ? Color.Yellow : Color.White);
-            spriteBatch.DrawString(_menuFont, "Xbox Controller", _xboxControllerTextPos, _selectedControllerIndex == 1 ? Color.Yellow : Color.White);
+            spriteBatch.DrawString(Stepalange, "Keyboard", _keyboardTextPosition, _selectedControllerIndex == 0 ? Color.Yellow : Color.White);
+            spriteBatch.DrawString(Stepalange, "Xbox Controller", _xboxControllerTextPos, _selectedControllerIndex == 1 ? Color.Yellow : Color.White);
 
             var actionLabels = new[] { "Jump:", "Attack:", "Parry:", "Ultimate:" };
             string[] keyMappings = _selectedControllerIndex == 0
@@ -528,8 +526,8 @@ namespace DimmedLight.MainMenu
                 string keyText = keyMappings[i];
 
                 Color textColor = _selectedControllerSubIndex == i ? Color.Yellow : Color.White;
-                spriteBatch.DrawString(_menuFont, actionLabels[i], actionPos, textColor);
-                spriteBatch.DrawString(_menuFont, keyText, keyPos, textColor);
+                spriteBatch.DrawString(Stepalange, actionLabels[i], actionPos, textColor);
+                spriteBatch.DrawString(Stepalange, keyText, keyPos, textColor);
             }
         }
 

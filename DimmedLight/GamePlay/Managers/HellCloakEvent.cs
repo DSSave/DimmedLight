@@ -149,7 +149,7 @@ namespace DimmedLight.GamePlay.Managers
                 projectiles[i].Update(delta);
                 if (projectiles[i].canParry && projectiles[i].HitBox.Intersects(player.HitBoxParry))
                 {
-                    _parryHit?.Play(SoundManager.SfxVolume, 0f, 0f);
+                    _parryHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                     projectiles.RemoveAt(i);
                     continue;
                 }

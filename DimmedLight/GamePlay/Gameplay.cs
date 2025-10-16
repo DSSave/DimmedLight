@@ -19,7 +19,8 @@ namespace DimmedLight.GamePlay
         private readonly Game1 _game;
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private SpriteFont _font;
+        private SpriteFont Stepalange;
+        private SpriteFont StepalangeShort;
 
         #region Assets
         private Texture2D _platformTex, _platformAsset;
@@ -116,7 +117,8 @@ namespace DimmedLight.GamePlay
         }
         private void LoadFonts()
         {
-            _font = _game.Content.Load<SpriteFont>("gameFont");
+            Stepalange = _game.Content.Load<SpriteFont>("Fonts/StepalangeFont");
+            StepalangeShort = _game.Content.Load<SpriteFont>("Fonts/StepalangeShortFont");
         }
         private void InitializeBackground()
         {
@@ -146,7 +148,7 @@ namespace DimmedLight.GamePlay
         private void InitializeUI()
         {
             _hud = new HUD();
-            _pauseMenu = new PauseMenu(_graphics.GraphicsDevice, _font, _pauseImage, _frame, _bottonCursor, _camera);
+            _pauseMenu = new PauseMenu(_graphics.GraphicsDevice, Stepalange, _pauseImage, _frame, _bottonCursor, _camera);
             _pauseMenu.LoadContent(_game.Content);
             _pauseMenu.ClickExit = () =>
             {
@@ -330,7 +332,7 @@ namespace DimmedLight.GamePlay
             DrawBackground();
             _platformManager.Draw(_spriteBatch);
             _player.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex);
-            _scoreManager.Draw(_spriteBatch, _font);
+            _scoreManager.Draw(_spriteBatch, Stepalange, StepalangeShort);
             _hud.DrawHealth(_spriteBatch, _hurtBoxTex, _player.Health, _player);
             _phaseManager.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex, _isFlipped);
             _delisaster.Draw(_spriteBatch);

@@ -172,6 +172,20 @@
 #begin floating-platform.png
 /copy:floating-platform.png
 
+#begin Fonts/StepalangeFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/StepalangeFont.spritefont
+
+#begin Fonts/StepalangeShortFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/StepalangeShortFont.spritefont
+
 #begin Frame.png
 /copy:Frame.png
 

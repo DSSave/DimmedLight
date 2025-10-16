@@ -14,6 +14,7 @@ namespace DimmedLight.MainMenu
     public class MenuScreen : Screen
     {
         private SpriteFont _menuFont;
+        private SpriteFont Stepalange;
         // private SpriteFont _titleFont; // ลบออก ไม่ได้ใช้แล้ว
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
@@ -54,6 +55,7 @@ namespace DimmedLight.MainMenu
         public override void LoadContent()
         {
             _menuFont = Content.Load<SpriteFont>("gameFont");
+            Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
             //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/MyCustomFont");
             // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
             _backgroundTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
@@ -230,9 +232,9 @@ namespace DimmedLight.MainMenu
                     spriteBatch.Draw(_selectedButtonTexture, buttonRect, Color.White);
                 }
 
-                Vector2 textSize = _menuFont.MeasureString(buttonLabel);
+                Vector2 textSize = Stepalange.MeasureString(buttonLabel);
                 spriteBatch.DrawString(
-                    _menuFont,
+                    Stepalange,
                     buttonLabel,
                     new Vector2(buttonRect.Center.X, buttonRect.Center.Y),
                     Color.White,

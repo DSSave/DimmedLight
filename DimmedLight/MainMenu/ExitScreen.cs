@@ -12,7 +12,8 @@ namespace DimmedLight.MainMenu
 {
     public class ExitScreen : Screen
     {
-        private SpriteFont _menuFont;
+        //private SpriteFont _menuFont;
+        private SpriteFont Stepalange;
         private Texture2D _pixelTexture;
         private Texture2D _exitFrameTexture;
         private Texture2D _buttonFrameTexture;
@@ -21,7 +22,6 @@ namespace DimmedLight.MainMenu
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private GamePadState _previousGamePadState;
-
         private Rectangle _dialogBox;
         private Rectangle _yesButton;
         private Rectangle _noButton;
@@ -41,7 +41,8 @@ namespace DimmedLight.MainMenu
         {
             //_menuFont = Content.Load<SpriteFont>("UX_UI/TextFont"); gameFont
             _mainBackground = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
-            _menuFont = Content.Load<SpriteFont>("gameFont");
+            //_menuFont = Content.Load<SpriteFont>("gameFont");
+            Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
             _exitFrameTexture = Content.Load<Texture2D>("UX_UIAsset/exit_page/ExitScreen");
@@ -164,19 +165,19 @@ namespace DimmedLight.MainMenu
             {
                 // วาด "Yes" พร้อมกรอบ
                 spriteBatch.Draw(_buttonFrameTexture, _yesButton, Color.White);
-                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, true);
+                DrawTextInBox(spriteBatch, Stepalange, "Yes", _yesButton, true);
 
                 // วาด "No" แบบไม่มีกรอบ
-                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, false);
+                DrawTextInBox(spriteBatch, Stepalange, "No", _noButton, false);
             }
             else // ถ้าเลือก "No"
             {
                 // วาด "Yes" แบบไม่มีกรอบ
-                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, false);
+                DrawTextInBox(spriteBatch, Stepalange, "Yes", _yesButton, false);
 
                 // วาด "No" พร้อมกรอบ
                 spriteBatch.Draw(_buttonFrameTexture, _noButton, Color.White);
-                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, true);
+                DrawTextInBox(spriteBatch, Stepalange, "No", _noButton, true);
             }
 
             spriteBatch.End();
