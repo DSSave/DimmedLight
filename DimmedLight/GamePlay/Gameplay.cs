@@ -103,7 +103,6 @@ namespace DimmedLight.GamePlay
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
 
-            tutorialImage = game.Content.Load<Texture2D>("tutorialEvent");
             pauseImage = game.Content.Load<Texture2D>("PauseNew");
             tutorialImage = game.Content.Load<Texture2D>("eventTutorial");
             frame = game.Content.Load<Texture2D>("Frame");
