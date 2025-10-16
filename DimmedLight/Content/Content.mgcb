@@ -452,30 +452,6 @@
 /processorParam:TextureFormat=Color
 /build:traumadead_Spritesheet.png
 
-#begin tutorialEvent_New.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tutorialEvent_New.png
-
-#begin tutorialEvent.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tutorialEvent.png
-
 #begin UX_UIAsset/credit_page/CreditScreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
