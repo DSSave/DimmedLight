@@ -92,7 +92,7 @@ namespace DimmedLight.GamePlay
             _attackProjecTex = _game.Content.Load<Texture2D>("bullet2");
             _parryProjecTex = _game.Content.Load<Texture2D>("bullet1");
             _hellCloakTheme = _game.Content.Load<Texture2D>("ThemeEvent");
-            _tutorialImage = _game.Content.Load<Texture2D>("tutorialEvent");
+            _tutorialImage = _game.Content.Load<Texture2D>("eventTutorial");
             _pauseImage = _game.Content.Load<Texture2D>("PauseNew");
             _frame = _game.Content.Load<Texture2D>("Frame");
             _bottonCursor = _game.Content.Load<Texture2D>("bottonCursor");
