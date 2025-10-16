@@ -12,80 +12,69 @@ namespace DimmedLight.GamePlay.Managers
 {
     public class EnemyFactory
     {
-        private AnimatedTexture guiltIdleProto, guiltAttackProto, guiltDeathProto;
-        private AnimatedTexture traumaIdleProto, traumaAttackProto, traumaDeathProto;
-        private AnimatedTexture judgementIdleProto, judgementDeathProto;
-        private Texture2D bullet4Tex;
-        private Texture2D bullet1Tex;
+        private readonly AnimatedTexture _guiltIdleProto, _guiltAttackProto, _guiltDeathProto;
+        private readonly AnimatedTexture _traumaIdleProto, _traumaAttackProto, _traumaDeathProto;
+        private readonly AnimatedTexture _judgementIdleProto, _judgementDeathProto;
+        private readonly Texture2D _bullet4Tex;
+        private readonly Texture2D _bullet1Tex;
+
         public EnemyFactory(AnimatedTexture guiltIdle, AnimatedTexture guiltAttack, AnimatedTexture guiltDeath,
                             AnimatedTexture traumaIdle, AnimatedTexture traumaAttack, AnimatedTexture traumaDeath,
                             AnimatedTexture judgementIdle, AnimatedTexture judgementDeath,
                             Texture2D bullet4, Texture2D bullet1)
         {
-            guiltIdleProto = guiltIdle;
-            guiltAttackProto = guiltAttack;
-            guiltDeathProto = guiltDeath;
-            traumaIdleProto = traumaIdle;
-            traumaAttackProto = traumaAttack;
-            traumaDeathProto = traumaDeath;
-            judgementIdleProto = judgementIdle;
-            judgementDeathProto = judgementDeath;
-            bullet4Tex = bullet4;
-            bullet1Tex = bullet1;
+            _guiltIdleProto = guiltIdle;
+            _guiltAttackProto = guiltAttack;
+            _guiltDeathProto = guiltDeath;
+            _traumaIdleProto = traumaIdle;
+            _traumaAttackProto = traumaAttack;
+            _traumaDeathProto = traumaDeath;
+            _judgementIdleProto = judgementIdle;
+            _judgementDeathProto = judgementDeath;
+            _bullet4Tex = bullet4;
+            _bullet1Tex = bullet1;
         }
 
-        public Guilt CreateGuilt(Vector2 pos, float speed) // สร้างศัตรู Guilt
+        private T InitializeEnemy<T>(T enemy, Vector2 pos, float spd, AnimatedTexture idle, AnimatedTexture death, AnimatedTexture attack = null) where T : EnemyBase
         {
-            var g = new Guilt(); //ส่ง texture ของโปรเจกไทล์ไปยัง Constructor ของ Guilt
-            g.Idle = guiltIdleProto.Clone();
-            g.Attack = guiltAttackProto.Clone();
-            g.Death = guiltDeathProto.Clone();
-            g.Position = pos;
-            g.SetSpeed(speed);
-            g.IsDead = false;
-            g.DeathAnimationStarted = false;
-            g.DeathTimer = 0f;
-            return g; // คืนค่า instance ของ Guilt
+            enemy.Position = pos;
+            enemy.SetSpeed(spd);
+            enemy.Idle = idle.Clone();
+            enemy.Death = death.Clone();
+            if (attack != null)
+            {
+                enemy.AttackAnim = attack.Clone();
+            }
+            enemy.IsDead = false;
+            // enemy.DeathAnimationStarted = false; // This is handled in EnemyBase constructor/reset
+            return enemy;
         }
-        public Trauma CreateTrauma(Vector2 pos, float speed) // สร้างศัตรู Trauma
+
+        public Guilt CreateGuilt(Vector2 pos, float speed)
         {
-            var t = new Trauma(bullet4Tex); // ส่ง texture ของโปรเจกไทล์ไปยัง Constructor ของ Trauma
-            t.Idle = traumaIdleProto.Clone();
-            t.AttackAnim = traumaAttackProto.Clone();
-            t.Death = traumaDeathProto.Clone();
-            t.Position = pos;
-            t.ProjectileObj = new Projectile(bullet4Tex);
-            t.SetSpeed(speed);
-            t.IsDead = false;
-            t.DeathAnimationStarted = false;
-            t.DeathTimer = 0f;
-            return t; // คืนค่า instance ของ Trauma
+            var g = new Guilt();
+            InitializeEnemy(g, pos, speed, _guiltIdleProto, _guiltDeathProto, _guiltAttackProto);
+            g.Attack = _guiltAttackProto.Clone(); // Guilt has a specific 'Attack' property
+            return g;
         }
-        public FloorTrauma CreateFloorTrauma(Vector2 pos, float speed) // สร้างศัตรู FloorTrauma
+        public Trauma CreateTrauma(Vector2 pos, float speed)
         {
-            var ft = new FloorTrauma(bullet1Tex);
-            ft.Idle = traumaIdleProto.Clone();
-            ft.AttackAnim = traumaAttackProto.Clone();
-            ft.Death = traumaDeathProto.Clone();
-            ft.Position = pos;
-            ft.ProjectileObj = new Projectile(bullet1Tex);
-            ft.SetSpeed(speed);
-            ft.IsDead = false;
-            ft.DeathAnimationStarted = false;
-            ft.DeathTimer = 0f;
+            var t = new Trauma(_bullet4Tex);
+            InitializeEnemy(t, pos, speed, _traumaIdleProto, _traumaDeathProto, _traumaAttackProto);
+            t.ProjectileObj = new Projectile(_bullet4Tex);
+            return t;
+        }
+        public FloorTrauma CreateFloorTrauma(Vector2 pos, float speed)
+        {
+            var ft = new FloorTrauma(_bullet1Tex);
+            InitializeEnemy(ft, pos, speed, _traumaIdleProto, _traumaDeathProto, _traumaAttackProto);
+            ft.ProjectileObj = new Projectile(_bullet1Tex);
             return ft;
-
         }
-        public Judgement CreateJudgement(Vector2 pos, float speed) // สร้างศัตรู Judgement
+        public Judgement CreateJudgement(Vector2 pos, float speed)
         {
             var j = new Judgement();
-            j.Idle = judgementIdleProto.Clone();
-            j.Death = judgementDeathProto.Clone();
-            j.Position = pos;
-            j.SetSpeed(speed);
-            j.IsDead = false;
-            j.DeathAnimationStarted = false;
-            j.DeathTimer = 0f;
+            InitializeEnemy(j, pos, speed, _judgementIdleProto, _judgementDeathProto);
             return j;
         }
     }

@@ -15,27 +15,31 @@ namespace DimmedLight.GamePlay.Enemies
 {
     public abstract class EnemyBase //คลาสแม่ของศัตรูทุกตัว
     {
-        public AnimatedTexture Idle;
-        public AnimatedTexture AttackAnim;
-        public AnimatedTexture Death;
+        public AnimatedTexture Idle { get; internal set; }
+        public AnimatedTexture AttackAnim { get; internal set; }
+        public AnimatedTexture Death { get; internal set; }
 
         public Vector2 Position;
         public Rectangle HurtBox;
-        public bool IsDead = false;
-        public bool DeathAnimationStarted = false;
-        public float DeathTimer = 0f;
-        public float DeathDuration = 0.8f;
-        public bool IsFlipped;
-        protected float speed;
-        public static SoundEffect ParryHit, EnemiesDead,PlayerHit, AmmoShoot;
+        public bool IsDead { get; set; }
+        public bool DeathAnimationStarted { get; protected set; }
+        public bool IsFlipped { get; protected set; }
+        public string EnemyType { get; protected set; }
 
-        public EnemyBase()
+        protected float speed;
+        protected float deathTimer;
+        protected const float DeathDuration = 0.8f;
+
+        public static SoundEffect ParryHit { get; set; }
+        public static SoundEffect EnemiesDead { get; set; }
+        public static SoundEffect PlayerHit { get; set; }
+        public static SoundEffect AmmoShoot { get; set; }
+        protected EnemyBase()
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             AttackAnim = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Death = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
         }
-        public string EnemyType { get; protected set; }
         public abstract void Load(ContentManager content);
         public abstract void Update(GameTime gameTime, float delta, Player player, ref bool globalFlip, Delisaster delisaster, ScoreManager scoreManager);
         public abstract void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, bool flip);
@@ -44,9 +48,9 @@ namespace DimmedLight.GamePlay.Enemies
         {
             if (DeathAnimationStarted)
             {
-                DeathTimer += delta;
+                deathTimer += delta;
                 Death.UpdateFrame(delta);
-                if (DeathTimer >= DeathDuration)
+                if (deathTimer >= DeathDuration)
                 {
                     DeathAnimationStarted = false;
                 }
@@ -55,7 +59,6 @@ namespace DimmedLight.GamePlay.Enemies
         public virtual void OnKilled(ScoreManager scoreManager, string method)
         {
             scoreManager.AddPoints(EnemyType, method);
-            
         }
         public virtual void SetSpeed(float spd) => speed = spd;
         protected void PlayParryHit()

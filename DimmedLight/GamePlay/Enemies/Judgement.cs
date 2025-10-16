@@ -13,89 +13,74 @@ namespace DimmedLight.GamePlay.Enemies
 {
     public class Judgement : EnemyBase
     {
-        public Rectangle HitN;
-
+        public Rectangle HitN { get; private set; }
         public Judgement()
         {
             EnemyType = "Judgement";
         }
-        public override void Load(ContentManager content)
-        {
-        }
+        public override void Load(ContentManager content) { }
 
         public override void Update(GameTime gameTime, float delta, Player player, ref bool globalFlip, Delisaster delisaster, ScoreManager scoreManager)
         {
-            if (!player.IsDead)
+            if (player.IsDead) return;
+
+            Position.X -= speed * delta * 60;
+            HitN = new Rectangle((int)Position.X + 27, (int)Position.Y + 32, 125, 90);
+
+            if (!IsDead)
             {
-                Position.X -= speed * delta * 60;
-                HitN = new Rectangle((int)Position.X + 27, (int)Position.Y + 32, 125, 90);
-                if (!IsDead)
+                IsFlipped = player.Position.X > Position.X;
+
+                // Player collision
+                if (player.HurtBox.Intersects(HitN) && !player.IsInvincible)
                 {
-                    IsFlipped = player.Position.X > Position.X;
-                    if (player.HurtBox.Intersects(HitN) && !player.IsInvincible) // ถ้าผู้เล่นโดนชนและไม่อยู่ในสถานะอมตะ
-                    {
-                        player.Health--;
-                        player.IsInvincible = true;
-                        player.InvincibilityTimer = player.InvincibilityTime;
-                        player.HealingTimer = 0f;
-                        if (!player.IsReturning)
-                        {
-                            player.OriginalPosition = player.LastSafePosition;
-                            player.ReturnTimer = player.ReturnX;
-                            player.IsReturning = true;
-                        }
-                        player.Position += player.KnockBack;
-                        PlayerHit?.Play(0.3f, 0f, 0f);
-                        if (!delisaster.IsReturning)
-                        {
-                            delisaster.OriginalPosition = delisaster.Position;
-                            delisaster.ReturnTimer = delisaster.ReturnPos;
-                            delisaster.IsReturning = true;
-                        }
-                        else
-                        {
-                            delisaster.ReturnTimer += 4f;
-                        }
-                        delisaster.Position += delisaster.Move;
-                    }
-                    if (player.IsAttacking && player.HitBoxAttack.Intersects(HitN)) // ถ้าผู้เล่นกำลังโจมตีและโดนศัตรู
-                    {
-                        if (!IsDead)
-                        {
-                            OnKilled(scoreManager, "Attack"); // เรียกใช้เมธอด OnKilled เพื่อเพิ่มคะแนน
-                        }
-                        IsDead = true;
-                        DeathAnimationStarted = true;
-                        DeathTimer = 0f;
-                        EnemiesDead?.Play(0.3f, 0f, 0f);
-                    }
-                    if (Position.X < 0 && !DeathAnimationStarted) // ถ้าศัตรูออกนอกหน้าจอ
-                    {
-                        IsDead = true;
-                        DeathAnimationStarted = true;
-                        DeathTimer = 0f;
-                    }
-                    Idle.UpdateFrame(delta);
+                    player.TakeDamage(delisaster);
+                    PlayerHit?.Play(0.3f, 0f, 0f);
                 }
+
+                // Player attack collision
+                if (player.IsAttacking && player.HitBoxAttack.Intersects(HitN))
+                {
+                    if (!IsDead) OnKilled(scoreManager, "Attack");
+                    StartDeathAnimation();
+                }
+
+                // Off-screen check
+                if (Position.X < -HitN.Width && !DeathAnimationStarted)
+                {
+                    StartDeathAnimation(false);
+                }
+
+                Idle.UpdateFrame(delta);
             }
+
             if (DeathAnimationStarted)
             {
                 HandleDeathAnimation(delta);
             }
         }
+
+        private void StartDeathAnimation(bool playSound = true)
+        {
+            if (IsDead) return;
+            IsDead = true;
+            DeathAnimationStarted = true;
+            deathTimer = 0f;
+            if (playSound) EnemiesDead?.Play(0.3f, 0f, 0f);
+        }
+
+        // FIX: Re-implemented the missing Draw method
         public override void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, bool flip)
         {
-            if (!IsDead || DeathAnimationStarted)
+            if (IsDead && !DeathAnimationStarted) return;
+
+            if (DeathAnimationStarted)
             {
-                if (DeathAnimationStarted && IsDead)
-                {
-                    Death.DrawFrame(sb, new Vector2(Position.X + 5, Position.Y - 31), IsFlipped);
-                }
-                else
-                {
-                    Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
-                }
-                //sb.Draw(hurtBoxTex, HitN, Color.Red * 0.4f);
+                Death.DrawFrame(sb, new Vector2(Position.X + 5, Position.Y - 31), IsFlipped);
+            }
+            else
+            {
+                Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
             }
         }
     }

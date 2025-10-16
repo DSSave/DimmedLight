@@ -11,38 +11,31 @@ namespace DimmedLight
 {
     public class Game1 : Game
     {
-        public GraphicsDeviceManager _graphics;
+        public readonly GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
-        private Gameplay _gamePlay;
-
         private Screen _currentScreen;
-        private Screen _previousScreen;
-
-        public bool SettingScreenWasOpen = false;
+        public bool SettingScreenWasOpen { get; set; }
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
-            _graphics.IsFullScreen = false;
-            _graphics.ApplyChanges();
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 1920,
+                PreferredBackBufferHeight = 1080,
+                IsFullScreen = false
+            };
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
         protected override void Initialize()
         {
-            _gamePlay = new Gameplay(this, _graphics);
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            var menuScreen = new MenuScreen(this, _graphics, GraphicsDevice, Content);
-            ChangeScreen(menuScreen);
+            ChangeScreen(new MenuScreen(this, _graphics, GraphicsDevice, Content));
         }
         protected override void Update(GameTime gameTime)
         {
@@ -57,10 +50,7 @@ namespace DimmedLight
         }
         public void ChangeScreen(Screen newScreen)
         {
-            _previousScreen = _currentScreen;
             _currentScreen = newScreen;
-
-            // เรียก LoadContent() ของหน้าจอใหม่
             _currentScreen?.LoadContent();
         }
         public void SetFullScreen(bool fullScreen)

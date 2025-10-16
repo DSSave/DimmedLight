@@ -15,16 +15,16 @@ namespace DimmedLight.GamePlay.Managers
             MaxPlatformSpeed = 10f;
             SpeedIncreaseRate = 0.13f;
             spawnInterval = 2f; // ระยะเวลาระหว่างการเกิดศัตรู
-            minSpacing = 300f; // ระยะห่างขั้นต่ำระหว่างศัตรู
+            MinSpacing = 300f; // ระยะห่างขั้นต่ำระหว่างศัตรู
         }
         public override List<EnemySpawnInfo> GetSpawns(float delta) //List ของศัตรูที่จะเกิด
         {
-            List<EnemySpawnInfo> result = new List<EnemySpawnInfo>(); // รายการที่จะเก็บข้อมูลการเกิดศัตรู
+            var result = new List<EnemySpawnInfo>();
             timeSinceLastSpawn += delta;
             if (timeSinceLastSpawn >= spawnInterval)
             {
                 timeSinceLastSpawn = 0f;
-                string[] types = new[] { "Guilt", "Trauma", "Judgement", "FloorTrauma" };
+                string[] types = { "Guilt", "Trauma", "Judgement", "FloorTrauma" };
                 string type = types[rnd.Next(types.Length)];
                 float x = 1920 + rnd.Next(300, 800);
                 float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 515f;

@@ -15,7 +15,7 @@ namespace DimmedLight.GamePlay.Managers
             MaxPlatformSpeed = 15f; // ความเร็วสูงสุดของแพลตฟอร์ม
             SpeedIncreaseRate = 0.1f; // อัตราการเพิ่มความเร็วของแพลตฟอร์ม
             spawnInterval = 1.5f; // ระยะเวลาระหว่างการเกิดศัตรู
-            minSpacing = 200f; // ระยะห่างขั้นต่ำระหว่างศัตรู
+            MinSpacing = 200f; // ระยะห่างขั้นต่ำระหว่างศัตรู
         }
         public override List<EnemySpawnInfo> GetSpawns(float delta) //List ของศัตรูที่จะเกิด
         {
