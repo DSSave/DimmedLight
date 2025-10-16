@@ -82,7 +82,7 @@ namespace DimmedLight.GamePlay
 
             //MediaPlayer.Play(_bmg);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.01f;
+            MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }
         private void LoadTextures()
         {
@@ -155,7 +155,7 @@ namespace DimmedLight.GamePlay
             };
             _pauseMenu.ClickOption = () =>
             {
-                MediaPlayer.Stop();
+                //MediaPlayer.Stop();
                 _game.ChangeScreen(new SettingScreen(_game, _graphics, _game.GraphicsDevice, _game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
             _gameOverScreen = new GameOver(_game, _graphics);
@@ -383,6 +383,8 @@ namespace DimmedLight.GamePlay
             {
                 MediaPlayer.Play(_bmg);
             }
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }
     }
 }

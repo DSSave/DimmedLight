@@ -75,18 +75,29 @@ namespace DimmedLight.GamePlay.Animated
 
             _totalElapsed += elapsed;
 
-            if (_totalElapsed > _timePerFrame)
+            while (_totalElapsed > _timePerFrame && _timePerFrame > 0)
             {
                 _totalElapsed -= _timePerFrame;
                 _currentFrame++;
-                if (_currentFrame == _frameCount)
+
+                if (_currentFrame >= _frameCount)
                 {
                     _currentFrame = 0;
                     _currentRow++;
-                    if (_currentRow == _frameRowCount)
+
+                    if (_currentRow >= _frameRowCount)
                     {
-                        _currentRow = 0;
-                        if (!Loop) IsEnded = true;
+                        if (!Loop)
+                        {
+                            IsEnded = true;
+                            _currentRow = _frameRowCount - 1;
+                            _currentFrame = _frameCount - 1;
+                            return;
+                        }
+                        else
+                        {
+                            _currentRow = 0;
+                        }
                     }
                 }
             }

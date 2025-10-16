@@ -1,8 +1,9 @@
-﻿using DimmedLight.GamePlay.Enemies;
+﻿using DimmedLight.GamePlay.Animated;
+using DimmedLight.GamePlay.Enemies;
 using DimmedLight.GamePlay.ETC;
-using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Managers;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -12,9 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 
 namespace DimmedLight.GamePlay.Isplayer
 {
@@ -43,7 +44,7 @@ namespace DimmedLight.GamePlay.Isplayer
         #region jumping
         private float _velocityY;
         private const float Gravity = 0.5f;
-        private const float GroundLevel = 650f;
+        private const float GroundLevel = 655f;
         private float _jumpPower = -15f;
         #endregion
 
@@ -152,7 +153,7 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 IsJumping = true;
                 _velocityY = _jumpPower;
-                if (!_inEvent) _jumpEffect.Play(0.3f, 0f, 0f);
+                if (!_inEvent) _jumpEffect.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                 Jump.Reset();
             }
 
@@ -188,7 +189,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 _attackTimer = _attackDuration;
                 _attackDelayTimer = AttackDelay;
                 Attack.Reset();
-                if (canWalk) _attackEffect.Play(0.3f, 0f, 0f);
+                if (canWalk) _attackEffect.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
             }
 
             if (IsAttacking)

@@ -3,6 +3,7 @@ using DimmedLight.GamePlay.Enemies;
 using DimmedLight.GamePlay.ETC;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -43,9 +44,9 @@ namespace DimmedLight.GamePlay.Managers
 
         private Random rng = new Random();
         private bool playerHit = false;
-        private SoundEffect parryHit;
-        private Song eventSong;
-        private Song bmg;
+        private readonly SoundEffect _parryHit;
+        private readonly Song _eventSong;
+        private readonly Song _bmg;
         public Action OnPrepareFinished;
         public void Prepare()
         {
@@ -62,9 +63,9 @@ namespace DimmedLight.GamePlay.Managers
             this.camera = camera;
             this.parryProjecTex = parryProjecTex;
             this.attackProjecTex = attackProjecTex;
-            this.parryHit = parryHit;
-            this.eventSong = eventSong;
-            this.bmg = bmg;
+            _parryHit = parryHit;
+            _eventSong = eventSong;
+            _bmg = bmg;
         }
 
         public HellCloakEvent(Delisaster delisaster, Camera camera)
@@ -85,7 +86,7 @@ namespace DimmedLight.GamePlay.Managers
 
             //MediaPlayer.Play(eventSong);
             MediaPlayer.IsRepeating = false;
-            MediaPlayer.Volume = 0.2f;
+            MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
 
             player.SetEvent(true);
             delisaster.IsInEvent = true;
@@ -148,7 +149,7 @@ namespace DimmedLight.GamePlay.Managers
                 projectiles[i].Update(delta);
                 if (projectiles[i].canParry && projectiles[i].HitBox.Intersects(player.HitBoxParry))
                 {
-                    parryHit?.Play();
+                    _parryHit?.Play(SoundManager.SfxVolume, 0f, 0f);
                     projectiles.RemoveAt(i);
                     continue;
                 }
@@ -225,7 +226,7 @@ namespace DimmedLight.GamePlay.Managers
 
             //MediaPlayer.Play(bmg);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f;
+            MediaPlayer.Volume = 0.008f * SoundManager.BgmVolume;
         }
 
         public void Reset()

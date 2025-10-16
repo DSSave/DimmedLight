@@ -1,5 +1,6 @@
 ﻿using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,7 +36,7 @@ namespace DimmedLight.GamePlay.Enemies
                 if (player.HurtBox.Intersects(HitN) && !player.IsInvincible)
                 {
                     player.TakeDamage(delisaster);
-                    PlayerHit?.Play(0.3f, 0f, 0f);
+                    PlayerHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                 }
 
                 // Player attack collision
@@ -66,7 +67,7 @@ namespace DimmedLight.GamePlay.Enemies
             IsDead = true;
             DeathAnimationStarted = true;
             deathTimer = 0f;
-            if (playSound) EnemiesDead?.Play(0.3f, 0f, 0f);
+            if (playSound) EnemiesDead?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
         }
 
         // FIX: Re-implemented the missing Draw method

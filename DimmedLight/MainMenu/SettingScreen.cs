@@ -1,5 +1,6 @@
 ﻿using DimmedLight.GamePlay;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,25 +20,28 @@ namespace DimmedLight.MainMenu
             MainMenu,
             PauseMenu
         }
-        // --- Global Setting State ---
         public static bool ShowTutorial = true;
 
-        // --- Assets ---
+        #region Assets
         private Texture2D _background;
         private SpriteFont _menuFont;
         private SpriteFont _headingFont;
         private Texture2D _pixelTexture;
+        private SoundEffect _testSfx;
+        #endregion
 
-        // --- Input States ---
+        #region Input State
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private GamePadState _previousGamePadState;
+        #endregion
 
-        // --- UI State ---
+        #region Settings State
         private float _bgVolume = 0.7f;
         private float _sfxVolume = 0.9f;
         private bool _isDraggingBgKnob = false;
         private bool _isDraggingSfxKnob = false;
+        #endregion
 
         // --- Tabs ---
         private enum SettingTab { Mode, Sound, Controller }
@@ -100,6 +104,9 @@ namespace DimmedLight.MainMenu
             _headingFont = Content.Load<SpriteFont>("gameFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
+
+            _bgVolume = SoundManager.BgmVolume;
+            _sfxVolume = SoundManager.SfxVolume;
 
             CalculateLayout();
             UpdateSliderKnobs();
@@ -221,21 +228,6 @@ namespace DimmedLight.MainMenu
             bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
                           (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
 
-            /*if (mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
-            {
-                if (_isNavigatingTabs)
-                {
-                    for (int i = 0; i < _tabButtons.Count; i++)
-                    {
-                        if (_tabButtons[i].Contains(mousePos))
-                        {
-                            _selectedTabIndex = i;
-                            _currentTab = (SettingTab)i;
-                        }
-                    }
-                }
-            }*/
-
             if (goBack)
             {
                 if (_source == SettingSource.MainMenu)
@@ -310,15 +302,14 @@ namespace DimmedLight.MainMenu
             if (up) _selectedSoundIndex = 0;
             if (down) _selectedSoundIndex = 1;
 
-            if (right)
+            float oldBgVolume = _bgVolume;
+            float oldSfxVolume = _sfxVolume;
+
+            if (left || right)
             {
-                if (_selectedSoundIndex == 0) _bgVolume = Math.Clamp(_bgVolume + 0.05f, 0, 1);
-                else _sfxVolume = Math.Clamp(_sfxVolume + 0.05f, 0, 1);
-            }
-            if (left)
-            {
-                if (_selectedSoundIndex == 0) _bgVolume = Math.Clamp(_bgVolume - 0.05f, 0, 1);
-                else _sfxVolume = Math.Clamp(_sfxVolume - 0.05f, 0, 1);
+                float change = left ? -0.05f : 0.05f;
+                if (_selectedSoundIndex == 0) _bgVolume = Math.Clamp(_bgVolume + change, 0, 1);
+                else _sfxVolume = Math.Clamp(_sfxVolume + change, 0, 1);
             }
 
             if (mouse.LeftButton == ButtonState.Pressed)
@@ -336,6 +327,27 @@ namespace DimmedLight.MainMenu
             if (_isDraggingSfxKnob) _sfxVolume = Math.Clamp((float)(mouse.X - _sfxSliderBar.X) / _sfxSliderBar.Width, 0f, 1f);
 
             UpdateSliderKnobs();
+
+            bool bgChanged = Math.Abs(oldBgVolume - _bgVolume) > float.Epsilon;
+            bool sfxChanged = Math.Abs(oldSfxVolume - _sfxVolume) > float.Epsilon;
+            if (bgChanged)
+            {
+                SoundManager.BgmVolume = _bgVolume;
+                // Since menu screens don't have BGM, this change will be applied when GameplayScreen is loaded/resumed.
+                // If there was menu music, we would set MediaPlayer.Volume here.
+            }
+
+            if (sfxChanged)
+            {
+                SoundManager.SfxVolume = _sfxVolume;
+                bool discreteChange = left || right || up || down;
+                bool dragReleased = (_isDraggingSfxKnob && mouse.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed);
+
+                if ((discreteChange || dragReleased) && _testSfx != null)
+                {
+                    _testSfx.Play(SoundManager.SfxVolume, 0f, 0f);
+                }
+            }
         }
 
         private void HandleControllerTabInput(bool up, bool down, bool left, bool right, Point mousePos)

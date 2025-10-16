@@ -1,6 +1,7 @@
 ﻿using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -90,7 +91,7 @@ namespace DimmedLight.GamePlay.Enemies
                     else
                     {
                         player.TakeDamage(delisaster);
-                        PlayerHit?.Play(0.3f, 0f, 0f);
+                        PlayerHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                     }
                     _hitTriggered = true;
                 }
@@ -119,7 +120,7 @@ namespace DimmedLight.GamePlay.Enemies
             IsDead = true;
             DeathAnimationStarted = true;
             deathTimer = 0;
-            if (playSound) EnemiesDead?.Play(0.3f, 0f, 0f);
+            if (playSound) EnemiesDead?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
         }
         public override void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, bool flip)
         {

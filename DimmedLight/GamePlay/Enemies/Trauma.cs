@@ -1,5 +1,6 @@
 ﻿using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -73,7 +74,7 @@ namespace DimmedLight.GamePlay.Enemies
                 AttackAnim.Reset();
                 ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed);
                 HitTriggered = false;
-                AmmoShoot?.Play(0.3f, 0f, 0f);
+                AmmoShoot?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
             }
 
             if (IsAttacking)
@@ -103,7 +104,7 @@ namespace DimmedLight.GamePlay.Enemies
                 else
                 {
                     player.TakeDamage(delisaster);
-                    PlayerHit?.Play(0.3f, 0f, 0f);
+                    PlayerHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                     IsAttacking = false;
                 }
                 ProjectileObj.Deactivate();
@@ -132,7 +133,7 @@ namespace DimmedLight.GamePlay.Enemies
             DeathAnimationStarted = true;
             deathTimer = 0f;
             ProjectileObj.Deactivate();
-            if (playSound) EnemiesDead?.Play(0.3f, 0f, 0f);
+            if (playSound) EnemiesDead?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
         }
         public override void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, bool flip)
         {
