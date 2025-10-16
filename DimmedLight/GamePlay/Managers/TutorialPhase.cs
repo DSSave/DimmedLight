@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DimmedLight.GamePlay.Managers
 {
-    public class TutorialPhase : Phase //Phase 1
+    public class TutorialPhase : Phase 
     {
         private int _fixedSpawnIndex;
         private EnemyBase _currentFixedEnemy;

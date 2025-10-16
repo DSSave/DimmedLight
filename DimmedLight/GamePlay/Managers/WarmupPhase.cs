@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace DimmedLight.GamePlay.Managers
 {
-    public class WarmupPhase : Phase //Phase 2
+    public class WarmupPhase : Phase
     {
         public WarmupPhase(float startSpeed = 6f)
         {
             PlatformSpeed = startSpeed;
             MaxPlatformSpeed = 10f;
             SpeedIncreaseRate = 0.13f;
-            spawnInterval = 2f; // ระยะเวลาระหว่างการเกิดศัตรู
-            MinSpacing = 300f; // ระยะห่างขั้นต่ำระหว่างศัตรู
+            spawnInterval = 2f;
+            MinSpacing = 300f;
         }
-        public override List<EnemySpawnInfo> GetSpawns(float delta) //List ของศัตรูที่จะเกิด
+        public override List<EnemySpawnInfo> GetSpawns(float delta)
         {
             var result = new List<EnemySpawnInfo>();
             timeSinceLastSpawn += delta;
@@ -27,7 +27,7 @@ namespace DimmedLight.GamePlay.Managers
                 string[] types = { "Guilt", "Trauma", "Judgement", "FloorTrauma" };
                 string type = types[rnd.Next(types.Length)];
                 float x = 1920 + rnd.Next(300, 800);
-                float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 515f;
+                float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 445f;
                 result.Add(new EnemySpawnInfo(type, new Vector2(x, y), PlatformSpeed));
             }
 

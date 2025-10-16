@@ -77,7 +77,7 @@ namespace DimmedLight.GamePlay.Enemies
                 IsAttacking = true;
                 AttackTimer = 0f;
                 AttackAnim.Reset();
-                ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X, 745), ProjectileSpeed);
+                ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 145), new Vector2(player.Position.X, 745), ProjectileSpeed);
                 HitTriggered = false;
                 AmmoShoot?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
             }
