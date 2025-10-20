@@ -50,16 +50,16 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
             // Handle navigation
-            bool advancePage = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right)) ||
-                               (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter)) ||
-                               (gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A)) ||
-                               (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight)) ||
-                               (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f);
+            bool advancePage = keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right) ||
+                               keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter) ||
+                               gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A) ||
+                               gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight) ||
+                               gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f;
 
-            bool backPage = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left)) ||
-                            (gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B)) ||
-                            (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft)) ||
-                            (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f);
+            bool backPage = keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left) ||
+                            gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B) ||
+                            gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft) ||
+                            gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f;
 
             bool escapePressed = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape);
 

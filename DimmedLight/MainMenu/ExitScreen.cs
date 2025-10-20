@@ -88,18 +88,18 @@ namespace DimmedLight.MainMenu
             var mousePos = new Point(mouse.X, mouse.Y);
             bool isMouseClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
 
-            bool isConfirmPressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
-                                    (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
+            bool isConfirmPressed = keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
+                                    gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A);
 
-            bool isUpPressed = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
-                             (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp)) ||
-                             (gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f);
-            bool isDownPressed = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
-                               (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown)) ||
-                               (gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f);
+            bool isUpPressed = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
+                             gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp) ||
+                             gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f;
+            bool isDownPressed = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
+                               gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown) ||
+                               gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f;
 
-            bool isBackPressed = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
-                                 (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
+            bool isBackPressed = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape) ||
+                                 gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
 
             // Mouse hover selection
             if (mouse.Position != _previousMouseState.Position)

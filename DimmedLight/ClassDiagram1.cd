@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DimmedLight.GamePlay.UI.FloatingText" Collapsed="true">
+    <Position X="16" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAgAAQAEAAAAAAAAQAAAAAAiABAAAA=</HashCode>
+      <FileName>GamePlay\UI\FloatingText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.GameOver" Collapsed="true">
+    <Position X="17.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAABAAAAAABhAAABIAAIAAAAAAFAAKAIEAAAAAAAQ=</HashCode>
+      <FileName>GamePlay\UI\GameOver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.HUD" Collapsed="true">
+    <Position X="14.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAEA=</HashCode>
+      <FileName>GamePlay\UI\HUD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.ScoreManager" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CkQAgAAQMohQBggQAAQgAgAAABAAAIBBAAAABAAAAAU=</HashCode>
+      <FileName>GamePlay\UI\ScoreManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.TutorialEvent" Collapsed="true">
+    <Position X="16" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAgIAFAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\UI\TutorialEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Delisaster" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAogRjCIAAEgKgAAAAiAAAAIAIAACAAAAAgAEEAEA=</HashCode>
+      <FileName>GamePlay\Enemies\Delisaster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.EnemyBase" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAgABAIAABAoAggAEAUBAAAAKgAQAgAAgBAAAAAAg=</HashCode>
+      <FileName>GamePlay\Enemies\EnemyBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.FloorTrauma" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAgAAAEIwCAgABAAAAABAABAAAAAEABAAAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\FloorTrauma.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Guilt" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAgGAgAABAAAAAAARIAAAAAAAAgAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Guilt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Judgement" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAIACAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Judgement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Projectile" Collapsed="true">
+    <Position X="21.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAABAAgAgBCAAACABAAAEAAAgAAIAAAAAAQA=</HashCode>
+      <FileName>GamePlay\Enemies\Projectile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Trauma" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAgAAAEIwCAgABAAAAAAAABAAAAAEABAAAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Trauma.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Animated.AnimatedTexture" Collapsed="true">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAggAANAYAABIAAAAIAABABAAABAMAgoAAkAkhAABA=</HashCode>
+      <FileName>GamePlay\Animated\AnimatedTexture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.EnemyFactory" Collapsed="true">
+    <Position X="21.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RAAAAAEAAAAAAEAAEAAAAAAQAAAAAEAABMQAIAAIQAA=</HashCode>
+      <FileName>GamePlay\Managers\EnemyFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.EnemySpawnInfo" Collapsed="true">
+    <Position X="14.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAQAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\EnemySpawnInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.FullPhase" Collapsed="true">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\FullPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.HellCloakEvent" Collapsed="true">
+    <Position X="21.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAYnAEoAAgAERgEAGAwAQAAAAAAAAAAFARFAAAEAAAA=</HashCode>
+      <FileName>GamePlay\Managers\HellCloakEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.Phase" Collapsed="true">
+    <Position X="7.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAAAQACAAAAABAAAAAAAQAgAAAAAQEABAA=</HashCode>
+      <FileName>GamePlay\Managers\Phase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.PhaseManager" Collapsed="true">
+    <Position X="16" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAEABSQAAJgAAEAABAAAAMAABAAAAACACEIARAAQ=</HashCode>
+      <FileName>GamePlay\Managers\PhaseManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.TutorialPhase" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAwACAAAAABQAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>GamePlay\Managers\TutorialPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.WarmupPhase" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\WarmupPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Background.BackgroundLayer" Collapsed="true">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABgAgAAAAAAAAAAAIAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Background\BackgroundLayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Background.PlatformManager" Collapsed="true">
+    <Position X="17.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQkAAACAAAABgAgAAAAAAAAAABAEAAAAAAgAAAAAAA=</HashCode>
+      <FileName>GamePlay\Background\PlatformManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Isplayer.Player" Collapsed="true">
+    <Position X="19.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAU0iCJACgpIdwA4AKBBFBgAEJDgsAAoAAANgAkQUSg=</HashCode>
+      <FileName>GamePlay\Isplayer\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.ETC.Camera" Collapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAGAAAAAAAAAAAAAACACAJAgIAAQAAAQAAAAI=</HashCode>
+      <FileName>GamePlay\ETC\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Gameplay" Collapsed="true">
+    <Position X="19.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>6IQkgCABAoCAigkCAGEAGABYBpKCAAAPQIkUhS0CAA0=</HashCode>
+      <FileName>GamePlay\Gameplay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

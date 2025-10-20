@@ -72,9 +72,9 @@ namespace DimmedLight.MainMenu
 
             AddButton(new Rectangle(startX, startY, buttonWidth, buttonHeight), "PLAY");
             AddButton(new Rectangle(startX, startY + spacingY, buttonWidth, buttonHeight), "UPGRADE");
-            AddButton(new Rectangle(startX, startY + (spacingY * 2), buttonWidth, buttonHeight), "SETTING");
-            AddButton(new Rectangle(startX, startY + (spacingY * 3), buttonWidth, buttonHeight), "CREDIT");
-            AddButton(new Rectangle(startX, startY + (spacingY * 4), buttonWidth, buttonHeight), "EXIT");
+            AddButton(new Rectangle(startX, startY + spacingY * 2, buttonWidth, buttonHeight), "SETTING");
+            AddButton(new Rectangle(startX, startY + spacingY * 3, buttonWidth, buttonHeight), "CREDIT");
+            AddButton(new Rectangle(startX, startY + spacingY * 4, buttonWidth, buttonHeight), "EXIT");
 
             // --- รูปภาพ Title ---
             // << แก้ไข: กำหนดตำแหน่งรูปภาพ
@@ -101,10 +101,10 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
             // --- เลื่อนลง/ขึ้น ---
-            bool movedDown = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
-                                (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
-            bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
-                                (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
+            bool movedDown = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
+                                gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown);
+            bool movedUp = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
+                                gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp);
 
             //--- curent state ---
 
@@ -135,14 +135,14 @@ namespace DimmedLight.MainMenu
             }
 
             // --- ยืนยัน ---
-            bool isConfirmPressed = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released) ||
-                                      (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
-                                      (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
+            bool isConfirmPressed = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released ||
+                                      keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
+                                      gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A);
 
             if (isConfirmPressed)
             {
-                bool wasClicked = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released);
-                if (!wasClicked || (wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos)))
+                bool wasClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
+                if (!wasClicked || wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos))
                 {
                     ExecuteButtonAction(_selectedButtonIndex);
                 }
