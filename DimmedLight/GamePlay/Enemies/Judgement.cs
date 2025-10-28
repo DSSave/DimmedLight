@@ -26,7 +26,7 @@ namespace DimmedLight.GamePlay.Enemies
             if (player.IsDead) return;
 
             Position.X -= speed * delta * 60;
-            HitN = new Rectangle((int)Position.X + 27, (int)Position.Y + 32, 125, 90);
+            HitN = new Rectangle((int)Position.X + 39, (int)Position.Y + 38, 101, 103);
 
             if (!IsDead)
             {
@@ -83,6 +83,7 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
             }
+            sb.Draw(hitBoxTex, HitN, Color.Red * 0.6f);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace DimmedLight.MainMenu
             MainMenu,
             PauseMenu
         }
+
         public static bool ShowTutorial = true;
 
         #region Assets
@@ -45,6 +46,7 @@ namespace DimmedLight.MainMenu
 
         // --- Tabs ---
         private enum SettingTab { Mode, Sound, Controller }
+
         private SettingTab _currentTab = SettingTab.Mode;
         private List<Rectangle> _tabButtons = new List<Rectangle>();
         private List<string> _tabLabels = new List<string>();
@@ -240,6 +242,7 @@ namespace DimmedLight.MainMenu
             if (movedDown) _selectedTabIndex = (_selectedTabIndex + 1) % _tabButtons.Count;
             if (movedUp) _selectedTabIndex = (_selectedTabIndex - 1 + _tabButtons.Count) % _tabButtons.Count;
             _currentTab = (SettingTab)_selectedTabIndex;
+
             for (int i = 0; i < _tabButtons.Count; i++)
             {
                 if (_tabButtons[i].Contains(mousePos) && isConfirmPressed)

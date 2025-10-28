@@ -1,6 +1,7 @@
 ﻿using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -63,7 +64,7 @@ namespace DimmedLight.GamePlay.Enemies
         public virtual void SetSpeed(float spd) => speed = spd;
         protected void PlayParryHit()
         {
-            ParryHit?.Play(0.3f, 0f, 0f);
+            ParryHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace DimmedLight.GamePlay
         #region Assets
         private Texture2D _platformTex, _platformAsset;
         private Texture2D _projectileTex, _attackProjecTex, _parryProjecTex;
-        private Texture2D _hurtBoxTex, _hitBoxTex;
+        private Texture2D _hurtBoxTex, _hitBoxTex, _pixelTexture;
         private Texture2D _hellCloakTheme;
         private Texture2D _tutorialImage;
         private Texture2D _pauseImage, _frame, _bottonCursor;
@@ -44,10 +44,6 @@ namespace DimmedLight.GamePlay
         private Camera _camera;
         private HUD _hud;
         private ScoreManager _scoreManager;
-        #endregion
-
-        #region Player
-        Player player;
         #endregion
 
         #region Control
@@ -105,6 +101,8 @@ namespace DimmedLight.GamePlay
             _hitBoxTex.SetData(new[] { new Color(37, 150, 190) });
             _redOverlay = new Texture2D(_game.GraphicsDevice, 1, 1);
             _redOverlay.SetData(new[] { Color.Red });
+            _pixelTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
+            _pixelTexture.SetData(new[] { Color.White });
         }
         private void LoadSounds()
         {
@@ -232,7 +230,7 @@ namespace DimmedLight.GamePlay
                 }
                 else if (!_player.IsDead)
                 {
-                    UpdateGameplay(gameTime, keyState, gpState, delta);
+                    UpdateGameplay(gameTime, keyState, gpState, delta, _phaseManager);
                 }
                 else
                 {
@@ -274,7 +272,7 @@ namespace DimmedLight.GamePlay
                     MediaPlayer.Stop();
             }
         }
-        private void UpdateGameplay(GameTime gameTime, KeyboardState keyState, GamePadState gpState, float delta)
+        private void UpdateGameplay(GameTime gameTime, KeyboardState keyState, GamePadState gpState, float delta, PhaseManager phaseManager)
         {
             float bgSpeed = _player.canWalk ? _phaseManager.PlatformSpeed : 0f;
             _bg1.Update(bgSpeed);
@@ -284,7 +282,7 @@ namespace DimmedLight.GamePlay
             _bg5.Update(bgSpeed);
             _platformManager.Update(bgSpeed, delta);
 
-            _player.Update(gameTime, keyState, gpState, _previousKeyState, _previousGamePadState, delta);
+            _player.Update(gameTime, keyState, gpState, _previousKeyState, _previousGamePadState, delta, phaseManager);
             _delisaster.Update(delta, _player);
 
             _phaseManager.Update(gameTime, delta, _player, ref _isFlipped, _delisaster, _scoreManager, keyState, _previousKeyState);
@@ -331,9 +329,11 @@ namespace DimmedLight.GamePlay
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, transformMatrix: _camera.GetViewMatrix());
             DrawBackground();
             _platformManager.Draw(_spriteBatch);
-            _player.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex);
+
+            _player.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex, _pixelTexture);
             _scoreManager.Draw(_spriteBatch, Stepalange, StepalangeShort);
             _hud.DrawHealth(_spriteBatch, _hurtBoxTex, _player.Health, _player);
+
             _phaseManager.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex, _isFlipped);
             _delisaster.Draw(_spriteBatch);
             _pauseMenu.Draw(_spriteBatch);

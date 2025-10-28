@@ -22,6 +22,7 @@ namespace DimmedLight.GamePlay.Managers
         public int CurrentPhaseIndex => _currentIndex;
         public bool IsInEvent => _hellCloakEvent.IsActive || _hellCloakEvent.IsPreparing || (TutorialEvent?.IsActive == true);
         public TutorialEvent TutorialEvent { get; private set; }
+        public IReadOnlyList<EnemyBase> ActiveEnemies => _activeEnemies;
 
         private readonly EnemyFactory _factory;
         private readonly List<EnemyBase> _activeEnemies = new List<EnemyBase>();
@@ -206,6 +207,12 @@ namespace DimmedLight.GamePlay.Managers
 
             if (phaseIndex >= 0 && phaseIndex < _phases.Length)
             {
+                _phases = new Phase[]
+            {
+                new TutorialPhase(),
+                new WarmupPhase(),
+                new FullPhase()
+            };
                 _currentIndex = phaseIndex;
                 _currentPhase = _phases[_currentIndex];
                 _currentPhase.Initialize();

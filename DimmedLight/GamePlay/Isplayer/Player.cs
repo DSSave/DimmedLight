@@ -99,6 +99,13 @@ namespace DimmedLight.GamePlay.Isplayer
         private PhaseManager _phaseManager;
         private readonly ScoreManager _scoreManager;
         #endregion
+
+        #region Helpers
+        private Rectangle _helperAttackBoxRect;
+        private float _helperAttackBoxTimer;
+        private const float HelperAttackBoxDuration = 0.2f;
+        private readonly Color _helperAttackBoxColor = Color.Yellow * 0.6f;
+        #endregion
         public Player(PhaseManager manager, ScoreManager score)
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -124,7 +131,7 @@ namespace DimmedLight.GamePlay.Isplayer
             _attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
             _jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
         }
-        public void Update(GameTime gameTime, KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
+        public void Update(GameTime gameTime, KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta, PhaseManager phaseManager)
         {
             HurtBox = new Rectangle((int)Position.X + 30, (int)Position.Y, 156, 174);
 
@@ -134,6 +141,8 @@ namespace DimmedLight.GamePlay.Isplayer
             HandleInvincibilityAndHealing(delta);
             HandleReturnToSafePosition(delta);
             UpdateAnimations(delta);
+
+            UpdateHelperAttackBox(delta, phaseManager);
         }
         private void HandleInitialDelay(float delta)
         {
@@ -201,6 +210,38 @@ namespace DimmedLight.GamePlay.Isplayer
             else
             {
                 HitBoxAttack = Rectangle.Empty;
+            }
+        }
+        private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
+        {
+            Rectangle potentialHitbox = new Rectangle((int)Position.X + 200, (int)Position.Y + 50, 80, 80);
+            bool enemyInRange = false;
+
+            if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
+            {
+                foreach (var enemy in phaseManager.ActiveEnemies)
+                {
+                    if (enemy.IsDead) continue;
+
+                    Rectangle enemyHitbox = (enemy is Judgement judge) ? judge.HitN : enemy.HurtBox;
+
+                    if (potentialHitbox.Intersects(enemyHitbox))
+                    {
+                        enemyInRange = true;
+                        _helperAttackBoxTimer = HelperAttackBoxDuration;
+                        _helperAttackBoxRect = potentialHitbox;
+                        break;
+                    }
+                }
+            }
+
+            if (!enemyInRange && _helperAttackBoxTimer > 0f)
+            {
+                _helperAttackBoxTimer -= delta;
+            }
+            if (_helperAttackBoxTimer < 0f)
+            {
+                _helperAttackBoxTimer = 0f;
             }
         }
         private void HandleParry(KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
@@ -341,7 +382,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 DeathDelayTimer += delta;
             }
         }
-        public void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex)
+        public void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, Texture2D pixelTexture)
         {
             if (!IsVisible && !DeathAnimationStarted) return;
 
@@ -351,10 +392,23 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsParrying) Parry.DrawFrame(sb, Position, false, Color.LightSkyBlue);
             else if (IsJumping) Jump.DrawFrame(sb, Position);
             else if (IsVisible) Walk.DrawFrame(sb, Position);
+
+            if (_helperAttackBoxTimer > 0f)
+            {
+                float alpha = _helperAttackBoxTimer / HelperAttackBoxDuration;
+                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor * alpha);
+            }
         }
         public void SetPhaseManager(PhaseManager manager) => _phaseManager = manager;
 
         public void Reset()
+        {
+            idleTimer = 0f;
+            canWalk = false;
+            IsVisible = true;
+            midReset();
+        }
+        public void midReset()
         {
             IsDead = false;
             IsJumping = false;
@@ -371,10 +425,6 @@ namespace DimmedLight.GamePlay.Isplayer
             ReturnTimer = ReturnX;
             Position = new Vector2(395, GroundLevel);
             OriginalPosition = Position;
-            idleTimer = 0f;
-            canWalk = false;
-            IsVisible = true;
-
             Walk.Reset();
             Jump.Reset();
             Attack.Reset();
@@ -392,7 +442,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 _velocityY = 0f;
                 Position.Y = GroundLevel;
             }
-            Reset();
+            midReset();
             _scoreManager.clear();
         }
     }

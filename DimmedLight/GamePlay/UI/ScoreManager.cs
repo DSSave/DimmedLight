@@ -133,10 +133,8 @@ namespace DimmedLight.GamePlay.UI
         // ⭐ FIX: Updated Draw method to accept two fonts
         public void Draw(SpriteBatch sb, SpriteFont textFont, SpriteFont numberFont)
         {
-            // Draw Score
             sb.DrawString(numberFont, $"{Score}", new Vector2(1750, 50), Color.White);
 
-            // Draw HighScore (Text part + Number part)
             string highText = "HIGH: ";
             Vector2 highTextSize = textFont.MeasureString(highText);
             Vector2 highTextPos = new Vector2(790, 50);
@@ -144,7 +142,6 @@ namespace DimmedLight.GamePlay.UI
             sb.DrawString(numberFont, $"{HighScore}", highTextPos + new Vector2(highTextSize.X, 0), Color.Gold);
 
 
-            // Draw Light points
             if (_lightDisplayTime > 0)
             {
                 float alpha = MathHelper.Clamp(_lightDisplayTime / LightDisplayDuration, 0f, 1f);
@@ -152,14 +149,10 @@ namespace DimmedLight.GamePlay.UI
                 sb.DrawString(numberFont, $"{_light}", new Vector2(1750, 150), color);
             }
 
-            // Draw Soul Gauge
             DrawSoulGauge(sb);
 
-            // Draw Floating Texts
             foreach (var ft in _floatingTexts)
             {
-                // Pass the correct font based on what the text is for.
-                // Here, all floating texts are numbers, so we use numberFont.
                 ft.Draw(sb, numberFont);
             }
         }
