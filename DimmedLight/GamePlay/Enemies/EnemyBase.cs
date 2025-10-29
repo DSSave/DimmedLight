@@ -28,8 +28,8 @@ namespace DimmedLight.GamePlay.Enemies
         public string EnemyType { get; protected set; }
 
         protected float speed;
-        protected float deathTimer;
-        protected const float DeathDuration = 0.8f;
+        internal float deathTimer;
+        internal const float DeathDuration = 0.8f;
 
         public static SoundEffect ParryHit { get; set; }
         public static SoundEffect EnemiesDead { get; set; }

@@ -73,7 +73,7 @@ namespace DimmedLight.GamePlay.Enemies
                 AttackTimer = 0f;
                 AttackAnim.Reset();
                 ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed);
-                HitTriggered = false;
+                
                 AmmoShoot?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
             }
 
@@ -81,7 +81,11 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 AttackTimer += delta;
                 AttackAnim.UpdateFrame(delta);
-                if (AttackTimer >= AttackDuration) IsAttacking = false;
+                if (AttackTimer >= AttackDuration)
+                {
+                    IsAttacking = false;
+                    HitTriggered = false;
+                }
             }
             else
             {

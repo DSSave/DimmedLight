@@ -106,6 +106,9 @@ namespace DimmedLight.GamePlay.Isplayer
         private const float HelperAttackBoxDuration = 0.2f;
         private readonly Color _helperAttackBoxColor = Color.Yellow * 0.6f;
         #endregion
+
+        private bool _isUltimateActive = false;
+        private const float _ultimateGaugeDrainRate = 200f;
         public Player(PhaseManager manager, ScoreManager score)
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -136,12 +139,12 @@ namespace DimmedLight.GamePlay.Isplayer
             HurtBox = new Rectangle((int)Position.X + 30, (int)Position.Y, 156, 174);
 
             HandleInitialDelay(delta);
+            HandleUltimateDrain(delta);
             HandleJumping(keyState, gpState, delta);
             HandleActions(keyState, gpState, prevKey, prevGp, delta);
             HandleInvincibilityAndHealing(delta);
             HandleReturnToSafePosition(delta);
             UpdateAnimations(delta);
-
             UpdateHelperAttackBox(delta, phaseManager);
         }
         private void HandleInitialDelay(float delta)
@@ -214,7 +217,7 @@ namespace DimmedLight.GamePlay.Isplayer
         }
         private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
         {
-            Rectangle potentialHitbox = new Rectangle((int)Position.X + 200, (int)Position.Y + 50, 80, 80);
+            Rectangle potentialHitbox = new Rectangle(HitBoxAttack.X + 50, HitBoxAttack.Y, 80, 80);
             bool enemyInRange = false;
 
             if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
@@ -276,10 +279,24 @@ namespace DimmedLight.GamePlay.Isplayer
             bool ultiPressed = (keyState.IsKeyDown(Keys.F) && keyState.IsKeyDown(Keys.J)) ||
                                (gpState.IsButtonDown(Buttons.RightShoulder) && gpState.IsButtonDown(Buttons.LeftShoulder));
 
-            if (_scoreManager.SoulGauge >= 600 && ultiPressed && !IsDead && !_phaseManager.IsInEvent)
+            if (_scoreManager != null && _scoreManager.SoulGauge >= ScoreManager.MaxGauge &&
+             ultiPressed && !IsDead && (_phaseManager == null || !_phaseManager.IsInEvent) && !_isUltimateActive)
             {
-                UltimateReset();
-                _scoreManager.removeSoul(600);
+                _isUltimateActive = true;
+                UltimateResetPhaseOnly();
+            }
+        }
+        private void HandleUltimateDrain(float delta)
+        {
+            if (_isUltimateActive && _scoreManager != null)
+            {
+                float amountToDrain = _ultimateGaugeDrainRate * delta;
+                _scoreManager.DrainSoulGauge(amountToDrain);
+
+                if (_scoreManager.SoulGauge <= 0)
+                {
+                    _isUltimateActive = false;
+                }
             }
         }
         private void HandleInvincibilityAndHealing(float delta)
@@ -314,7 +331,7 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
             }
         }
-        private void UpdateAnimations(float delta)
+        public void UpdateAnimations(float delta)
         {
             if (!canWalk) Idle.UpdateFrame(delta);
             else if (IsAttacking) Attack.UpdateFrame(delta);
@@ -330,6 +347,9 @@ namespace DimmedLight.GamePlay.Isplayer
             IsInvincible = true;
             InvincibilityTimer = InvincibilityTime;
             HealingTimer = 0f;
+
+            _scoreManager?.ResetCombo();
+            _scoreManager?.ResetEventCombo();
 
             if (!IsReturning)
             {
@@ -425,6 +445,7 @@ namespace DimmedLight.GamePlay.Isplayer
             ReturnTimer = ReturnX;
             Position = new Vector2(395, GroundLevel);
             OriginalPosition = Position;
+            LastSafePosition = Position;
             Walk.Reset();
             Jump.Reset();
             Attack.Reset();
@@ -433,7 +454,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Death.Loop = true;
             SetEvent(false);
         }
-        public void UltimateReset()
+        public void UltimateResetPhaseOnly()
         {
             _phaseManager?.ResetCurrentPhase(_phaseManager.CurrentPhaseIndex);
             if (IsJumping)
@@ -442,7 +463,6 @@ namespace DimmedLight.GamePlay.Isplayer
                 _velocityY = 0f;
                 Position.Y = GroundLevel;
             }
-            midReset();
             _scoreManager.clear();
         }
     }

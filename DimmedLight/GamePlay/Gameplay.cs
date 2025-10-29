@@ -32,6 +32,7 @@ namespace DimmedLight.GamePlay
         private SoundEffect _parryHit, _enemiesDead, _playerHit, _ammoShoot;
         private Song _bmg, _eventSound;
         private Texture2D _redOverlay;
+        private Texture2D _healthPlayer;
         #endregion
 
         #region Game Objects
@@ -57,6 +58,10 @@ namespace DimmedLight.GamePlay
         public bool SettingScreenWasOpen { get; set; }
         #endregion
 
+        private EventTextSlide _eventTextSlide;
+        private bool _isEventEndingAnimationPlaying;
+        public bool IsEventEndingAnimationPlaying => _isEventEndingAnimationPlaying;
+
         public Gameplay(Game1 game, GraphicsDeviceManager graphics)
         {
             _game = game;
@@ -77,6 +82,7 @@ namespace DimmedLight.GamePlay
             InitializeUI();
             InitializeEnemies();
 
+            _eventTextSlide = new EventTextSlide(_game.GraphicsDevice, Stepalange, _camera);
             //MediaPlayer.Play(_bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
@@ -103,6 +109,8 @@ namespace DimmedLight.GamePlay
             _redOverlay.SetData(new[] { Color.Red });
             _pixelTexture = new Texture2D(_game.GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
+
+            _healthPlayer = _game.Content.Load<Texture2D>("MenuAsset/Hearts");
         }
         private void LoadSounds()
         {
@@ -137,7 +145,7 @@ namespace DimmedLight.GamePlay
         {
             _scoreManager = new ScoreManager();
             _scoreManager.LoadContent(_game.Content);
-            _player = new Player(null, _scoreManager);
+            _player = new Player(_phaseManager, _scoreManager);
             _player.Load(_game.Content);
             _delisaster = new Delisaster();
             _delisaster.Load(_game.Content);
@@ -195,16 +203,29 @@ namespace DimmedLight.GamePlay
             );
 
             // Phase Manager
-            _phaseManager = new PhaseManager(_enemyFactory, _player, _delisaster, _camera, _hellCloakTheme, _tutorialImage,
-                _parryProjecTex, _attackProjecTex, _parryHit, _eventSound, _bmg, _game.GraphicsDevice);
+            _phaseManager = new PhaseManager(this, _enemyFactory, _player, _delisaster, _camera, _hellCloakTheme, _tutorialImage,
+                  _parryProjecTex, _attackProjecTex, _parryHit, _eventSound, _bmg, _game.GraphicsDevice, _scoreManager,
+                  _platformManager);
 
             _player.SetPhaseManager(_phaseManager);
-
+            if (_phaseManager._hellCloakEvent != null)
+            {
+                _phaseManager._hellCloakEvent.OnEventFinishTrigger = StartEventEndAnimation;
+            }
             // Assign static sound effects
             EnemyBase.ParryHit = _parryHit;
             EnemyBase.EnemiesDead = _enemiesDead;
             EnemyBase.PlayerHit = _playerHit;
             EnemyBase.AmmoShoot = _ammoShoot;
+
+            _scoreManager.SetComboPosition(new Vector2(300, 200), new Vector2(300, 450));
+        }
+        public void StartEventEndAnimation(string message, bool success)
+        {
+            Color textColor = success ? Color.LightGreen : Color.Red;
+            _eventTextSlide.StartAnimation(message, textColor);
+            _isEventEndingAnimationPlaying = true;
+            _player.canWalk = false;
         }
         public void Update(GameTime gameTime)
         {
@@ -247,6 +268,34 @@ namespace DimmedLight.GamePlay
                     ResetGame();
                 }
                 return;
+            }
+            if(_isEventEndingAnimationPlaying)
+            {
+                float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _eventTextSlide.Update(delta);
+                if (!_eventTextSlide.IsActive)
+                {
+                    _isEventEndingAnimationPlaying = false;
+                    _phaseManager._hellCloakEvent.PostTextEnd();
+                    _player.canWalk = true;
+
+                    if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
+                    {
+                        //MediaPlayer.Play(_bmg);
+                        MediaPlayer.IsRepeating = true;
+                        MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
+                    }
+                    _platformManager?.Update(0f, delta);
+                    _bg1?.Update(0f); _bg2?.Update(0f); _bg3?.Update(0f); _bg4?.Update(0f); _bg5?.Update(0f);
+                    _camera?.MoveCamTocenter(delta);
+                    _player?.UpdateAnimations(delta);
+                    _delisaster?.Update(delta, _player);
+                    _scoreManager?.Update(gameTime, _player);
+
+                    _previousKeyState = keyState;
+                    _previousGamePadState = gpState;
+                    return;
+                }
             }
 
             _previousKeyState = keyState;
@@ -331,22 +380,19 @@ namespace DimmedLight.GamePlay
             _platformManager.Draw(_spriteBatch);
 
             _player.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex, _pixelTexture);
-            _scoreManager.Draw(_spriteBatch, Stepalange, StepalangeShort);
-            _hud.DrawHealth(_spriteBatch, _hurtBoxTex, _player.Health, _player);
+            _scoreManager.Draw(_spriteBatch, Stepalange, StepalangeShort, _phaseManager.IsInEvent);
+            _hud.DrawHealth(_spriteBatch, _healthPlayer, _player.Health, _player);
 
             _phaseManager.Draw(_spriteBatch, _hurtBoxTex, _hitBoxTex, _isFlipped);
             _delisaster.Draw(_spriteBatch);
             _pauseMenu.Draw(_spriteBatch);
             DrawPlayerInvincibilityOverlay();
-            _spriteBatch.End();
 
-            // Game over screen draw (if applicable)
+            if (_isEventEndingAnimationPlaying)
+                _eventTextSlide.Draw(_spriteBatch);
             if (_showGameOver)
-            {
-                _spriteBatch.Begin();
                 _gameOverScreen.Draw(_spriteBatch);
-                _spriteBatch.End();
-            }
+            _spriteBatch.End();
         }
         private void DrawBackground()
         {
@@ -380,10 +426,11 @@ namespace DimmedLight.GamePlay
             _platformManager.Reset();
             _showGameOver = false;
             _gameOverScreen.Reset();
+            _eventTextSlide.StartAnimation("", Color.White);
 
             if (MediaPlayer.State != MediaState.Playing)
             {
-                MediaPlayer.Play(_bmg);
+                //MediaPlayer.Play(_bmg);
             }
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;

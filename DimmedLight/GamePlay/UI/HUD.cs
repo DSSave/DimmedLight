@@ -12,11 +12,19 @@ namespace DimmedLight.GamePlay.UI
     public class HUD
     {
         Player player;
-        public void DrawHealth(SpriteBatch sb, Texture2D boxTex, byte health, Player player)
+        public void DrawHealth(SpriteBatch sb, Texture2D healthPlayer, byte health, Player player)
         {
+            int startX = (int)player.Position.X + 20;
+            int startY = 900;
+            int spacing = healthPlayer.Width + 40;
+            float scale = 1.5f;
             for (int i = 0; i < health; i++)
             {
-                sb.Draw(boxTex, new Rectangle(((int)player.Position.X + 90) + i * 40, 920, 30, 30), Color.Red);
+                Vector2 iconPosition = new Vector2(startX + i * spacing, startY);
+
+                sb.Draw(healthPlayer, iconPosition, null, Color.White, 0f,                     
+                    Vector2.Zero, scale, SpriteEffects.None, 0f                      
+                );
             }
         }
     }

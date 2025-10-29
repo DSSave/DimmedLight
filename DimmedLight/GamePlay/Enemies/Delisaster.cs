@@ -27,7 +27,7 @@ namespace DimmedLight.GamePlay.Enemies
         public float MaxForwardOffset = 300f; // ระยะทางสูงสุดที่ Delisaster จะขยับไปทางขวา
         public float currentOffset = 0f;
 
-        private Vector2 projectileOffSet = new Vector2(285, 750);
+        private Vector2 projectileOffSet = new Vector2(305, 750);
 
         private bool IsDashing = false;
         private bool IsDashReturning = false;
@@ -54,11 +54,10 @@ namespace DimmedLight.GamePlay.Enemies
         {
             if (player.canWalk)
             {
-                // Player กำลังเดิน → เริ่มดึง Delisaster กลับไปตำแหน่งเดิม
                 if (!IsReturning)
                 {
                     IsReturning = true;
-                    ReturnTimer = ReturnPos; // เริ่มจับเวลาคืนตำแหน่ง
+                    ReturnTimer = ReturnPos;
                 }
                 IsFlipped = false;
             }
@@ -72,7 +71,7 @@ namespace DimmedLight.GamePlay.Enemies
                     if (Position.X >= DashTarget.X)
                         IsDashReturning = true;
                 }
-                else // ถอยกลับ
+                else
                 {
                     Position.X = MathHelper.Max(Position.X - DashReturnSpeed * delta, DashStart.X);
                     if (Position.X <= DashStart.X)
@@ -93,12 +92,12 @@ namespace DimmedLight.GamePlay.Enemies
                 return;
             }
 
-            if (IsReturning) // กำลังดึงกลับไปตำแหน่งเดิม
+            if (IsReturning)
             {
                 ReturnTimer -= delta;
-                float d = 1f - ReturnTimer / ReturnPos; // คำนวณเปอร์เซ็นต์การดึงกลับ
-                d = MathHelper.Clamp(d, 0f, 1f); // จำกัดค่า d ให้อยู่ระหว่าง 0 ถึง 1
-                Position.X = MathHelper.Lerp(Position.X, OriginalPosition.X, d); // ใช้ Lerp เพื่อขยับไปยังตำแหน่งเดิมอย่างนุ่มนวล
+                float d = 1f - ReturnTimer / ReturnPos;
+                d = MathHelper.Clamp(d, 0f, 1f);
+                Position.X = MathHelper.Lerp(Position.X, OriginalPosition.X, d);
                 if (ReturnTimer <= 0f)
                 {
                     IsReturning = false;
@@ -108,13 +107,12 @@ namespace DimmedLight.GamePlay.Enemies
             }
             else
             {
-                // Player กำลัง idle → ขยับไปทางขวาตามระยะ MaxForwardOffset
-                if (currentOffset < MaxForwardOffset) // ขยับไปทางขวา
+                if (currentOffset < MaxForwardOffset)
                 {
-                    currentOffset += AppearSpeed * delta; // เพิ่มค่า currentOffset ตามความเร็วและเวลา
-                    currentOffset = MathHelper.Clamp(currentOffset, 0f, MaxForwardOffset); // จำกัดไม่ให้เกิน MaxForwardOffset
+                    currentOffset += AppearSpeed * delta;
+                    currentOffset = MathHelper.Clamp(currentOffset, 0f, MaxForwardOffset);
                 }
-                Position.X = OriginalPosition.X + currentOffset; // อัพเดตตำแหน่ง X ของ Delisaster
+                Position.X = OriginalPosition.X + currentOffset;
                 IsFlipped = false;
             }
             IsFlipped = false;

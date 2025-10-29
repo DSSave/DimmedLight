@@ -1,4 +1,5 @@
-﻿using DimmedLight.GamePlay.Enemies;
+﻿using DimmedLight.GamePlay.Background;
+using DimmedLight.GamePlay.Enemies;
 using DimmedLight.GamePlay.ETC;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.Managers;
@@ -26,7 +27,7 @@ namespace DimmedLight.GamePlay.Managers
 
         private readonly EnemyFactory _factory;
         private readonly List<EnemyBase> _activeEnemies = new List<EnemyBase>();
-        private readonly HellCloakEvent _hellCloakEvent;
+        public readonly HellCloakEvent _hellCloakEvent;
         private Phase[] _phases;
         private int _currentIndex;
         private Phase _currentPhase;
@@ -35,11 +36,16 @@ namespace DimmedLight.GamePlay.Managers
         private float _nextEventTime;
         private bool _tutorialShown;
         private readonly Random _rng = new Random();
+        private readonly ScoreManager _scoreManager;
+        private PlatformManager _platformManager;
+        private readonly Gameplay _gameplay;
 
-        public PhaseManager(EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
+        public PhaseManager(Gameplay gameplay, EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
             Texture2D hellCloakTheme, Texture2D tutorialImage, Texture2D parryProjecTex, Texture2D attackProjecTex,
-            SoundEffect parryHit, Song eventSound, Song bgm, GraphicsDevice graphicsDevice)
+            SoundEffect parryHit, Song eventSound, Song bgm, GraphicsDevice graphicsDevice, ScoreManager scoreManager,
+            PlatformManager platformManager)
         {
+            _gameplay = gameplay;
             _factory = factory;
             _phases = new Phase[]
             {
@@ -51,7 +57,8 @@ namespace DimmedLight.GamePlay.Managers
             _currentPhase = _phases[_currentIndex];
             _currentPhase.Initialize();
 
-            _hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm);
+            _hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm, scoreManager, _platformManager);
+            _scoreManager = scoreManager;
             TutorialEvent = new TutorialEvent(graphicsDevice, tutorialImage, _hellCloakEvent.StartEvent);
             _hellCloakEvent.OnPrepareFinished = () =>
             {
@@ -70,6 +77,11 @@ namespace DimmedLight.GamePlay.Managers
         }
         public void Update(GameTime gameTime, float delta, Player player, ref bool isFlipped, Delisaster delisaster, ScoreManager scoreManager, KeyboardState keyboardState, KeyboardState previousKeyboardState)
         {
+            if(_gameplay != null && _gameplay.IsEventEndingAnimationPlaying)
+            {
+                UpdateEnemies(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+                return;
+            }
             if (TutorialEvent?.IsActive == true)
             {
                 TutorialEvent.Update(keyboardState, previousKeyboardState);
@@ -90,7 +102,10 @@ namespace DimmedLight.GamePlay.Managers
 
             UpdatePhase3EventTimer(delta);
 
-            SpawnEnemies(delta);
+            if (_gameplay == null || !_gameplay.IsEventEndingAnimationPlaying)
+            {
+                SpawnEnemies(delta);
+            }
             UpdateEnemies(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
 
             CheckForPhaseCompletion();
@@ -150,7 +165,12 @@ namespace DimmedLight.GamePlay.Managers
                     e.SetSpeed(_currentPhase.PlatformSpeed);
                 }
                 e.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+
                 if (e.IsDead && !e.DeathAnimationStarted)
+                {
+                    _activeEnemies.RemoveAt(i);
+                }
+                else if (e.IsDead && e.DeathAnimationStarted && e.deathTimer >= EnemyBase.DeathDuration)
                 {
                     _activeEnemies.RemoveAt(i);
                 }

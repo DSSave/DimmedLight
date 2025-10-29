@@ -55,7 +55,7 @@ namespace DimmedLight.GamePlay.Background
             for(int i = assetPositions.Count - 1; i >= 0; i--)
             {
                 assetPositions[i] = new Vector2(assetPositions[i].X - platformSpeed, assetPositions[i].Y);
-                if(assetPositions[i].X < -PlatformAsset.Width) assetPositions.RemoveAt(i);
+                if (assetPositions[i].X < -PlatformAsset.Width) assetPositions.RemoveAt(i);
             }
         }
 
@@ -72,6 +72,10 @@ namespace DimmedLight.GamePlay.Background
             for (int i = 0; i < Positions.Length; i++) Positions[i] = new Vector2(i * w, y);
 
             assetPositions.Clear();
+            ResetAssetTimer();
+        }
+        public void ResetAssetTimer()
+        {
             assetSpawnTimer = 0f;
         }
     }
