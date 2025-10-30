@@ -151,6 +151,18 @@
 #begin bullet4.png
 /copy:bullet4.png
 
+#begin cha_hit_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cha_hit_sprite.png
+
 #begin cursorMainmenu1.png
 /copy:cursorMainmenu1.png
 

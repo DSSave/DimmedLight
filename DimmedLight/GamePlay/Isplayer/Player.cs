@@ -28,6 +28,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public AnimatedTexture Attack { get; }
         public AnimatedTexture Parry { get; }
         public AnimatedTexture Death { get; }
+        public AnimatedTexture Hit { get; }
         #endregion
 
         #region state
@@ -39,6 +40,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public bool IsAttacking { get; private set; }
         public bool IsParrying { get; private set; }
         public bool IsDead { get; set; }
+        public bool IsHit { get; private set; }
         #endregion
 
         #region jumping
@@ -117,6 +119,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Attack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Parry = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Death = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
+            Hit = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             Position = new Vector2(395, GroundLevel);
             _phaseManager = manager;
             _scoreManager = score;
@@ -130,6 +133,8 @@ namespace DimmedLight.GamePlay.Isplayer
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
             Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
             Death.Load(content, "game_over_spritesheet", 1, 22, 10);
+            Hit.Load(content, "cha_hit_sprite", 1, 1, 15);
+            Hit.Loop = false;
 
             _attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
             _jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
@@ -140,8 +145,17 @@ namespace DimmedLight.GamePlay.Isplayer
 
             HandleInitialDelay(delta);
             HandleUltimateDrain(delta);
-            HandleJumping(keyState, gpState, delta);
-            HandleActions(keyState, gpState, prevKey, prevGp, delta);
+            if (IsHit)
+            {
+                if (Hit.IsEnded)
+                {
+                    IsHit = false;
+                }
+            }else if (!IsDead)
+            {
+                HandleJumping(keyState, gpState, delta);
+                HandleActions(keyState, gpState, prevKey, prevGp, delta);
+            }
             HandleInvincibilityAndHealing(delta);
             HandleReturnToSafePosition(delta);
             UpdateAnimations(delta);
@@ -334,6 +348,7 @@ namespace DimmedLight.GamePlay.Isplayer
         public void UpdateAnimations(float delta)
         {
             if (!canWalk) Idle.UpdateFrame(delta);
+            else if (IsHit) Hit.UpdateFrame(delta);
             else if (IsAttacking) Attack.UpdateFrame(delta);
             else if (IsParrying) Parry.UpdateFrame(delta);
             else if (IsJumping) Jump.UpdateFrame(delta);
@@ -350,7 +365,9 @@ namespace DimmedLight.GamePlay.Isplayer
 
             _scoreManager?.ResetCombo();
             _scoreManager?.ResetEventCombo();
-
+            IsHit = true;
+            IsAttacking = IsParrying = false;
+            Hit.Reset();
             if (!IsReturning)
             {
                 OriginalPosition = LastSafePosition;
@@ -407,6 +424,7 @@ namespace DimmedLight.GamePlay.Isplayer
             if (!IsVisible && !DeathAnimationStarted) return;
 
             if (DeathAnimationStarted) Death.DrawFrame(sb, Position);
+            else if (IsHit) Hit.DrawFrame(sb, Position);
             else if (!canWalk) Idle.DrawFrame(sb, Position);
             else if (IsAttacking) Attack.DrawFrame(sb, Position);
             else if (IsParrying) Parry.DrawFrame(sb, Position, false, Color.LightSkyBlue);
@@ -451,6 +469,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Attack.Reset();
             Parry.Reset();
             Death.Reset();
+            Hit.Reset();
             Death.Loop = true;
             SetEvent(false);
         }
