@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using DimmedLight.MainMenu;
 
 namespace DimmedLight.GamePlay.UI
 {
@@ -30,6 +31,7 @@ namespace DimmedLight.GamePlay.UI
 
             if (keyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyUp(Keys.Enter))
             {
+                SoundManager.PlayUIClick();
                 IsActive = false;
                 onFinish?.Invoke();
             }

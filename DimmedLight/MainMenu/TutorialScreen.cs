@@ -67,6 +67,7 @@ namespace DimmedLight.MainMenu
             {
                 if (_currentPage < 3)
                 {
+                    SoundManager.PlayUIClick();
                     _currentPage++;
                 }
                 else
@@ -78,6 +79,7 @@ namespace DimmedLight.MainMenu
             {
                 if (_currentPage > 1)
                 {
+                    SoundManager.PlayUIClick();
                     _currentPage--;
                 }
                 else
@@ -87,6 +89,7 @@ namespace DimmedLight.MainMenu
             }
             else if (escapePressed)
             {
+                SoundManager.PlayUIClick();
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 

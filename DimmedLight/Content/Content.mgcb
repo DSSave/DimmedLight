@@ -55,6 +55,18 @@
 /processorParam:Quality=Best
 /build:Audio/LOOP_SFX_PlayerHit2.wav
 
+#begin Audio/LOOP_UI_Interact.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_UI_Interact.wav
+
+#begin Audio/LOOP_UI_UiMoving.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_UI_UiMoving.wav
+
 #begin Audio/SunYaNaFon.mp3
 /importer:Mp3Importer
 /processor:SongProcessor

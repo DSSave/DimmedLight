@@ -27,6 +27,7 @@ namespace DimmedLight.MainMenu
         private Rectangle _noButton;
 
         private int _selectedButtonIndex = 1; // 0 for Yes, 1 for No (เริ่มที่ No)
+        private int _previousSelectedButtonIndex = 1;
 
         // REMOVED: ไม่ต้องใช้ Alpha fade แล้ว
         // private float[] _buttonAlphas = new float[2] { 0f, 0f };
@@ -85,6 +86,8 @@ namespace DimmedLight.MainMenu
             var keyboard = Keyboard.GetState();
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
+            _previousSelectedButtonIndex = _selectedButtonIndex;
+
             var mousePos = new Point(mouse.X, mouse.Y);
             bool isMouseClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
 
@@ -113,7 +116,10 @@ namespace DimmedLight.MainMenu
             {
                 _selectedButtonIndex = (_selectedButtonIndex + 1) % 2;
             }
-
+            if(_previousSelectedButtonIndex != _selectedButtonIndex)
+            {
+                SoundManager.PlayUIHover();
+            }
             // Action on confirmation
             if (isConfirmPressed || isMouseClicked)
             {
@@ -130,6 +136,7 @@ namespace DimmedLight.MainMenu
 
                 if (confirmed)
                 {
+                    SoundManager.PlayUIClick();
                     if (_selectedButtonIndex == 0) Game.Exit();
                     else Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
@@ -137,6 +144,7 @@ namespace DimmedLight.MainMenu
 
             if (isBackPressed)
             {
+                SoundManager.PlayUIHover();
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 

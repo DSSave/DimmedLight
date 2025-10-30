@@ -32,36 +32,19 @@ namespace DimmedLight.MainMenu
         private List<Rectangle> _buttons = new List<Rectangle>();
         private List<string> _buttonLabels = new List<string>();
         private int _selectedButtonIndex = 0;
+        private int _previousSelectedButtonIndex = 0;
 
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
                    : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
         }
-
-        // --- state ---
-        /*private SettingSource _source;
-        public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content, SettingSource source)
-            : base(game, graphicsDeviceManager, graphicsDevice, content)
-        {
-            _source = source;
-        }*/
-
-        /*public enum SettingSource
-        {
-            MainMenu,
-            PauseMenu
-        }*/
-
         public override void LoadContent()
         {
             _menuFont = Content.Load<SpriteFont>("gameFont");
             Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
-            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/MyCustomFont");
-            // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
             _backgroundTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
             _selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
-            //_selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
-            _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title"); // << เพิ่ม: โหลดรูปภาพ title
+            _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title");
 
             // --- ปุ่ม ---
             int buttonWidth = 450;
@@ -100,6 +83,8 @@ namespace DimmedLight.MainMenu
             var keyboard = Keyboard.GetState();
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
+            _previousSelectedButtonIndex = _selectedButtonIndex;
+
             // --- เลื่อนลง/ขึ้น ---
             bool movedDown = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
                                 gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown);
@@ -133,6 +118,10 @@ namespace DimmedLight.MainMenu
                     }
                 }
             }
+            if(_previousSelectedButtonIndex != _selectedButtonIndex)
+            {
+                SoundManager.PlayUIHover();
+            }
 
             // --- ยืนยัน ---
             bool isConfirmPressed = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released ||
@@ -144,6 +133,7 @@ namespace DimmedLight.MainMenu
                 bool wasClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
                 if (!wasClicked || wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos))
                 {
+                    SoundManager.PlayUIClick();
                     ExecuteButtonAction(_selectedButtonIndex);
                 }
             }

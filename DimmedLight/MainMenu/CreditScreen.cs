@@ -44,6 +44,7 @@ namespace DimmedLight.MainMenu
 
             if (isEscapePressed || isBButtonPressed)
             {
+                SoundManager.PlayUIClick();
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 

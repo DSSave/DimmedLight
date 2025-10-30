@@ -35,6 +35,7 @@ namespace DimmedLight
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            SoundManager.LoadUISound(Content);
             ChangeScreen(new MenuScreen(this, _graphics, GraphicsDevice, Content));
         }
         protected override void Update(GameTime gameTime)

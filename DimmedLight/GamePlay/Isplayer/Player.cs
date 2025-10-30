@@ -217,7 +217,7 @@ namespace DimmedLight.GamePlay.Isplayer
         }
         private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
         {
-            Rectangle potentialHitbox = new Rectangle(HitBoxAttack.X + 50, HitBoxAttack.Y, 80, 80);
+            Rectangle potentialHitbox = new Rectangle((int)Position.X + 186 + 50, (int)Position.Y + 50, 80, 80);
             bool enemyInRange = false;
 
             if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)

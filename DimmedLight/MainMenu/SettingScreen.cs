@@ -78,6 +78,12 @@ namespace DimmedLight.MainMenu
         private int _selectedControllerSubIndex = 0;
         private int _selectedControllerIndex = 0;
 
+        private int _prevSelectedModeIndex = 0;
+        private int _prevSelectedSoundIndex = 0;
+        private int _prevSelectedTabIndex = 0;
+        private int _prevSelectedControllerSubIndex = 0;
+        private int _prevSelectedControllerIndex = 0;
+
         // --- Option Alphas for Highlighting ---
         private float[] _modeOptionAlphas = new float[3];
         private float[] _soundOptionAlphas = new float[2];
@@ -210,6 +216,12 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
             var mousePos = new Point(mouse.X, mouse.Y);
 
+            _prevSelectedTabIndex = _selectedTabIndex;
+            _prevSelectedModeIndex = _selectedModeIndex;
+            _prevSelectedSoundIndex = _selectedSoundIndex;
+            _prevSelectedControllerIndex = _selectedControllerIndex;
+            _prevSelectedControllerSubIndex = _selectedControllerSubIndex;
+
             bool movedRight = keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right) ||
                              gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f ||
                              gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight);
@@ -230,6 +242,7 @@ namespace DimmedLight.MainMenu
 
             if (goBack)
             {
+                SoundManager.PlayUIClick();
                 if (_source == SettingSource.MainMenu)
                     Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 else if (_source == SettingSource.PauseMenu)
@@ -243,27 +256,50 @@ namespace DimmedLight.MainMenu
             if (movedUp) _selectedTabIndex = (_selectedTabIndex - 1 + _tabButtons.Count) % _tabButtons.Count;
             _currentTab = (SettingTab)_selectedTabIndex;
 
-            for (int i = 0; i < _tabButtons.Count; i++)
+            if (isConfirmPressed)
             {
-                if (_tabButtons[i].Contains(mousePos) && isConfirmPressed)
+                for (int i = 0; i < _tabButtons.Count; i++)
                 {
-                    _selectedTabIndex = i;
-                    _currentTab = (SettingTab)i;
+                    if (_tabButtons[i].Contains(mousePos) && isConfirmPressed)
+                    {
+                        SoundManager.PlayUIClick();
+                        _selectedTabIndex = i;
+                        _currentTab = (SettingTab)i;
+                    }
+                }
+            }
+            else if(mouse.X != _previousMouseState.X || mouse.Y != _previousMouseState.Y)
+            {
+                for (int i = 0; i < _tabButtons.Count; i++)
+                {
+                    if (_tabButtons[i].Contains(mousePos))
+                    {
+                        _selectedTabIndex = i;
+                        break;
+                    }
                 }
             }
             switch (_currentTab)
+                {
+                    case SettingTab.Mode:
+                        HandleModeTabInput(isConfirmPressed, movedUp, movedDown, mousePos, mouse);
+                        break;
+                    case SettingTab.Sound:
+                        HandleSoundTabInput(movedUp, movedDown, movedLeft, movedRight, mouse);
+                        break;
+                    case SettingTab.Controller:
+                        HandleControllerTabInput(movedUp, movedDown, movedLeft, movedRight, mousePos);
+                        break;
+                }
+            if(_prevSelectedTabIndex != _selectedTabIndex ||
+               _prevSelectedModeIndex != _selectedModeIndex ||
+               _prevSelectedSoundIndex != _selectedSoundIndex ||
+               _prevSelectedControllerIndex != _selectedControllerIndex ||
+               _prevSelectedControllerSubIndex != _selectedControllerSubIndex)
             {
-                case SettingTab.Mode:
-                    HandleModeTabInput(isConfirmPressed, movedUp, movedDown, mousePos, mouse);
-                    break;
-                case SettingTab.Sound:
-                    HandleSoundTabInput(movedUp, movedDown, movedLeft, movedRight, mouse);
-                    break;
-                case SettingTab.Controller:
-                    HandleControllerTabInput(movedUp, movedDown, movedLeft, movedRight, mousePos);
-                    break;
+                if(!_isDraggingBgKnob && !_isDraggingSfxKnob)
+                    SoundManager.PlayUIHover();
             }
-
             UpdateAlphas(gameTime);
 
             _previousMouseState = mouse;
@@ -283,9 +319,19 @@ namespace DimmedLight.MainMenu
             if (up) _selectedModeIndex = (_selectedModeIndex - 1 + 3) % 3;
             if (down) _selectedModeIndex = (_selectedModeIndex + 1) % 3;
 
-            if (confirm || Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (confirm || Keyboard.GetState().IsKeyDown(Keys.Space) && _previousKeyboardState.IsKeyUp(Keys.Space))
             {
-                ApplySelectedModeOption();
+                bool moouseClickedOnOption = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released &&
+                                           (_fullscreenCheckbox.Contains(mousePos) ||
+                                            _windowedCheckbox.Contains(mousePos) ||
+                                            _tutorialCheckbox.Contains(mousePos));
+                bool keyPressed = (Keyboard.GetState().IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
+                              (Keyboard.GetState().IsKeyDown(Keys.Space) && _previousKeyboardState.IsKeyUp(Keys.Space));
+                if( moouseClickedOnOption || keyPressed)
+                {
+                    SoundManager.PlayUIClick();
+                    ApplySelectedModeOption();
+                }
             }
         }
 
@@ -334,8 +380,6 @@ namespace DimmedLight.MainMenu
             if (bgChanged)
             {
                 SoundManager.BgmVolume = _bgVolume;
-                // Since menu screens don't have BGM, this change will be applied when GameplayScreen is loaded/resumed.
-                // If there was menu music, we would set MediaPlayer.Volume here.
             }
 
             if (sfxChanged)
