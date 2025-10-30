@@ -104,8 +104,11 @@ namespace DimmedLight.GamePlay.Isplayer
 
         #region Helpers
         private Rectangle _helperAttackBoxRect;
-        private float _helperAttackBoxTimer;
-        private const float HelperAttackBoxDuration = 0.2f;
+        private float _helperBlinkTotalTimer = 0f;
+        private const float HelperBlinkDuration = 2.0f;
+        private float _helperBlinkIntervalTimer = 0f;
+        private const float HelperBlinkInterval = 0.1f;
+        private bool _isHelperBlinkVisible = false;
         private readonly Color _helperAttackBoxColor = Color.Yellow * 0.6f;
         #endregion
 
@@ -169,6 +172,9 @@ namespace DimmedLight.GamePlay.Isplayer
                 if (idleTimer >= idleDelay)
                 {
                     canWalk = true;
+                    _helperBlinkTotalTimer = HelperBlinkDuration;
+                    _isHelperBlinkVisible = true;
+                    _helperBlinkIntervalTimer = 0f;
                 }
             }
         }
@@ -231,7 +237,7 @@ namespace DimmedLight.GamePlay.Isplayer
         }
         private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
         {
-            Rectangle potentialHitbox = new Rectangle((int)Position.X + 186 + 50, (int)Position.Y + 50, 80, 80);
+            /*Rectangle potentialHitbox = new Rectangle((int)Position.X + 186 + 50, (int)Position.Y + 50, 80, 80);
             bool enemyInRange = false;
 
             if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
@@ -259,6 +265,26 @@ namespace DimmedLight.GamePlay.Isplayer
             if (_helperAttackBoxTimer < 0f)
             {
                 _helperAttackBoxTimer = 0f;
+            }*/
+            if(_helperBlinkTotalTimer > 0f)
+            {
+                _helperBlinkTotalTimer -= delta;
+                _helperBlinkIntervalTimer += delta;
+                if (_helperBlinkIntervalTimer >= HelperBlinkInterval)
+                {
+                    _isHelperBlinkVisible = !_isHelperBlinkVisible;
+                    _helperBlinkIntervalTimer -= HelperBlinkInterval;
+                }
+                _helperAttackBoxRect = new Rectangle((int)Position.X + 186, (int)Position.Y, 76, 174);
+                
+                if (_helperBlinkTotalTimer <= 0f)
+                {
+                    _isHelperBlinkVisible = false;
+                }
+            }
+            else
+            {
+                _isHelperBlinkVisible = false;
             }
         }
         private void HandleParry(KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
@@ -431,10 +457,14 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsJumping) Jump.DrawFrame(sb, Position);
             else if (IsVisible) Walk.DrawFrame(sb, Position);
 
-            if (_helperAttackBoxTimer > 0f)
+            /*if (_helperAttackBoxTimer > 0f)
             {
                 float alpha = _helperAttackBoxTimer / HelperAttackBoxDuration;
                 sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor * alpha);
+            }*/
+            if (_isHelperBlinkVisible)
+            {
+                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor);
             }
         }
         public void SetPhaseManager(PhaseManager manager) => _phaseManager = manager;
@@ -444,6 +474,9 @@ namespace DimmedLight.GamePlay.Isplayer
             idleTimer = 0f;
             canWalk = false;
             IsVisible = true;
+            _helperBlinkTotalTimer = 0f;
+            _helperBlinkIntervalTimer = 0f;
+            _isHelperBlinkVisible = false;
             midReset();
         }
         public void midReset()
