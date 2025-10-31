@@ -253,7 +253,7 @@ namespace DimmedLight.GamePlay.Isplayer
         private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
         {
             _helperIndicatorPosition = new Vector2(Position.X + 186 + 60, Position.Y + 50 + 40);
-            Rectangle detectionRect = new Rectangle((int)Position.X + 206, (int)Position.Y + 50, 80, 80);
+            Rectangle detectionRect = new Rectangle((int)Position.X + 206 + 150, (int)Position.Y + 50, 80, 80);
 
             if (_helperBlinkTotalTimer > 0f)
             {

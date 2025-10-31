@@ -83,7 +83,7 @@ namespace DimmedLight.GamePlay.Enemies
             {
                 Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
             }
-            sb.Draw(hitBoxTex, HitN, Color.Red * 0.6f);
+            //sb.Draw(hitBoxTex, HitN, Color.Red * 0.6f);
         }
     }
 }
