@@ -93,7 +93,7 @@ namespace DimmedLight.MainMenu
                 Description = "Increase Max Ultimate Gauge",
                 CurrentLevel = 1,
                 MaxLevel = 3,
-                StatDisplayFunc = level => $"Gauge: {100 * (level)} -> {100 * (level + 1)}"
+                StatDisplayFunc = level => $"Gauge: {100 * level} -> {100 * (level + 1)}"
             });
             _nodes.Add(new UpgradeNode
             {
@@ -119,13 +119,13 @@ namespace DimmedLight.MainMenu
             var mousePos = new Point(mouse.X, mouse.Y);
 
             // Handle navigation with keyboard and gamepad
-            bool moveRight = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right)) ||
-                             (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f) ||
-                             (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight));
+            bool moveRight = keyboard.IsKeyDown(Keys.Right) && _previousKeyboardState.IsKeyUp(Keys.Right) ||
+                             gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePadState.ThumbSticks.Left.X <= 0.5f ||
+                             gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePadState.IsButtonUp(Buttons.DPadRight);
 
-            bool moveLeft = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left)) ||
-                            (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f) ||
-                            (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft));
+            bool moveLeft = keyboard.IsKeyDown(Keys.Left) && _previousKeyboardState.IsKeyUp(Keys.Left) ||
+                            gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePadState.ThumbSticks.Left.X >= -0.5f ||
+                            gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePadState.IsButtonUp(Buttons.DPadLeft);
 
             if (moveRight)
             {
@@ -154,12 +154,12 @@ namespace DimmedLight.MainMenu
             var selectedNode = _nodes[_selectedIndex];
 
             // ----- THIS LINE IS CORRECTED -----
-            bool upgradePressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
-                                  (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A)) ||
-                                  (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released && GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos));
+            bool upgradePressed = keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
+                                  gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A) ||
+                                  mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released && GetScaledBounds(selectedNode.Bounds, _nodeScales[_selectedIndex]).Contains(mousePos);
 
-            bool downgradePressed = (keyboard.IsKeyDown(Keys.B) && _previousKeyboardState.IsKeyUp(Keys.B)) ||
-                                    (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
+            bool downgradePressed = keyboard.IsKeyDown(Keys.B) && _previousKeyboardState.IsKeyUp(Keys.B) ||
+                                    gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
 
             if (upgradePressed && selectedNode.CurrentLevel < selectedNode.MaxLevel)
             {
@@ -172,7 +172,7 @@ namespace DimmedLight.MainMenu
             }
 
             // Back to Menu logic
-            bool goBack = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape));
+            bool goBack = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape);
 
             if (goBack)
             {
@@ -182,7 +182,7 @@ namespace DimmedLight.MainMenu
             // Update scale based on selection
             for (int i = 0; i < _nodes.Count; i++)
             {
-                float targetScale = (i == _selectedIndex) ? 1.25f : 1.0f;
+                float targetScale = i == _selectedIndex ? 1.25f : 1.0f;
                 _nodeScales[i] += (targetScale - _nodeScales[i]) * SCALE_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
@@ -238,7 +238,7 @@ namespace DimmedLight.MainMenu
                 var scale = _nodeScales[i];
                 Rectangle scaledBounds = GetScaledBounds(node.Bounds, scale);
 
-                Color nodeColor = (i == _selectedIndex) ? Color.Gold : Color.DarkGray;
+                Color nodeColor = i == _selectedIndex ? Color.Gold : Color.DarkGray;
                 spriteBatch.Draw(_pixelTexture, scaledBounds, nodeColor);
 
                 string placeholderText = $"[{node.Name.First()}]";
@@ -264,8 +264,8 @@ namespace DimmedLight.MainMenu
         private Rectangle GetScaledBounds(Rectangle originalBounds, float scale)
         {
             return new Rectangle(
-                (int)(originalBounds.Center.X - (originalBounds.Width * scale) / 2),
-                (int)(originalBounds.Center.Y - (originalBounds.Height * scale) / 2),
+                (int)(originalBounds.Center.X - originalBounds.Width * scale / 2),
+                (int)(originalBounds.Center.Y - originalBounds.Height * scale / 2),
                 (int)(originalBounds.Width * scale),
                 (int)(originalBounds.Height * scale));
         }

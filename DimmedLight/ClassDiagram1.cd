@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DimmedLight.GamePlay.UI.FloatingText">
+    <Position X="68.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAgAAQAEAAAAAAAAQAAAAAAiABAAAA=</HashCode>
+      <FileName>GamePlay\UI\FloatingText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.GameOver">
+    <Position X="70.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAwAABAAAAAABhAAABIAAIAAAAAAFAAKAIEAAAAAAAQ=</HashCode>
+      <FileName>GamePlay\UI\GameOver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.HUD">
+    <Position X="72.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAEA=</HashCode>
+      <FileName>GamePlay\UI\HUD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.ScoreManager">
+    <Position X="74.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CkQAgAAQMohQBggQAAQgAgAAABAAAIBBAAAABAAAAAU=</HashCode>
+      <FileName>GamePlay\UI\ScoreManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.UI.TutorialEvent">
+    <Position X="79.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAgIAFAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\UI\TutorialEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Delisaster">
+    <Position X="40.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAogRjCIAAEgKgAAAAiAAAAIAIAACAAAAAgAEEAEA=</HashCode>
+      <FileName>GamePlay\Enemies\Delisaster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.EnemyBase">
+    <Position X="28.25" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAQAgABAIAABAoAggAEAUBAAAAKgAQAgAAgBAAAAAAg=</HashCode>
+      <FileName>GamePlay\Enemies\EnemyBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.FloorTrauma">
+    <Position X="31" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAUAgAAAEIwCAgABAAAAABAABAAAAAEABAAAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\FloorTrauma.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Guilt">
+    <Position X="33.25" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAgGAgAABAAAAAAARIAAAAAAAAgAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Guilt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Judgement">
+    <Position X="35.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAIACAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Judgement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Projectile">
+    <Position X="43" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAABAAgAgBCAAACABAAAEAAAgAAIAAAAAAQA=</HashCode>
+      <FileName>GamePlay\Enemies\Projectile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Enemies.Trauma">
+    <Position X="37.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAUAgAAAEIwCAgABAAAAAAAABAAAAAEABAAAAAMAAAA=</HashCode>
+      <FileName>GamePlay\Enemies\Trauma.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Animated.AnimatedTexture">
+    <Position X="18.75" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAggAANAYAABIAAAAIAABABAAABAMAgoAAkAkhAABA=</HashCode>
+      <FileName>GamePlay\Animated\AnimatedTexture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.EnemyFactory">
+    <Position X="53.5" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>RAAAAAEAAAAAAEAAEAAAAAAQAAAAAEAABMQAIAAIQAA=</HashCode>
+      <FileName>GamePlay\Managers\EnemyFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.EnemySpawnInfo">
+    <Position X="56" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAQAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\EnemySpawnInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.FullPhase">
+    <Position X="60.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\FullPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.HellCloakEvent">
+    <Position X="62.25" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QAYnAEoAAgAERgEAGAwAQAAAAAAAAAAFARFAAAEAAAA=</HashCode>
+      <FileName>GamePlay\Managers\HellCloakEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.Phase">
+    <Position X="58" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAAAQACAAAAABAAAAAAAQAgAAAAAQEABAA=</HashCode>
+      <FileName>GamePlay\Managers\Phase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.PhaseManager">
+    <Position X="65" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAQEAEABSQAAJgAAEAABAAAAMAABAAAAACACEIARAAQ=</HashCode>
+      <FileName>GamePlay\Managers\PhaseManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.TutorialPhase">
+    <Position X="55.75" Y="6" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAwACAAAAABQAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>GamePlay\Managers\TutorialPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Managers.WarmupPhase">
+    <Position X="58" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Managers\WarmupPhase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Background.BackgroundLayer">
+    <Position X="22" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABgAgAAAAAAAAAAAIAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>GamePlay\Background\BackgroundLayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Background.PlatformManager">
+    <Position X="23.75" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQkAAACAAAABgAgAAAAAAAAAABAEAAAAAAgAAAAAAA=</HashCode>
+      <FileName>GamePlay\Background\PlatformManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Isplayer.Player">
+    <Position X="49.5" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>gAU0iCJACgpIdwA4AKBBFBgAEJDgsAAoAAANgAkQUSg=</HashCode>
+      <FileName>GamePlay\Isplayer\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.ETC.Camera">
+    <Position X="46" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAGAAAAAAAAAAAAAACACAJAgIAAQAAAQAAAAI=</HashCode>
+      <FileName>GamePlay\ETC\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.GamePlay.Gameplay">
+    <Position X="82.25" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>6IQkgCABAoCAigkCAGEAGABYBpKCAAAOQIkUhS0CAA0=</HashCode>
+      <FileName>GamePlay\Gameplay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.CreditScreen">
+    <Position X="29" Y="24.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAQAAAAAAABAAgAAAAAAAAAAAAAAAAAAAAAAAAACAAQ=</HashCode>
+      <FileName>MainMenu\CreditScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.ExitScreen">
+    <Position X="33.75" Y="24.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAQDCIABEAAAAgCAQAAAQAAAAAAAAAAAAAAAAAACAAQ=</HashCode>
+      <FileName>MainMenu\ExitScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.GameplayScreen">
+    <Position X="36.25" Y="24.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgACAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>MainMenu\GameplayScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.MenuScreen">
+    <Position X="45" Y="24.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQBAEABQAAAAgAQQAAAAAAQAAABEAAACAAAAIEiAAQ=</HashCode>
+      <FileName>MainMenu\MenuScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.PauseMenu">
+    <Position X="77" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>GA4BAABAAgAAAgAAABESCAAAAAAIwAkAIAAwAAgCAAQ=</HashCode>
+      <FileName>MainMenu\PauseMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.Screen">
+    <Position X="36.5" Y="19.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAAgAAAAAAAAAAAAgACAAAAAAEAAAAAAQ=</HashCode>
+      <FileName>MainMenu\Screen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.SettingScreen">
+    <Position X="39.25" Y="24.25" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="DimmedLight.MainMenu.SettingScreen.SettingSource" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainMenu\SettingScreen.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="DimmedLight.MainMenu.SettingScreen.SettingTab" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainMenu\SettingScreen.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>0gwBQIIRMkFgQoGhhAEEUgwACBQxAxEAUQEWAxDDgAY=</HashCode>
+      <FileName>MainMenu\SettingScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.SoundManager">
+    <Position X="50.25" Y="25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>MainMenu\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.TutorialScreen">
+    <Position X="31.5" Y="24.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAIAAgAAAAAAAAgAAAAAAAwgAABAAQAAAAQ=</HashCode>
+      <FileName>MainMenu\TutorialScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.UpgradeNode">
+    <Position X="48.5" Y="25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAQAAAAEAAAAAAAAgAAAAkA=</HashCode>
+      <FileName>MainMenu\UpgradeScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DimmedLight.MainMenu.UpgradeScreen">
+    <Position X="42.25" Y="24.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEQBANAAAAAAAgAAAAAAAAJAAAAAgAAAAAAAAQACAAQ=</HashCode>
+      <FileName>MainMenu\UpgradeScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/EasyGameOver.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/EasyGameOver.mp3
+
+#begin Audio/Event.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Event.mp3
+
 #begin Audio/LOOP_SFX_EnemiesDead.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -55,17 +67,29 @@
 /processorParam:Quality=Best
 /build:Audio/LOOP_SFX_PlayerHit2.wav
 
-#begin Audio/SunYaNaFon.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
+#begin Audio/LOOP_UI_Interact.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SunYaNaFon.mp3
+/build:Audio/LOOP_UI_Interact.wav
 
-#begin Audio/TaLayJai.mp3
+#begin Audio/LOOP_UI_UiMoving.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_UI_UiMoving.wav
+
+#begin Audio/MainMenu.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Audio/TaLayJai.mp3
+/build:Audio/MainMenu.mp3
+
+#begin Audio/MainTheme.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/MainTheme.ogg
 
 #begin Background/back1.png
 /importer:TextureImporter
@@ -139,6 +163,30 @@
 #begin bullet4.png
 /copy:bullet4.png
 
+#begin cha_hit_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cha_hit_sprite.png
+
+#begin cha_parry_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cha_parry_spritesheet.png
+
 #begin cursorMainmenu1.png
 /copy:cursorMainmenu1.png
 
@@ -172,6 +220,20 @@
 #begin floating-platform.png
 /copy:floating-platform.png
 
+#begin Fonts/StepalangeFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/StepalangeFont.spritefont
+
+#begin Fonts/StepalangeShortFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/StepalangeShortFont.spritefont
+
 #begin Frame.png
 /copy:Frame.png
 
@@ -187,6 +249,30 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
+
+#begin gameOver_แก้.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gameOver_แก้.png
+
+#begin guilt_attack_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:guilt_attack_spritesheet.png
 
 #begin Guilt_idle.png
 /copy:Guilt_idle.png
@@ -217,6 +303,54 @@
 
 #begin judgement_Spritesheet.png
 /copy:judgement_Spritesheet.png
+
+#begin lockChain.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lockChain.png
+
+#begin LOOP_Indicator_Alert.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:LOOP_Indicator_Alert.png
+
+#begin LOOP_Indicator_Default.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:LOOP_Indicator_Default.png
+
+#begin MenuAsset/Hearts.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/Hearts.png
 
 #begin MenuAsset/mainMenu.png
 /importer:TextureImporter
@@ -313,6 +447,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:MenuAsset/tutorialEnemy_New.png
+
+#begin MenuAsset/tutorialEnemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/tutorialEnemy.png
 
 #begin MenuAsset/tutorialKeyboard_New.png
 /importer:TextureImporter

@@ -1,8 +1,10 @@
 ﻿using DimmedLight.GamePlay.Animated;
+using DimmedLight.GamePlay.Background;
 using DimmedLight.GamePlay.Enemies;
 using DimmedLight.GamePlay.ETC;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -43,18 +45,38 @@ namespace DimmedLight.GamePlay.Managers
 
         private Random rng = new Random();
         private bool playerHit = false;
-        private SoundEffect parryHit;
-        private Song eventSong;
-        private Song bmg;
+        private readonly SoundEffect _parryHit;
+        private readonly Song _eventSong;
+        private readonly Song _bmg;
+        private PlatformManager _platformManager;
         public Action OnPrepareFinished;
+        private ScoreManager _scoreManager;
+
+        private bool playerhit = false;
+        private readonly List<string> _failMessages = new List<string>
+        {
+            "It's all your FAULT!!!",
+            "Who was the one who killed her?",
+            "Run away!!, Run away from your Mistakes...",
+            "Leave Everything Behind"
+        };
+        private readonly List<string> _successMessages = new List<string>
+        {
+            "You did it...",
+            "She is at Peace now.",
+            "Light is brightest in the dark",
+            "Keep moving forward."
+        };
+        public Action<string, bool> OnEventFinishTrigger;
         public void Prepare()
         {
             IsPreparing = true;
             prepareTimer = 0f;
             camera.StartShake(prepareTime, 20f);
         }
-        public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera, 
-            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg)
+        public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera,
+            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg,
+            ScoreManager scoreManager, PlatformManager platformManager)
         {
             HellCloakTheme = hellCloakTheme;
             this.player = player;
@@ -62,9 +84,11 @@ namespace DimmedLight.GamePlay.Managers
             this.camera = camera;
             this.parryProjecTex = parryProjecTex;
             this.attackProjecTex = attackProjecTex;
-            this.parryHit = parryHit;
-            this.eventSong = eventSong;
-            this.bmg = bmg;
+            _parryHit = parryHit;
+            _eventSong = eventSong;
+            _bmg = bmg;
+            _scoreManager = scoreManager;
+            _platformManager = platformManager;
         }
 
         public HellCloakEvent(Delisaster delisaster, Camera camera)
@@ -80,12 +104,21 @@ namespace DimmedLight.GamePlay.Managers
             prepareTimer = 0f;
             shootTimer = 0f;
 
+            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _bmg)
+            {
+                MediaPlayer.Pause();
+            }
+            else if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.Stop();
+            }
+
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Pause();
 
-            //MediaPlayer.Play(eventSong);
+            MediaPlayer.Play(_eventSong);
             MediaPlayer.IsRepeating = false;
-            MediaPlayer.Volume = 0.2f;
+            MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
 
             player.SetEvent(true);
             delisaster.IsInEvent = true;
@@ -146,24 +179,30 @@ namespace DimmedLight.GamePlay.Managers
             for (int i = projectiles.Count - 1; i >= 0; i--)
             {
                 projectiles[i].Update(delta);
-                if (projectiles[i].canParry && projectiles[i].HitBox.Intersects(player.HitBoxParry))
+                bool projectileRemoved = false;
+                if (projectiles[i].canParry && projectiles[i].HitBox.Intersects(player.HitBoxParry) && player.IsParrying)
                 {
-                    parryHit?.Play();
+                    _parryHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
+                    _scoreManager?.IncreaseEventCombo();
                     projectiles.RemoveAt(i);
+                    projectileRemoved = true;
                     continue;
                 }
-                if (projectiles[i].canAttack && projectiles[i].HitBox.Intersects(player.HitBoxAttack))
+                if (!projectileRemoved && projectiles[i].canAttack && projectiles[i].HitBox.Intersects(player.HitBoxAttack) && player.IsAttacking)
                 {
+                    _scoreManager?.IncreaseEventCombo();
                     projectiles.RemoveAt(i);
+                    projectileRemoved = true;
                     continue;
                 }
-                if (projectiles[i].HitBox.Intersects(player.HurtBox) && !player.IsInvincible)
+                if (!projectileRemoved && projectiles[i].HitBox.Intersects(player.HurtBox) && !player.IsInvincible)
                 {
                     playerHit = true;
-                    End();
+                    _scoreManager?.ResetEventCombo();
+                    End(false);
                     return;
                 }
-                if (!projectiles[i].Active || projectiles[i].Position.X < 0)
+                if (!projectileRemoved && (!projectiles[i].Active || projectiles[i].Position.X < -projectiles[i].Texture.Width))
                 {
                     projectiles.RemoveAt(i);
                 }
@@ -173,9 +212,14 @@ namespace DimmedLight.GamePlay.Managers
             if (eventElapsed >= duration)
             {
                 scoreManager.EventBonus();
-                End();
+                End(true);
             }
-
+            if (playerHit)
+            {
+                _scoreManager?.ResetEventCombo();
+                End(false);
+                return;
+            }
         }
         private void FireProjectile(float speed)
         {
@@ -206,11 +250,26 @@ namespace DimmedLight.GamePlay.Managers
             }
         }
 
-        public void End()
+        public void End(bool success)
         {
+            if(!IsActive && !IsPreparing) 
+                return;
             IsActive = false;
             IsPreparing = false;
-            eventElapsed = 0f;
+
+            string message;
+            if(success)
+            {
+                int index = rng.Next(_successMessages.Count);
+                message = _successMessages[index];
+            }
+            else
+            {
+                int index = rng.Next(_failMessages.Count);
+                message = _failMessages[index];
+            }
+            OnEventFinishTrigger?.Invoke(message, success);
+            /*eventElapsed = 0f;
 
             delisaster.ResetPosition();
 
@@ -218,16 +277,40 @@ namespace DimmedLight.GamePlay.Managers
 
             player.SetEvent(false);
             player.canWalk = true;
-            projectiles.Clear();
+            projectiles.Clear();*/
 
-            if (MediaPlayer.State == MediaState.Playing)
+            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _eventSong)
+            {
                 MediaPlayer.Stop();
-
+                if (MediaPlayer.State == MediaState.Paused)
+                {
+                    MediaPlayer.Resume();
+                }
+            }
             //MediaPlayer.Play(bmg);
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f;
+            /*MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.008f * SoundManager.BgmVolume;
+            _scoreManager.ResetEventCombo();
+            _platformManager?.ResetAssetTimer();*/
         }
+        public void PostTextEnd()
+        {
+            eventElapsed = 0f;
+            prepareTime = 0f;
+            shootTimer = 0f;
+            spawnTimer = 0f;
+            projectiles.Clear();
+            playerHit = false;
 
+            if(player != null)
+                player.SetEvent(false);
+            if (delisaster != null)
+                delisaster.ResetPosition();
+            if (camera != null)
+                camera.ResetPosition();
+            _scoreManager.ResetEventCombo();
+            _platformManager?.ResetAssetTimer();
+        }
         public void Reset()
         {
             IsActive = false;
@@ -245,6 +328,8 @@ namespace DimmedLight.GamePlay.Managers
                 delisaster.ResetPosition();
             if (camera != null)
                 camera.ResetPosition();
+            _scoreManager.ResetEventCombo();
+            _platformManager?.ResetAssetTimer();
         }
     }
 }

@@ -25,6 +25,8 @@ namespace DimmedLight.GamePlay.UI
         private Rectangle mainMenuRect;
 
         private MouseState previousMouse;
+        private int _selectedIndex = -1;
+        private int _previousSelectedIndex = -1;
 
         private Vector2 pos = Vector2.Zero;
 
@@ -36,8 +38,7 @@ namespace DimmedLight.GamePlay.UI
         }
         public void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            gameOverTex = game.Content.Load<Texture2D>("Game_Over_Final");
+            gameOverTex = game.Content.Load<Texture2D>("gameOver_แก้");
             reStart = game.Content.Load<Texture2D>("cursorRestart2");
             restartHolder = game.Content.Load<Texture2D>("cursorRestart1");
             mainMenu = game.Content.Load<Texture2D>("cursorMainmenu1");
@@ -53,15 +54,32 @@ namespace DimmedLight.GamePlay.UI
         public void Update(GameTime gameTime)
         {
             MouseState mouse = Mouse.GetState();
+            _previousSelectedIndex = _selectedIndex;
+            _selectedIndex = -1;
+
+            if(restartRect.Contains(mouse.Position))
+            {
+                _selectedIndex = 0;
+            }
+            else if(mainMenuRect.Contains(mouse.Position))
+            {
+                _selectedIndex = 1;
+            }
+            if(_previousSelectedIndex != _selectedIndex && _selectedIndex != -1)
+            {
+                SoundManager.PlayUIHover();
+            }
 
             if (mouse.LeftButton == ButtonState.Pressed && previousMouse.LeftButton == ButtonState.Released)
             {
                 if (restartRect.Contains(mouse.Position))
                 {
+                    SoundManager.PlayUIClick();
                     RestartRequested = true;
                 }
                 else if (mainMenuRect.Contains(mouse.Position))
                 {
+                    SoundManager.PlayUIClick();
                     game.ChangeScreen(new MenuScreen(game, _graphics, game.GraphicsDevice, game.Content));
                     RestartRequested = false;
                 }
@@ -71,17 +89,13 @@ namespace DimmedLight.GamePlay.UI
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            game.GraphicsDevice.Clear(Color.Black);
-
-            _spriteBatch.Begin();
-
             int screenW = _graphics.PreferredBackBufferWidth;
             int screenH = _graphics.PreferredBackBufferHeight;
 
             int imgW = gameOverTex.Width;
             int imgH = gameOverTex.Height;
 
-            _spriteBatch.Draw(gameOverTex, pos, Color.White);
+            spriteBatch.Draw(gameOverTex, pos, Color.White);
 
             MouseState mouse = Mouse.GetState();
             if (restartRect.Contains(mouse.Position))
@@ -94,7 +108,6 @@ namespace DimmedLight.GamePlay.UI
                 spriteBatch.Draw(mainMenuHolder, mainMenuRect, Color.White);
             else
                 spriteBatch.Draw(mainMenu, mainMenuRect, Color.White);
-            _spriteBatch.End();
         }
 
         public void Reset()

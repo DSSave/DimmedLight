@@ -12,7 +12,8 @@ namespace DimmedLight.MainMenu
 {
     public class ExitScreen : Screen
     {
-        private SpriteFont _menuFont;
+        //private SpriteFont _menuFont;
+        private SpriteFont Stepalange;
         private Texture2D _pixelTexture;
         private Texture2D _exitFrameTexture;
         private Texture2D _buttonFrameTexture;
@@ -21,12 +22,12 @@ namespace DimmedLight.MainMenu
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private GamePadState _previousGamePadState;
-
         private Rectangle _dialogBox;
         private Rectangle _yesButton;
         private Rectangle _noButton;
 
         private int _selectedButtonIndex = 1; // 0 for Yes, 1 for No (เริ่มที่ No)
+        private int _previousSelectedButtonIndex = 1;
 
         // REMOVED: ไม่ต้องใช้ Alpha fade แล้ว
         // private float[] _buttonAlphas = new float[2] { 0f, 0f };
@@ -41,7 +42,8 @@ namespace DimmedLight.MainMenu
         {
             //_menuFont = Content.Load<SpriteFont>("UX_UI/TextFont"); gameFont
             _mainBackground = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
-            _menuFont = Content.Load<SpriteFont>("gameFont");
+            //_menuFont = Content.Load<SpriteFont>("gameFont");
+            Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
             _exitFrameTexture = Content.Load<Texture2D>("UX_UIAsset/exit_page/ExitScreen");
@@ -84,21 +86,23 @@ namespace DimmedLight.MainMenu
             var keyboard = Keyboard.GetState();
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
+            _previousSelectedButtonIndex = _selectedButtonIndex;
+
             var mousePos = new Point(mouse.X, mouse.Y);
             bool isMouseClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
 
-            bool isConfirmPressed = (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
-                                    (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
+            bool isConfirmPressed = keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
+                                    gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A);
 
-            bool isUpPressed = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
-                             (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp)) ||
-                             (gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f);
-            bool isDownPressed = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
-                               (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown)) ||
-                               (gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f);
+            bool isUpPressed = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
+                             gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp) ||
+                             gamePad.ThumbSticks.Left.Y > 0.5f && _previousGamePadState.ThumbSticks.Left.Y <= 0.5f;
+            bool isDownPressed = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
+                               gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown) ||
+                               gamePad.ThumbSticks.Left.Y < -0.5f && _previousGamePadState.ThumbSticks.Left.Y >= -0.5f;
 
-            bool isBackPressed = (keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape)) ||
-                                 (gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B));
+            bool isBackPressed = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboardState.IsKeyUp(Keys.Escape) ||
+                                 gamePad.IsButtonDown(Buttons.B) && _previousGamePadState.IsButtonUp(Buttons.B);
 
             // Mouse hover selection
             if (mouse.Position != _previousMouseState.Position)
@@ -112,7 +116,10 @@ namespace DimmedLight.MainMenu
             {
                 _selectedButtonIndex = (_selectedButtonIndex + 1) % 2;
             }
-
+            if(_previousSelectedButtonIndex != _selectedButtonIndex)
+            {
+                SoundManager.PlayUIHover();
+            }
             // Action on confirmation
             if (isConfirmPressed || isMouseClicked)
             {
@@ -129,6 +136,7 @@ namespace DimmedLight.MainMenu
 
                 if (confirmed)
                 {
+                    SoundManager.PlayUIClick();
                     if (_selectedButtonIndex == 0) Game.Exit();
                     else Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
@@ -136,6 +144,7 @@ namespace DimmedLight.MainMenu
 
             if (isBackPressed)
             {
+                SoundManager.PlayUIHover();
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 
@@ -164,19 +173,19 @@ namespace DimmedLight.MainMenu
             {
                 // วาด "Yes" พร้อมกรอบ
                 spriteBatch.Draw(_buttonFrameTexture, _yesButton, Color.White);
-                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, true);
+                DrawTextInBox(spriteBatch, Stepalange, "Yes", _yesButton, true);
 
                 // วาด "No" แบบไม่มีกรอบ
-                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, false);
+                DrawTextInBox(spriteBatch, Stepalange, "No", _noButton, false);
             }
             else // ถ้าเลือก "No"
             {
                 // วาด "Yes" แบบไม่มีกรอบ
-                DrawTextInBox(spriteBatch, _menuFont, "Yes", _yesButton, false);
+                DrawTextInBox(spriteBatch, Stepalange, "Yes", _yesButton, false);
 
                 // วาด "No" พร้อมกรอบ
                 spriteBatch.Draw(_buttonFrameTexture, _noButton, Color.White);
-                DrawTextInBox(spriteBatch, _menuFont, "No", _noButton, true);
+                DrawTextInBox(spriteBatch, Stepalange, "No", _noButton, true);
             }
 
             spriteBatch.End();

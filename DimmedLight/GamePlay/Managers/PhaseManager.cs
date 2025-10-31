@@ -1,4 +1,5 @@
-﻿using DimmedLight.GamePlay.Enemies;
+﻿using DimmedLight.GamePlay.Background;
+using DimmedLight.GamePlay.Enemies;
 using DimmedLight.GamePlay.ETC;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.Managers;
@@ -18,211 +19,235 @@ namespace DimmedLight.GamePlay.Managers
 {
     public class PhaseManager
     {
-        private GraphicsDevice graphics;
-        private Phase[] phases;
-        private int currentIndex = 0;
-        private Phase currentPhase;
-        private EnemyFactory factory;
-        private List<EnemyBase> activeEnemies = new List<EnemyBase>();
-        private float lastSpawnX = 0f;
-
-        private float minSpacing = 200f;
-        public float PlatformSpeed => currentPhase.PlatformSpeed;
-        private Random rng = new Random();
-        private HellCloakEvent hellCloakEvent;
-        private float phase3Timer = 0f;
-        private float nextEventTime = 18f;
+        public float PlatformSpeed => _currentPhase.PlatformSpeed;
+        public int CurrentPhaseIndex => _currentIndex;
+        public bool IsInEvent => _hellCloakEvent.IsActive || _hellCloakEvent.IsPreparing || (TutorialEvent?.IsActive == true);
         public TutorialEvent TutorialEvent { get; private set; }
-        public int CurrentPhaseIndex => currentIndex;
-        private bool tutorialShown = false;
-        public bool IsInEvent => hellCloakEvent.IsActive || hellCloakEvent.IsPreparing || (TutorialEvent != null && TutorialEvent.IsActive);
+        public IReadOnlyList<EnemyBase> ActiveEnemies => _activeEnemies;
 
-        public PhaseManager(EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
+        private readonly EnemyFactory _factory;
+        private readonly List<EnemyBase> _activeEnemies = new List<EnemyBase>();
+        public readonly HellCloakEvent _hellCloakEvent;
+        private Phase[] _phases;
+        private int _currentIndex;
+        private Phase _currentPhase;
+        private float _lastSpawnX;
+        private float _phase3Timer;
+        private float _nextEventTime;
+        private bool _tutorialShown;
+        private readonly Random _rng = new Random();
+        private readonly ScoreManager _scoreManager;
+        private PlatformManager _platformManager;
+        private readonly Gameplay _gameplay;
+
+        public PhaseManager(Gameplay gameplay, EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
             Texture2D hellCloakTheme, Texture2D tutorialImage, Texture2D parryProjecTex, Texture2D attackProjecTex,
-            SoundEffect parryHit, Song eventSound, Song bgm, GraphicsDevice graphicsDevice)
+            SoundEffect parryHit, Song eventSound, Song bgm, GraphicsDevice graphicsDevice, ScoreManager scoreManager,
+            PlatformManager platformManager)
         {
-            this.factory = factory;
-            this.graphics = graphicsDevice;
-            phases = new Phase[]
+            _gameplay = gameplay;
+            _factory = factory;
+            _phases = new Phase[]
             {
-                new TutorialPhase(6f),
-                new WarmupPhase(6f),
-                new FullPhase(10f)
+                new TutorialPhase(),
+                new WarmupPhase(),
+                new FullPhase()
             };
-            currentIndex = 0; //ค่าเดิม 0
-            currentPhase = phases[currentIndex];
-            currentPhase.Initialize();
+            _currentIndex = 0;
+            _currentPhase = _phases[_currentIndex];
+            _currentPhase.Initialize();
 
-            hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm);
-            TutorialEvent = new TutorialEvent(graphicsDevice, tutorialImage, () =>
+            _hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm, scoreManager, _platformManager);
+            _scoreManager = scoreManager;
+            TutorialEvent = new TutorialEvent(graphicsDevice, tutorialImage, _hellCloakEvent.StartEvent);
+            _hellCloakEvent.OnPrepareFinished = () =>
             {
-                hellCloakEvent.StartEvent();
-            });
-            hellCloakEvent.OnPrepareFinished = () =>
-            {
-                if (!tutorialShown)
+                if (!_tutorialShown)
                 {
                     TutorialEvent.Start();
-                    tutorialShown = true;
+                    _tutorialShown = true;
                 }
                 else
                 {
-                    hellCloakEvent.StartEvent();
+                    _hellCloakEvent.StartEvent();
                 }
             };
+
+            ResetEventTimers();
         }
         public void Update(GameTime gameTime, float delta, Player player, ref bool isFlipped, Delisaster delisaster, ScoreManager scoreManager, KeyboardState keyboardState, KeyboardState previousKeyboardState)
         {
-            if (TutorialEvent != null && TutorialEvent.IsActive)
+            if(_gameplay != null && _gameplay.IsEventEndingAnimationPlaying)
+            {
+                UpdateEnemies(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+                return;
+            }
+            if (TutorialEvent?.IsActive == true)
             {
                 TutorialEvent.Update(keyboardState, previousKeyboardState);
                 return;
             }
-            if (currentIndex == 2)
+
+            if (_hellCloakEvent.IsActive || _hellCloakEvent.IsPreparing)
             {
-                if (!hellCloakEvent.IsActive && !hellCloakEvent.IsPreparing)
+                _hellCloakEvent.Update(gameTime, delta, _currentPhase.PlatformSpeed, scoreManager);
+                if (!_hellCloakEvent.IsActive && !_hellCloakEvent.IsPreparing)
                 {
-                    phase3Timer += delta;
-                    if (phase3Timer >= nextEventTime)
-                    {
-                        hellCloakEvent.Prepare();
-                        activeEnemies.Clear();
-                        lastSpawnX = 0f;
-                    }
-                }
-            }
-            if (hellCloakEvent.IsActive || hellCloakEvent.IsPreparing)
-            {
-                hellCloakEvent.Update(gameTime, delta, currentPhase.PlatformSpeed, scoreManager);
-                if (!hellCloakEvent.IsActive && !hellCloakEvent.IsPreparing)
-                {
-                    phase3Timer = 0f;
-                    nextEventTime = rng.Next(20, 40); //random next eventTime
-                    //nextEventTime = 50f;
-                    lastSpawnX = 0f;
+                    ResetEventTimers();
                 }
                 return;
             }
-            if (!player.canWalk)
+
+            if (!player.canWalk) return;
+
+            UpdatePhase3EventTimer(delta);
+
+            if (_gameplay == null || !_gameplay.IsEventEndingAnimationPlaying)
             {
-                return;
+                SpawnEnemies(delta);
             }
-            var spawns = currentPhase.GetSpawns(delta);
+            UpdateEnemies(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+
+            CheckForPhaseCompletion();
+        }
+        private void UpdatePhase3EventTimer(float delta)
+        {
+            if (_currentIndex == 2 && !_hellCloakEvent.IsActive && !_hellCloakEvent.IsPreparing)
+            {
+                _phase3Timer += delta;
+                if (_phase3Timer >= _nextEventTime)
+                {
+                    _hellCloakEvent.Prepare();
+                    _activeEnemies.Clear();
+                    _lastSpawnX = 0f;
+                }
+            }
+        }
+        private void SpawnEnemies(float delta)
+        {
+            var spawns = _currentPhase.GetSpawns(delta);
             foreach (var s in spawns)
             {
                 float spawnX = s.Position.X;
-                float rightmost = activeEnemies.Count > 0 ? activeEnemies.Max(e => e.Position.X) : 0f; // ตำแหน่ง X ที่ขวาสุดของศัตรูที่กำลังทำงาน
+                float rightmost = _activeEnemies.Any() ? _activeEnemies.Max(e => e.Position.X) : 0f;
 
-                if (spawnX - rightmost < minSpacing) // ถ้าตำแหน่งที่จะเกิดศัตรูใกล้กับศัตรูที่ขวาสุดเกินไป
-                    spawnX = rightmost + minSpacing;
+                spawnX = Math.Max(spawnX, rightmost + _currentPhase.MinSpacing);
+                spawnX = Math.Max(spawnX, _lastSpawnX + _currentPhase.MinSpacing);
+                _lastSpawnX = spawnX;
 
-                if (spawnX - lastSpawnX < minSpacing) // ถ้าตำแหน่งที่จะเกิดศัตรูใกล้กับศัตรูที่เกิดล่าสุดเกินไป
-                    spawnX = lastSpawnX + minSpacing;
-
-                lastSpawnX = spawnX; // อัปเดตตำแหน่ง X ของศัตรูที่เกิดล่าสุด
-
-                EnemyBase created = s.EnemyType switch // สร้างศัตรูตามประเภทที่ระบุ
+                EnemyBase created = s.EnemyType switch
                 {
-                    "Guilt" => factory.CreateGuilt(new Vector2(spawnX, s.Position.Y), s.Speed),
-                    "Trauma" => factory.CreateTrauma(new Vector2(spawnX, s.Position.Y), 6f),
-                    "Judgement" => factory.CreateJudgement(new Vector2(spawnX, s.Position.Y), s.Speed),
-                    "FloorTrauma" => factory.CreateFloorTrauma(new Vector2(spawnX, s.Position.Y), s.Speed),
-                    _ => null // ถ้าประเภทไม่ตรงกับที่รู้จัก ให้คืนค่า null
+                    "Guilt" => _factory.CreateGuilt(new Vector2(spawnX, s.Position.Y), s.Speed),
+                    "Trauma" => _factory.CreateTrauma(new Vector2(spawnX, s.Position.Y), 6f),
+                    "Judgement" => _factory.CreateJudgement(new Vector2(spawnX, s.Position.Y), s.Speed),
+                    "FloorTrauma" => _factory.CreateFloorTrauma(new Vector2(spawnX, s.Position.Y), s.Speed),
+                    _ => null
                 };
-                if (created != null) // ถ้าสร้างศัตรูสำเร็จ
+
+                if (created != null)
                 {
-                    activeEnemies.Add(created); // เพิ่มศัตรูที่สร้างลงในรายการศัตรูที่กำลังทำงาน
-                    if (currentPhase is TutorialPhase tutorialPhase)
+                    _activeEnemies.Add(created);
+                    if (_currentPhase is TutorialPhase tutorialPhase)
                     {
                         tutorialPhase.SetCurrentFixedEnemy(created);
                     }
                 }
             }
-            for (int i = activeEnemies.Count - 1; i >= 0; i--) // วนลูปย้อนกลับผ่านรายการศัตรูที่กำลังทำงาน
+        }
+
+        private void UpdateEnemies(GameTime gameTime, float delta, Player player, ref bool isFlipped, Delisaster delisaster, ScoreManager scoreManager)
+        {
+            for (int i = _activeEnemies.Count - 1; i >= 0; i--)
             {
-                var e = activeEnemies[i]; // ดึงศัตรูตัวปัจจุบัน
-                if (!(e is Trauma)) // ถ้าศัตรูไม่ใช่ประเภท Trauma
+                var e = _activeEnemies[i];
+                if (!(e is Trauma))
                 {
-                    e.SetSpeed(currentPhase.PlatformSpeed); // ตั้งค่าความเร็วของศัตรูให้ตรงกับความเร็วแพลตฟอร์มในเฟสปัจจุบัน
+                    e.SetSpeed(_currentPhase.PlatformSpeed);
                 }
-                e.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager); // อัปเดตสถานะของศัตรู
+                e.Update(gameTime, delta, player, ref isFlipped, delisaster, scoreManager);
+
                 if (e.IsDead && !e.DeathAnimationStarted)
                 {
-                    activeEnemies.RemoveAt(i); // ถ้าศัตรูตายและยังไม่เริ่มแอนิเมชันตาย ให้ลบศัตรูออกจากรายการ
+                    _activeEnemies.RemoveAt(i);
                 }
-
+                else if (e.IsDead && e.DeathAnimationStarted && e.deathTimer >= EnemyBase.DeathDuration)
+                {
+                    _activeEnemies.RemoveAt(i);
+                }
             }
-            if (currentPhase.IsPhaseComplete() && currentIndex < phases.Length - 1) // ถ้าเฟสปัจจุบันจบแล้วและยังมีเฟสถัดไป
-            {
-                currentIndex++;
-                currentPhase = phases[currentIndex];
-                currentPhase.Initialize();
-                //activeEnemies.Clear();
-                //lastSpawnX = 0;
+        }
 
+        private void CheckForPhaseCompletion()
+        {
+            if (_currentPhase.IsPhaseComplete() && _currentIndex < _phases.Length - 1)
+            {
+                _currentIndex++;
+                _currentPhase = _phases[_currentIndex];
+                _currentPhase.Initialize();
             }
         }
         public void Draw(SpriteBatch sp, Texture2D hurt, Texture2D hit, bool flip)
         {
-            foreach (var e in activeEnemies)
+            foreach (var e in _activeEnemies)
             {
                 e.Draw(sp, hurt, hit, flip);
             }
 
-            if (hellCloakEvent.IsActive)
+            if (_hellCloakEvent.IsActive)
             {
-                hellCloakEvent.Draw(sp);
+                _hellCloakEvent.Draw(sp);
             }
-            if (TutorialEvent != null && TutorialEvent.IsActive)
+            if (TutorialEvent?.IsActive == true)
             {
                 TutorialEvent.Draw(sp);
-                return;
             }
         }
         public void Reset()
         {
-            phases = new Phase[]
+            _phases = new Phase[]
             {
-                new TutorialPhase(6f),
-                new WarmupPhase(6f),
-                new FullPhase(10f)
+                new TutorialPhase(),
+                new WarmupPhase(),
+                new FullPhase()
             };
-            currentIndex = 0;
-            currentPhase = phases[0];
-            currentPhase.Initialize();
-            activeEnemies.Clear();
-            lastSpawnX = 0f;
+            _currentIndex = 0;
+            _currentPhase = _phases[0];
+            _currentPhase.Initialize();
+            _activeEnemies.Clear();
+            _lastSpawnX = 0f;
 
-            hellCloakEvent.Reset();
-            tutorialShown = false;
-            phase3Timer = 0f;
-            nextEventTime = 30f;
+            _hellCloakEvent.Reset();
+            _tutorialShown = false;
+            ResetEventTimers();
         }
+
         public void ResetCurrentPhase(int phaseIndex)
         {
-            if (hellCloakEvent.IsActive || hellCloakEvent.IsPreparing)
-            {
-                return;
-            }
-            if (phaseIndex >= 0 && phaseIndex < phases.Length)
-            {
-                phases = new Phase[]
-                {
-                    new TutorialPhase(6f),
-                    new WarmupPhase(6f),
-                    new FullPhase(10f)
-                };
-                currentIndex = phaseIndex;
-                currentPhase = phases[currentIndex];
+            if (IsInEvent) return;
 
-                currentPhase.Initialize();
-                activeEnemies.Clear();
-                lastSpawnX = 0f;
+            if (phaseIndex >= 0 && phaseIndex < _phases.Length)
+            {
+                _phases = new Phase[]
+            {
+                new TutorialPhase(),
+                new WarmupPhase(),
+                new FullPhase()
+            };
+                _currentIndex = phaseIndex;
+                _currentPhase = _phases[_currentIndex];
+                _currentPhase.Initialize();
+                _activeEnemies.Clear();
+                _lastSpawnX = 0f;
 
-                hellCloakEvent.Reset();
-                phase3Timer = 0f;
-                nextEventTime = 18f;
+                _hellCloakEvent.Reset();
+                ResetEventTimers();
             }
+        }
+
+        private void ResetEventTimers()
+        {
+            _phase3Timer = 0f;
+            _nextEventTime = _rng.Next(20, 40);
         }
     }
 }

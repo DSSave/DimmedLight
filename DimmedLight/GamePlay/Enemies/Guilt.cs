@@ -1,6 +1,7 @@
 ﻿using DimmedLight.GamePlay.Animated;
 using DimmedLight.GamePlay.Isplayer;
 using DimmedLight.GamePlay.UI;
+using DimmedLight.MainMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,148 +15,128 @@ namespace DimmedLight.GamePlay.Enemies
 {
     public class Guilt : EnemyBase
     {
-        public AnimatedTexture Attack;
-        public Rectangle HitBox;
-        public bool IsAttacking = false;
-        public float AttackTimer = 0f;
-        public float AttackDuration = 0.5f;
-        public float AttackHitTime = 0.25f;
-        public bool HitTriggered = false;
-        private Color attack = new Color(255, 144, 100);
+        public AnimatedTexture Attack { get; internal set; }
+        public Rectangle HitBox { get; private set; }
+        public bool IsAttacking { get; private set; }
+        public float AttackTimer { get; private set; }
+
+        private const float AttackDuration = 0.5f;
+        private const float AttackHitTime = 0.25f;
+        private bool _hitTriggered;
+        private readonly Color _attackColor = new Color(255, 144, 100);
         public Guilt()
         {
             EnemyType = "Guilt";
+            Attack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
         }
 
         public override void Load(ContentManager content)
         {
         }
-
         public override void Update(GameTime gameTime, float delta, Player player, ref bool globalFlip, Delisaster delisaster, ScoreManager scoreManager)
         {
-            if (!player.IsDead)
+            if (player.IsDead) return;
+
+            Position.X -= speed * delta * 60;
+            HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 144, 178);
+            HitBox = new Rectangle((int)Position.X - 45, (int)Position.Y, 144, 178);
+
+            if (!IsDead)
             {
-                Position.X -= speed * delta * 60;
+                IsFlipped = player.Position.X > Position.X;
 
-                HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 144, 178);
-                HitBox = new Rectangle((int)Position.X - 45, (int)Position.Y, 144, 178);
-                if (!IsDead)
+                HandleAttacking(delta, player, delisaster, scoreManager);
+                HandlePlayerCollision(player, scoreManager);
+
+                if (Position.X < -HurtBox.Width)
                 {
-                    IsFlipped = player.Position.X > Position.X; // หันหน้าไปทางผู้เล่น
-                    if (!IsAttacking && !HitTriggered && HitBox.Intersects(player.HurtBox)) // ถ้าศัตรูยังไม่โจมตีและผู้เล่นอยู่ในระยะโจมตี
-                    {
-                        IsAttacking = true;
-                        AttackTimer = 0f;
-                        HitTriggered = false;
-                    }
-                    if (IsAttacking)
-                    {
-                        AttackTimer += delta;
-                        Attack.UpdateFrame(delta);
-                        if (!HitTriggered && AttackTimer >= AttackHitTime && AttackTimer <= AttackHitTime + 0.1f) // ช่วงเวลาที่เกิดการโจมตี
-                        {
-                            if (player.HurtBox.Intersects(HitBox)) // ถ้าผู้เล่นอยู่ในระยะโจมตี
-                            {
-                                if (player.IsParrying) // ถ้าผู้เล่นกำลังแพร์รี่
-                                {
-                                    if (!IsDead)
-                                    {
-                                        OnKilled(scoreManager, "Parry"); // เรียกใช้เมธอด OnKilled เพื่อเพิ่มคะแนน
-                                    }
-                                    PlayParryHit();
-                                    IsDead = true;
-                                    DeathAnimationStarted = true;
-                                    DeathTimer = 0f;
-                                }
-                                else if (!player.IsInvincible) // ถ้าผู้เล่นไม่อยู่ในสถานะอมตะ
-                                {
-                                    player.Health--;
-                                    player.IsInvincible = true;
-                                    player.InvincibilityTimer = player.InvincibilityTime;
-                                    player.HealingTimer = 0f;
-                                    if (!player.IsReturning)
-                                    {
-                                        player.OriginalPosition = player.LastSafePosition;
-                                        player.ReturnTimer = player.ReturnX;
-                                        player.IsReturning = true;
-                                    }
-                                    player.Position += player.KnockBack;
-                                    PlayerHit?.Play(0.3f, 0f, 0f);
-                                    if (!delisaster.IsReturning)
-                                    {
-                                        delisaster.OriginalPosition = delisaster.Position;
-                                        delisaster.ReturnTimer = delisaster.ReturnPos;
-                                        delisaster.IsReturning = true;
-                                    }
-                                    else
-                                    {
-                                        delisaster.ReturnTimer += 4f;
-                                    }
-                                    delisaster.Position += delisaster.Move;
-                                }
-                            }
-                            HitTriggered = true;
-                        }
+                    StartDeathAnimation(false);
+                }
+            }
 
-                        if (AttackTimer >= AttackDuration)
-                        {
-                            IsAttacking = false;
-                            HitTriggered = true;
-                        }
+            if (IsDead && !DeathAnimationStarted)
+            {
+                StartDeathAnimation();
+            }
+
+            if (DeathAnimationStarted)
+            {
+                HandleDeathAnimation(delta);
+            }
+        }
+        private void HandleAttacking(float delta, Player player, Delisaster delisaster, ScoreManager scoreManager)
+        {
+            if (!IsAttacking && !_hitTriggered && HitBox.Intersects(player.HurtBox))
+            {
+                IsAttacking = true;
+                AttackTimer = 0f;
+                _hitTriggered = false;
+                Attack.Reset();
+            }
+
+            if (IsAttacking)
+            {
+                AttackTimer += delta;
+                Attack.UpdateFrame(delta);
+
+                bool isHitTime = AttackTimer >= AttackHitTime && AttackTimer <= AttackHitTime + 0.1f;
+                if (!_hitTriggered && isHitTime && player.HurtBox.Intersects(HitBox))
+                {
+                    if (player.IsParrying)
+                    {
+                        if (!IsDead) OnKilled(scoreManager, "Parry");
+                        PlayParryHit();
+                        StartDeathAnimation();
                     }
                     else
                     {
-                        Idle.UpdateFrame(delta);
+                        player.TakeDamage(delisaster);
+                        PlayerHit?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
                     }
+                    _hitTriggered = true;
+                }
 
-                    if (player.IsAttacking && player.HitBoxAttack.Intersects(HurtBox)) // ถ้าผู้เล่นกำลังโจมตีและโดนศัตรู
-                    {
-                        if (!IsDead)
-                        {
-                            OnKilled(scoreManager, player.IsParrying ? "Parry" : "Attack"); // เรียกใช้เมธอด OnKilled เพื่อเพิ่มคะแนน
-                        }
-                        IsDead = true;
-                        DeathAnimationStarted = true;
-                        DeathTimer = 0;
-                        EnemiesDead?.Play(0.3f, 0f, 0f);
-                    }
-                    if (Position.X < 0) // ถ้าศัตรูออกนอกหน้าจอด้านซ้าย
-                    {
-                        IsDead = true;
-                        DeathAnimationStarted = true;
-                        DeathTimer = 0f;
-                    }
-                    if (IsDead && !DeathAnimationStarted) // เริ่มเล่นอนิเมชันตายถ้ายังไม่เริ่ม
-                    {
-                        DeathAnimationStarted = true;
-                        DeathTimer = 0f;
-                    }
+                if (AttackTimer >= AttackDuration)
+                {
+                    IsAttacking = false;
                 }
             }
-            if (DeathAnimationStarted) // ถ้าเริ่มเล่นอนิเมชันตายแล้ว
+            else
             {
-                HandleDeathAnimation(delta); // เรียกใช้เมธอดจัดการอนิเมชันตาย
+                Idle.UpdateFrame(delta);
             }
         }
-
+        private void HandlePlayerCollision(Player player, ScoreManager scoreManager)
+        {
+            if (player.IsAttacking && player.HitBoxAttack.Intersects(HurtBox))
+            {
+                if (!IsDead) OnKilled(scoreManager, "Attack");
+                StartDeathAnimation();
+            }
+        }
+        private void StartDeathAnimation(bool playSound = true)
+        {
+            if (IsDead) return;
+            IsDead = true;
+            DeathAnimationStarted = true;
+            deathTimer = 0;
+            if (playSound) EnemiesDead?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
+        }
         public override void Draw(SpriteBatch sb, Texture2D hurtBoxTex, Texture2D hitBoxTex, bool flip)
         {
-            if (!IsDead || DeathAnimationStarted)
+            if (IsDead && !DeathAnimationStarted) return;
+
+            if (DeathAnimationStarted)
             {
-                if (DeathAnimationStarted && IsDead)
-                {
-                    Death.DrawFrame(sb, new Vector2(Position.X - 6, Position.Y - 68), IsFlipped);
-                }
-                else if (IsAttacking)
-                {
-                    Attack.DrawFrame(sb, new Vector2(Position.X - 45, Position.Y), attack * 1f, IsFlipped);
-                    //sb.Draw(hitBoxTex, HitBox, Color.Blue * 0.4f);
-                }
-                else
-                {
-                    Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
-                }
-                //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+                Death.DrawFrame(sb, new Vector2(Position.X - 6, Position.Y - 68), IsFlipped);
+            }
+            else if (IsAttacking)
+            {
+                Attack.DrawFrame(sb, new Vector2(Position.X - 92, Position.Y - 68), IsFlipped);
+            }
+            else
+            {
+                Idle.DrawFrame(sb, Position, IsFlipped);
             }
         }
     }

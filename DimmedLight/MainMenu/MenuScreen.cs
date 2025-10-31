@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace DimmedLight.MainMenu
     public class MenuScreen : Screen
     {
         private SpriteFont _menuFont;
+        private SpriteFont Stepalange;
         // private SpriteFont _titleFont; // ลบออก ไม่ได้ใช้แล้ว
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
@@ -24,6 +26,11 @@ namespace DimmedLight.MainMenu
         private Texture2D _selectedButtonTexture;
         private Texture2D _titleTexture; // << เพิ่ม: ตัวแปรสำหรับรูปภาพ Title
 
+        private Texture2D _lockChainTexture;
+        private Vector2 _lockChainPosition;
+        private float _lockChainRotation = 0f;
+        private float _lockChainShakeTimer = 0f;
+        private const float LockChainShakeDuration = 0.5f;
         // --- ตำแหน่งข้อความ ---
         private Vector2 _titlePosition;
 
@@ -31,36 +38,21 @@ namespace DimmedLight.MainMenu
         private List<Rectangle> _buttons = new List<Rectangle>();
         private List<string> _buttonLabels = new List<string>();
         private int _selectedButtonIndex = 0;
-
+        private int _previousSelectedButtonIndex = 0;
+        private Song _mainMenuMusic;
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
                    : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
         }
-
-        // --- state ---
-        /*private SettingSource _source;
-        public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content, SettingSource source)
-            : base(game, graphicsDeviceManager, graphicsDevice, content)
-        {
-            _source = source;
-        }*/
-
-        /*public enum SettingSource
-        {
-            MainMenu,
-            PauseMenu
-        }*/
-
         public override void LoadContent()
         {
             _menuFont = Content.Load<SpriteFont>("gameFont");
-            //_menuFont = Content.Load<SpriteFont>("UX_UIAsset/Font/MyCustomFont");
-            // _titleFont = Content.Load<SpriteFont>("TitleFont"); // ลบออก
+            Stepalange = Content.Load<SpriteFont>("Fonts/StepalangeFont");
             _backgroundTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Background");
             _selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
-            //_selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
-            _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title"); // << เพิ่ม: โหลดรูปภาพ title
+            _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title");
 
+            _lockChainTexture = Content.Load<Texture2D>("lockChain");
             // --- ปุ่ม ---
             int buttonWidth = 450;
             int buttonHeight = 90;
@@ -70,9 +62,9 @@ namespace DimmedLight.MainMenu
 
             AddButton(new Rectangle(startX, startY, buttonWidth, buttonHeight), "PLAY");
             AddButton(new Rectangle(startX, startY + spacingY, buttonWidth, buttonHeight), "UPGRADE");
-            AddButton(new Rectangle(startX, startY + (spacingY * 2), buttonWidth, buttonHeight), "SETTING");
-            AddButton(new Rectangle(startX, startY + (spacingY * 3), buttonWidth, buttonHeight), "CREDIT");
-            AddButton(new Rectangle(startX, startY + (spacingY * 4), buttonWidth, buttonHeight), "EXIT");
+            AddButton(new Rectangle(startX, startY + spacingY * 2, buttonWidth, buttonHeight), "SETTING");
+            AddButton(new Rectangle(startX, startY + spacingY * 3, buttonWidth, buttonHeight), "CREDIT");
+            AddButton(new Rectangle(startX, startY + spacingY * 4, buttonWidth, buttonHeight), "EXIT");
 
             // --- รูปภาพ Title ---
             // << แก้ไข: กำหนดตำแหน่งรูปภาพ
@@ -80,6 +72,17 @@ namespace DimmedLight.MainMenu
                 GraphicsDevice.Viewport.Width / 2f + 580, // ปรับตำแหน่งแกน X ตามต้องการ
                 GraphicsDevice.Viewport.Height /2f - _titleTexture.Height + 30    // ปรับตำแหน่งแกน Y ตามต้องการ
             );
+
+            Rectangle upgradeButtonRect = _buttons[1];
+            _lockChainPosition = new Vector2(upgradeButtonRect.Center.X, upgradeButtonRect.Center.Y - 6);
+
+            _mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
+            if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _mainMenuMusic)
+            {
+                MediaPlayer.Play(_mainMenuMusic);
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
+            }
 
             _previousMouseState = Mouse.GetState();
             _previousKeyboardState = Keyboard.GetState();
@@ -98,11 +101,13 @@ namespace DimmedLight.MainMenu
             var keyboard = Keyboard.GetState();
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
+            _previousSelectedButtonIndex = _selectedButtonIndex;
+
             // --- เลื่อนลง/ขึ้น ---
-            bool movedDown = (keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down)) ||
-                                (gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown));
-            bool movedUp = (keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up)) ||
-                                (gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp));
+            bool movedDown = keyboard.IsKeyDown(Keys.Down) && _previousKeyboardState.IsKeyUp(Keys.Down) ||
+                                gamePad.IsButtonDown(Buttons.DPadDown) && _previousGamePadState.IsButtonUp(Buttons.DPadDown);
+            bool movedUp = keyboard.IsKeyDown(Keys.Up) && _previousKeyboardState.IsKeyUp(Keys.Up) ||
+                                gamePad.IsButtonDown(Buttons.DPadUp) && _previousGamePadState.IsButtonUp(Buttons.DPadUp);
 
             //--- curent state ---
 
@@ -131,18 +136,34 @@ namespace DimmedLight.MainMenu
                     }
                 }
             }
+            if(_previousSelectedButtonIndex != _selectedButtonIndex)
+            {
+                SoundManager.PlayUIHover();
+            }
 
             // --- ยืนยัน ---
-            bool isConfirmPressed = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released) ||
-                                      (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter)) ||
-                                      (gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A));
+            bool isConfirmPressed = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released ||
+                                      keyboard.IsKeyDown(Keys.Enter) && _previousKeyboardState.IsKeyUp(Keys.Enter) ||
+                                      gamePad.IsButtonDown(Buttons.A) && _previousGamePadState.IsButtonUp(Buttons.A);
 
             if (isConfirmPressed)
             {
-                bool wasClicked = (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released);
-                if (!wasClicked || (wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos)))
+                bool wasClicked = mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
+                if (!wasClicked || wasClicked && _buttons[_selectedButtonIndex].Contains(mousePos))
                 {
+                    SoundManager.PlayUIClick();
                     ExecuteButtonAction(_selectedButtonIndex);
+                }
+            }
+
+            if (_lockChainShakeTimer > 0f)
+            {
+                _lockChainShakeTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _lockChainRotation = (float)Math.Sin(_lockChainShakeTimer * 30f) * 0.2f;
+
+                if (_lockChainShakeTimer <= 0f)
+                {
+                    _lockChainRotation = 0f;
                 }
             }
 
@@ -156,6 +177,7 @@ namespace DimmedLight.MainMenu
             switch (buttonIndex)
             {
                 case 0: // Play
+                    MediaPlayer.Stop();
                     if (SettingScreen.ShowTutorial)
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else
@@ -165,6 +187,8 @@ namespace DimmedLight.MainMenu
                     break;
                 case 1: // Upgrade
                     //Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    _lockChainShakeTimer = LockChainShakeDuration; // <-- เพิ่ม: เริ่มการสั่น
+                    SoundManager.PlayUIHover();
                     break;
                 case 2: // Setting
                     //Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
@@ -230,9 +254,9 @@ namespace DimmedLight.MainMenu
                     spriteBatch.Draw(_selectedButtonTexture, buttonRect, Color.White);
                 }
 
-                Vector2 textSize = _menuFont.MeasureString(buttonLabel);
+                Vector2 textSize = Stepalange.MeasureString(buttonLabel);
                 spriteBatch.DrawString(
-                    _menuFont,
+                    Stepalange,
                     buttonLabel,
                     new Vector2(buttonRect.Center.X, buttonRect.Center.Y),
                     Color.White,
@@ -243,6 +267,18 @@ namespace DimmedLight.MainMenu
                     0f
                 );
             }
+            Vector2 lockOrigin = new Vector2(_lockChainTexture.Width / 2f, _lockChainTexture.Height / 2f);
+            spriteBatch.Draw(
+                _lockChainTexture,
+                _lockChainPosition,
+                null,
+                Color.White,
+                _lockChainRotation,
+                lockOrigin,
+                0.7f, // ขนาด
+                SpriteEffects.None,
+                0f
+            );
 
             spriteBatch.End();
         }

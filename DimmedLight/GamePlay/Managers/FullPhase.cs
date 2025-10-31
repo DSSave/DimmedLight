@@ -7,43 +7,43 @@ using System.Threading.Tasks;
 
 namespace DimmedLight.GamePlay.Managers
 {
-    public class FullPhase : Phase //Phase 3 
+    public class FullPhase : Phase
     {
-        public FullPhase(float startSpeed = 10f) // ความเร็วเริ่มต้นของแพลตฟอร์ม
+        public FullPhase(float startSpeed = 10f)
         {
             PlatformSpeed = startSpeed;
-            MaxPlatformSpeed = 15f; // ความเร็วสูงสุดของแพลตฟอร์ม
-            SpeedIncreaseRate = 0.1f; // อัตราการเพิ่มความเร็วของแพลตฟอร์ม
-            spawnInterval = 1.5f; // ระยะเวลาระหว่างการเกิดศัตรู
-            minSpacing = 200f; // ระยะห่างขั้นต่ำระหว่างศัตรู
+            MaxPlatformSpeed = 15f;
+            SpeedIncreaseRate = 0.1f;
+            spawnInterval = 1.5f;
+            MinSpacing = 200f;
         }
-        public override List<EnemySpawnInfo> GetSpawns(float delta) //List ของศัตรูที่จะเกิด
+        public override List<EnemySpawnInfo> GetSpawns(float delta)
         {
-            List<EnemySpawnInfo> result = new List<EnemySpawnInfo>(); // รายการที่จะเก็บข้อมูลการเกิดศัตรู
-            timeSinceLastSpawn += delta; // เพิ่มเวลาที่ผ่านไปตั้งแต่การเกิดครั้งล่าสุด
-            if (timeSinceLastSpawn >= spawnInterval) // ถ้าเวลาที่ผ่านไปเกินกว่าระยะเวลาที่กำหนด
+            List<EnemySpawnInfo> result = new List<EnemySpawnInfo>();
+            timeSinceLastSpawn += delta;
+            if (timeSinceLastSpawn >= spawnInterval)
             {
                 timeSinceLastSpawn = 0f;
-                int countToSpawn = 1 + rnd.Next(0, 2); // สุ่มจำนวนศัตรูที่จะเกิด (1-2 ตัว)
-                for (int i = 0; i < countToSpawn; i++) // วนลูปตามจำนวนศัตรูที่จะเกิด
+                int countToSpawn = 1 + rnd.Next(0, 2);
+                for (int i = 0; i < countToSpawn; i++)
                 {
-                    string[] types = new[] { "Guilt", "Trauma", "Judgement", "FloorTrauma" }; // ประเภทของศัตรูที่สามารถเกิดได้
-                    string type = types[rnd.Next(types.Length)]; // สุ่มเลือกประเภทของศัตรู
-                    float x = 1920 + rnd.Next(200, 450) + i * 200; // ตำแหน่ง X ที่ศัตรูจะเกิด (นอกหน้าจอทางขวา)
-                    float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 515f; // ตำแหน่ง Y ที่ศัตรูจะเกิด (ขึ้นอยู่กับประเภทของศัตรู)
-                    result.Add(new EnemySpawnInfo(type, new Vector2(x, y), PlatformSpeed)); // เพิ่มข้อมูลการเกิดศัตรูลงในรายการ
+                    string[] types = new[] { "Guilt", "Trauma", "Judgement", "FloorTrauma" };
+                    string type = types[rnd.Next(types.Length)];
+                    float x = 1920 + rnd.Next(200, 450) + i * 200;
+                    float y = type == "Guilt" ? 670f : type == "Trauma" ? 330f : type == "Judgement" ? 720f : 445f;
+                    result.Add(new EnemySpawnInfo(type, new Vector2(x, y), PlatformSpeed));
                 }
             }
-            if (PlatformSpeed < MaxPlatformSpeed) // ถ้าความเร็วของแพลตฟอร์มยังไม่ถึงความเร็วสูงสุด
+            if (PlatformSpeed < MaxPlatformSpeed) 
             {
-                PlatformSpeed += SpeedIncreaseRate * delta; // เพิ่มความเร็วของแพลตฟอร์มตามอัตราการเพิ่มความเร็วและเวลาที่ผ่านไป
+                PlatformSpeed += SpeedIncreaseRate * delta; 
                 if (PlatformSpeed > MaxPlatformSpeed)
                 {
                     PlatformSpeed = MaxPlatformSpeed;
                 }
             }
-            return result; // คืนค่ารายการการเกิดศัตรู
+            return result; 
         }
-        public override bool IsPhaseComplete() => false; // เฟสนี้จะไม่สิ้นสุด
+        public override bool IsPhaseComplete() => false; 
     }
 }

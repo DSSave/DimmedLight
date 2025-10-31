@@ -1,45 +1,30 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// AnimatedTexture.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace DimmedLight.GamePlay.Animated
 {
     public class AnimatedTexture
     {
-        private int framecount;
-        private Texture2D myTexture;
-        private float TimePerFrame;
-        private int Frame;
-        private int framerow = 1; // frame row
-        private int frame_r; // count frame row 
-        private int startframe;
-        private int endframe;
-        private float TotalElapsed;
-        private bool Paused;
-        private bool Ended;
-        private int Overload;
-        private int startrow;
-        private bool flip = false;
-        private int pauseFrame = -1;
-        private int pauseRow = -1;
+        public float Rotation { get; set; }
+        public float Scale { get; set; }
+        public float Depth { get; set; }
+        public Vector2 Origin { get; set; }
+        public bool IsPaused { get; private set; }
+        public bool IsEnded { get; private set; }
+        public bool Loop { get; set; } = true;
 
-        private int framesPerSecond;
+        private Texture2D _texture;
+        private int _frameCount;
+        private int _frameRowCount;
+        private int _currentFrame;
+        private int _currentRow;
+        private float _timePerFrame;
+        private float _totalElapsed;
+        private bool _flip;
+        private int _pauseFrame = -1;
+        private int _pauseRow = -1;
 
-        public float Rotation, Scale, Depth;
-        public Vector2 Origin;
-        private bool loop = true;
         public AnimatedTexture(Vector2 origin, float rotation, float scale, float depth)
         {
             Origin = origin;
@@ -47,247 +32,112 @@ namespace DimmedLight.GamePlay.Animated
             Scale = scale;
             Depth = depth;
         }
+
         public void Load(ContentManager content, string asset, int frameCount, int frameRow, int framesPerSec)
         {
-            framecount = frameCount;
-            framerow = frameRow;
-            startframe = 0;
-            endframe = frameCount * framerow - 1;
-            myTexture = content.Load<Texture2D>(asset);
-            framesPerSecond = framesPerSec;
-            TimePerFrame = (float)1 / framesPerSec;
-            Frame = 0;
-            frame_r = 0;
-            TotalElapsed = 0;
-            Paused = false;
-            Ended = false;
-            Overload = 1;
-            startrow = 1;
+            _texture = content.Load<Texture2D>(asset);
+            SetupAnimation(frameCount, frameRow, framesPerSec);
         }
-        public void LoadFromTexture(Texture2D texture, int frameCount, int frameRow, int framesPerSec, int startRow = 1, int overload = 1)
+
+        public void LoadFromTexture(Texture2D texture, int frameCount, int frameRow, int framesPerSec)
         {
-            myTexture = texture;
-            framecount = frameCount;
-            framerow = frameRow;
-            framesPerSecond = framesPerSec;
-            TimePerFrame = (float)1 / framesPerSec;
-            Frame = 0;
-            frame_r = 0;
-            TotalElapsed = 0;
-            Paused = false;
-            Ended = false;
-            Overload = overload;
-            startrow = Math.Max(1, startRow);
-            startframe = 0;
-            endframe = framecount * framerow - 1;
+            _texture = texture;
+            SetupAnimation(frameCount, frameRow, framesPerSec);
         }
+
+        private void SetupAnimation(int frameCount, int frameRow, int framesPerSec)
+        {
+            _frameCount = frameCount;
+            _frameRowCount = frameRow;
+            _timePerFrame = 1f / framesPerSec;
+            Reset();
+        }
+
         public AnimatedTexture Clone()
         {
             var clone = new AnimatedTexture(Origin, Rotation, Scale, Depth);
-            clone.LoadFromTexture(myTexture, framecount, framerow, framesPerSecond, startrow, Overload);
+            clone.LoadFromTexture(_texture, _frameCount, _frameRowCount, (int)(1 / _timePerFrame));
             return clone;
         }
-        // class AnimatedTexture
-        public bool Loop
-        {
-            get => loop;
-            set
-            {
-                loop = value;
-                if (loop) Ended = false;
-            }
-        }
+
         public void UpdateFrame(float elapsed)
         {
-            if (pauseFrame > -1 && pauseRow > -1)
+            if (_pauseFrame > -1 && _pauseRow > -1)
             {
-
-                frame_r = pauseRow;
-                Frame = pauseFrame;
-                Paused = true;
-                pauseFrame = -1;
-                pauseRow = -1;
-
-            }
-            if (Paused)
-                return;
-            if (!loop && Ended) return;
-            TotalElapsed += elapsed;
-
-            while (TotalElapsed > TimePerFrame)
-            {
-                // คำนวนเฟรมถัดไป
-                int nextFrame = Frame + 1;
-                int nextRow = frame_r;
-
-                if (nextFrame >= framecount)
-                {
-                    nextFrame = 0;
-                    nextRow = frame_r + 1;
-                }
-
-                // ถ้าไม่วนและเฟรมถัดไปออกนอกแถวสุดท้าย -> ถือว่า animation จบ
-                if (!loop && nextRow >= framerow)
-                {
-                    // ตั้งค่าให้เป็นเฟรมสุดท้ายของ animation แล้วทำ Ended = true
-                    Frame = Math.Max(0, framecount - 1);
-                    frame_r = Math.Max(0, framerow - 1);
-                    Ended = true;
-                    TotalElapsed = 0f;
-                    return;
-                }
-
-                // ปกติอัพเดตไปเฟรมถัดไป
-                Frame = nextFrame;
-                frame_r = nextRow % framerow;
-
-                // ป้องกันการ overflow
-                Frame = Frame % framecount;
-
-                TotalElapsed -= TimePerFrame;
+                _currentRow = _pauseRow;
+                _currentFrame = _pauseFrame;
+                IsPaused = true;
+                _pauseFrame = -1;
+                _pauseRow = -1;
             }
 
-            /*if (TotalElapsed > TimePerFrame)
+            if (IsPaused || (!Loop && IsEnded)) return;
+
+            _totalElapsed += elapsed;
+
+            while (_totalElapsed > _timePerFrame && _timePerFrame > 0)
             {
-                Frame++;
-                if (Frame == framecount)
+                _totalElapsed -= _timePerFrame;
+                _currentFrame++;
+
+                if (_currentFrame >= _frameCount)
                 {
-                    Frame = 0;
-                    frame_r++;
-                    if (Overload == 2)
+                    _currentFrame = 0;
+                    _currentRow++;
+
+                    if (_currentRow >= _frameRowCount)
                     {
-                        Ended = true;
+                        if (!Loop)
+                        {
+                            IsEnded = true;
+                            _currentRow = _frameRowCount - 1;
+                            _currentFrame = _frameCount - 1;
+                            return;
+                        }
+                        else
+                        {
+                            _currentRow = 0;
+                        }
                     }
                 }
-                if (frame_r == framerow)
-                {
-                    frame_r = 0;
-                    if (Overload == 1)
-                    {
-                        Ended = true;
-                    }
-                }
-
-                // Keep the Frame between 0 and the total frames, minus one.
-                Frame = Frame % framecount;
-                // check start check end
-
-                TotalElapsed -= TimePerFrame;
-            }*/
+            }
         }
 
-        // class AnimatedTexture
-        public void DrawFrame(SpriteBatch batch, Vector2 screenPos, bool flip)
+        public void DrawFrame(SpriteBatch batch, Vector2 screenPos, bool flip = false, Color? color = null)
         {
-            this.flip = flip;
-            DrawFrame(batch, Frame, screenPos);
-        }
-        public void DrawFrame(SpriteBatch batch, Vector2 screenPos)
-        {
-            DrawFrame(batch, Frame, screenPos);
-        }
-        public void DrawFrame(SpriteBatch batch, Vector2 screenPos, int row)
-        {
-            DrawFrame(batch, Frame, screenPos, row);
-        }
-        public void DrawFrame(SpriteBatch batch, int frame, Vector2 screenPos)
-        {
-            int FrameWidth = myTexture.Width / framecount;
-            int FrameHeight = myTexture.Height / framerow;
-            Rectangle sourcerect;
-            if (Overload == 1)
-            {
-                sourcerect = new Rectangle(FrameWidth * frame, FrameHeight * frame_r,
-                    FrameWidth, FrameHeight);
-            }
-            else
-            {
-                sourcerect = new Rectangle(FrameWidth * frame, FrameHeight * (startrow - 1),
-                    FrameWidth, FrameHeight);
-            }
-            if (!flip)
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, Color.White,
-                    Rotation, Origin, Scale, SpriteEffects.None, Depth);
-            }
-            else
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, Color.White,
-                    Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, Depth);
-            }
-        }
-        public void DrawFrame(SpriteBatch batch, int frame, Vector2 screenPos, int row)
-        {
-            int FrameWidth = myTexture.Width / framecount;
-            int FrameHeight = myTexture.Height / framerow;
-            startrow = row;
-            Rectangle sourcerect = new Rectangle(FrameWidth * frame, FrameHeight * (startrow - 1),
-                    FrameWidth, FrameHeight);
-            if (!flip)
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, Color.White,
-                    Rotation, Origin, Scale, SpriteEffects.None, Depth);
-            }
-            else
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, Color.White,
-                    Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, Depth);
-            }
-        }
-        public void DrawFrame(SpriteBatch batch, Vector2 screenPos, Color color, bool flip = false)
-        {
-            int FrameWidth = myTexture.Width / framecount;
-            int FrameHeight = myTexture.Height / framerow;
-            Rectangle sourcerect;
+            if (_texture == null) return;
 
-            if (Overload == 1)
-            {
-                sourcerect = new Rectangle(FrameWidth * Frame, FrameHeight * frame_r,
-                    FrameWidth, FrameHeight);
-            }
-            else
-            {
-                sourcerect = new Rectangle(FrameWidth * Frame, FrameHeight * (startrow - 1),
-                    FrameWidth, FrameHeight);
-            }
+            _flip = flip;
+            int frameWidth = _texture.Width / _frameCount;
+            int frameHeight = _texture.Height / _frameRowCount;
+            Rectangle sourceRect = new Rectangle(frameWidth * _currentFrame, frameHeight * _currentRow, frameWidth, frameHeight);
 
-            if (!flip)
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, color,
-                    Rotation, Origin, Scale, SpriteEffects.None, Depth);
-            }
-            else
-            {
-                batch.Draw(myTexture, screenPos, sourcerect, color,
-                    Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, Depth);
-            }
+            SpriteEffects effects = _flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            batch.Draw(_texture, screenPos, sourceRect, color ?? Color.White, Rotation, Origin, Scale, effects, Depth);
         }
-        public bool IsPaused => Paused;
-        public bool IsEnd => Ended;
+
         public void Reset()
         {
-            Frame = 0;
-            TotalElapsed = 0f;
-            Paused = false;
-            Ended = false;
+            _currentFrame = 0;
+            _currentRow = 0;
+            _totalElapsed = 0f;
+            IsPaused = false;
+            IsEnded = false;
         }
+
         public void Stop()
         {
             Pause();
             Reset();
         }
-        public void Play()
-        {
-            Paused = false;
-        }
-        public void Pause()
-        {
-            Paused = true;
-        }
+
+        public void Play() => IsPaused = false;
+        public void Pause() => IsPaused = true;
+
         public void Pause(int frame, int row)
         {
-            pauseFrame = frame;
-            pauseRow = row;
+            _pauseFrame = frame;
+            _pauseRow = row;
         }
     }
 }

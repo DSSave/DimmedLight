@@ -17,23 +17,23 @@ namespace DimmedLight.GamePlay.Background
         public BackgroundLayer(Texture2D texture, int copies, float speedFactor)
         {
             Texture = texture;
-            Positions = new Vector2[copies]; // สร้าง array สำหรับเก็บตำแหน่งของแต่ละชิ้น
+            Positions = new Vector2[copies];
             SpeedFactor = speedFactor;
-            for (int i = 0; i < copies; i++) Positions[i] = new Vector2(i * texture.Width, 0); // วางตำแหน่งแต่ละชิ้นชิดกันแนวนอน
+            for (int i = 0; i < copies; i++) Positions[i] = new Vector2(i * texture.Width, 0);
         }
 
         public void Update(float platformSpeed)
         {
             float speed = platformSpeed * SpeedFactor;
-            for (int i = 0; i < Positions.Length; i++) Positions[i].X -= speed; // เคลื่อนตำแหน่ง ไปทางซ้าย ตามความเร็วที่ปรับแล้ว
+            for (int i = 0; i < Positions.Length; i++) Positions[i].X -= speed;
             int width = Texture.Width;
-            for (int i = 0; i < Positions.Length; i++) // วนเช็คแต่ละตำแหน่ง
+            for (int i = 0; i < Positions.Length; i++)
             {
-                if (Positions[i].X <= -width) // ถ้าตำแหน่งนี้เลยขอบซ้ายของหน้าจอไปแล้ว
+                if (Positions[i].X <= -width)
                 {
-                    int prev = (i - 1 + Positions.Length) % Positions.Length; // หา index ของตำแหน่งก่อนหน้า โดยใช้ modulo เพื่อให้วนกลับไปที่สุดท้ายได้
-                    if (prev < 0) prev = Positions.Length - 1; // ป้องกันกรณี index ติดลบ
-                    Positions[i].X = Positions[prev].X + width; // ย้ายตำแหน่งนี้ไปต่อท้ายตำแหน่งก่อนหน้า
+                    int prev = (i - 1 + Positions.Length) % Positions.Length;
+                    if (prev < 0) prev = Positions.Length - 1;
+                    Positions[i].X = Positions[prev].X + width;
                 }
             }
         }

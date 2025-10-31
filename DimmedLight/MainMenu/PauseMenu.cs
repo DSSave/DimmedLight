@@ -22,12 +22,15 @@ namespace DimmedLight.MainMenu
         private Texture2D Restart;
         private Texture2D Option;
         private Texture2D Exit;
+        private Texture2D _pixelTexture;
 
         public Action ClickRestart;
         public Action ClickExit;
         public Action ClickOption;
         private int selectedIndex = 0;
         private int exitSelectedIndex = 0;
+        private int _previousSelectedIndex = 0;
+        private int _previousExitSelectedIndex = 0;
 
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
@@ -47,8 +50,6 @@ namespace DimmedLight.MainMenu
             pauseMenu = pauseImage;
             frameExit = frame;
             holder = bottonCursor;
-
-
         }
         public void LoadContent(ContentManager content)
         {
@@ -56,6 +57,10 @@ namespace DimmedLight.MainMenu
             Restart = content.Load<Texture2D>("MenuAsset/restart");
             Option = content.Load<Texture2D>("MenuAsset/option");
             Exit = content.Load<Texture2D>("MenuAsset/mainMenu");
+
+            _pixelTexture = new Texture2D(graphics, 1, 1);
+            _pixelTexture.SetData(new[] { Color.White });
+
             SetupMenus();
         }
         private void SetupMenus()
@@ -70,7 +75,7 @@ namespace DimmedLight.MainMenu
             {
                 (Resume, new Rectangle(centerX - 150, startY, 300, 50), () => IsPaused = false),
                 (Restart, new Rectangle(centerX - 150, startY + spacing, 300, 50), () => { ClickRestart?.Invoke(); IsPaused = false; }),
-                (Option, new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { ClickOption?.Invoke(); IsPaused = false; }),
+                (Option, new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { ClickOption?.Invoke(); }),
                 (Exit, new Rectangle(centerX - 150, startY + spacing * 3, 300, 50), () => { inExitMenu = true; }),
             };
 
@@ -86,6 +91,7 @@ namespace DimmedLight.MainMenu
         {
             if (keyboardState.IsKeyDown(Keys.Escape) && previousKeyboardState.IsKeyUp(Keys.Escape))
             {
+                SoundManager.PlayUIHover();
                 if (!IsPaused)
                 {
                     IsPaused = true;
@@ -104,6 +110,8 @@ namespace DimmedLight.MainMenu
             {
                 MouseState mouse = Mouse.GetState();
                 var mousePos = mouse.Position;
+                _previousExitSelectedIndex = exitSelectedIndex;
+                _previousSelectedIndex = selectedIndex;
 
                 if (!inExitMenu)
                 {
@@ -141,7 +149,12 @@ namespace DimmedLight.MainMenu
                     }
                     if (keyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyUp(Keys.Enter))
                     {
+                        SoundManager.PlayUIClick();
                         menuItems[selectedIndex].onClick?.Invoke();
+                    }
+                    if( _previousSelectedIndex != selectedIndex)
+                    {
+                        SoundManager.PlayUIHover();
                     }
                 }
                 else
@@ -158,7 +171,12 @@ namespace DimmedLight.MainMenu
                     }
                     if (keyboardState.IsKeyDown(Keys.Enter) && previousKeyboardState.IsKeyUp(Keys.Enter))
                     {
+                        SoundManager.PlayUIClick();
                         exitMenuItems[exitSelectedIndex].onClick?.Invoke();
+                    }
+                    if(_previousExitSelectedIndex != exitSelectedIndex)
+                    {
+                        SoundManager.PlayUIHover();
                     }
                 }
                 if (mouse.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
@@ -169,6 +187,7 @@ namespace DimmedLight.MainMenu
                         {
                             if (item.rect.Contains(mouse.Position))
                             {
+                                SoundManager.PlayUIClick();
                                 item.onClick?.Invoke();
                                 break;
                             }
@@ -180,6 +199,7 @@ namespace DimmedLight.MainMenu
                         {
                             if (item.rect.Contains(mouse.Position))
                             {
+                                SoundManager.PlayUIClick();
                                 item.onClick?.Invoke();
                                 break;
                             }
@@ -194,10 +214,7 @@ namespace DimmedLight.MainMenu
             if (!IsPaused) return;
 
             Vector2 cameraOffset = camera != null ? camera.CurrentPosition + camera.ShakeOffset : Vector2.Zero;
-
-            Texture2D blackPixel = new Texture2D(graphics, 1, 1);
-            blackPixel.SetData(new[] { Color.White });
-            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
+            spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
 
             spriteBatch.Draw(pauseMenu, new Rectangle((int)(graphics.Viewport.Width / 2 - 576 + cameraOffset.X), (int)(graphics.Viewport.Height / 2 - 324 + cameraOffset.Y), 1152, 648), Color.White);
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace DimmedLight.MainMenu
             //_background = Content.Load<Texture2D>("Totorial_Background");
             _tutorialPage1 = Content.Load<Texture2D>("MenuAsset/tutorialKeyboard_New");
             _tutorialPage2 = Content.Load<Texture2D>("MenuAsset/tutorialController_New");
-            _tutorialPage3 = Content.Load<Texture2D>("MenuAsset/tutorialEnemy_New");
+            _tutorialPage3 = Content.Load<Texture2D>("MenuAsset/tutorialEnemy");
 
 
             _previousKeyboard = Keyboard.GetState();
@@ -50,16 +51,16 @@ namespace DimmedLight.MainMenu
             var gamePad = GamePad.GetState(PlayerIndex.One);
 
             // Handle navigation
-            bool advancePage = (keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right)) ||
-                               (keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter)) ||
-                               (gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A)) ||
-                               (gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight)) ||
-                               (gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f);
+            bool advancePage = keyboard.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right) ||
+                               keyboard.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter) ||
+                               gamePad.IsButtonDown(Buttons.A) && _previousGamePad.IsButtonUp(Buttons.A) ||
+                               gamePad.IsButtonDown(Buttons.DPadRight) && _previousGamePad.IsButtonUp(Buttons.DPadRight) ||
+                               gamePad.ThumbSticks.Left.X > 0.5f && _previousGamePad.ThumbSticks.Left.X <= 0.5f;
 
-            bool backPage = (keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left)) ||
-                            (gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B)) ||
-                            (gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft)) ||
-                            (gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f);
+            bool backPage = keyboard.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left) ||
+                            gamePad.IsButtonDown(Buttons.B) && _previousGamePad.IsButtonUp(Buttons.B) ||
+                            gamePad.IsButtonDown(Buttons.DPadLeft) && _previousGamePad.IsButtonUp(Buttons.DPadLeft) ||
+                            gamePad.ThumbSticks.Left.X < -0.5f && _previousGamePad.ThumbSticks.Left.X >= -0.5f;
 
             bool escapePressed = keyboard.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape);
 
@@ -67,10 +68,12 @@ namespace DimmedLight.MainMenu
             {
                 if (_currentPage < 3)
                 {
+                    SoundManager.PlayUIClick();
                     _currentPage++;
                 }
                 else
                 {
+                    MediaPlayer.Stop();
                     Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
             }
@@ -78,6 +81,7 @@ namespace DimmedLight.MainMenu
             {
                 if (_currentPage > 1)
                 {
+                    SoundManager.PlayUIClick();
                     _currentPage--;
                 }
                 else
@@ -87,6 +91,7 @@ namespace DimmedLight.MainMenu
             }
             else if (escapePressed)
             {
+                SoundManager.PlayUIClick();
                 Game.ChangeScreen(new MenuScreen(Game, Game._graphics, GraphicsDevice, Content));
             }
 
