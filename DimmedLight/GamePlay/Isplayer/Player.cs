@@ -116,7 +116,7 @@ namespace DimmedLight.GamePlay.Isplayer
         private float _helperBlinkIntervalTimer = 0f;
         private const float HelperBlinkInterval = 0.1f;
         private bool _isHelperBlinkVisible = false;
-
+        private bool _phase3BlinkTriggered = false;
         private bool _isHelperEnemyInRange = false;
 
         private bool _initialDelayComplete = false;
@@ -255,25 +255,6 @@ namespace DimmedLight.GamePlay.Isplayer
             _helperIndicatorPosition = new Vector2(Position.X + 186 + 60, Position.Y + 50 + 40);
             Rectangle detectionRect = new Rectangle((int)Position.X + 206 + 150, (int)Position.Y + 50, 80, 80);
 
-            if (_helperBlinkTotalTimer > 0f)
-            {
-                _helperBlinkTotalTimer -= delta;
-                _helperBlinkIntervalTimer += delta;
-                if (_helperBlinkIntervalTimer >= HelperBlinkInterval)
-                {
-                    _isHelperBlinkVisible = !_isHelperBlinkVisible;
-                    _helperBlinkIntervalTimer -= HelperBlinkInterval;
-                }
-
-                if (_helperBlinkTotalTimer <= 0f)
-                {
-                    _isHelperBlinkVisible = false;
-                }
-            }
-            else
-            {
-                _isHelperBlinkVisible = false;
-            }
             bool enemyInRange = false;
             if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
             {
@@ -290,6 +271,44 @@ namespace DimmedLight.GamePlay.Isplayer
                 }
             }
             _isHelperEnemyInRange = enemyInRange;
+            if (phaseManager != null)
+            {
+                if (phaseManager.CurrentPhaseIndex >= 2)
+                {
+                    if (!_phase3BlinkTriggered)
+                    {
+                        _helperBlinkTotalTimer = HelperBlinkDuration;
+                        _isHelperBlinkVisible = true;
+                        _helperBlinkIntervalTimer = 0f;
+                        _phase3BlinkTriggered = true;
+                    }
+
+                    if (_helperBlinkTotalTimer > 0f)
+                    {
+                        _helperBlinkTotalTimer -= delta;
+                        _helperBlinkIntervalTimer += delta;
+
+                        if (_helperBlinkIntervalTimer >= HelperBlinkInterval)
+                        {
+                            _isHelperBlinkVisible = !_isHelperBlinkVisible;
+                            _helperBlinkIntervalTimer -= HelperBlinkInterval;
+                        }
+
+                        if (_helperBlinkTotalTimer <= 0f)
+                        {
+                            _isHelperBlinkVisible = false;
+                        }
+                    }
+                    else
+                    {
+                        _isHelperBlinkVisible = false;
+                    }
+                }
+                else
+                {
+                    _isHelperBlinkVisible = false;
+                }
+            }
         }
         private void HandleParry(KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
         {
@@ -470,6 +489,16 @@ namespace DimmedLight.GamePlay.Isplayer
                         _helperIndicatorScale,
                         SpriteEffects.None,
                         0f);
+            else if (_phaseManager != null && _phaseManager.CurrentPhaseIndex < 2)
+                sb.Draw(_helperIndicatorDefault,
+                        _helperIndicatorPosition,
+                        null,
+                        Color.White,
+                        0f,
+                        _helperIndicatorOriginDefault,
+                        _helperIndicatorScale,
+                        SpriteEffects.None,
+                        0f);
             else if (_isHelperBlinkVisible)
                 sb.Draw(_helperIndicatorDefault,
                         _helperIndicatorPosition,
@@ -493,6 +522,7 @@ namespace DimmedLight.GamePlay.Isplayer
             _helperBlinkIntervalTimer = 0f;
             _isHelperBlinkVisible = false;
             _isHelperEnemyInRange = false;
+            _phase3BlinkTriggered = false;
             midReset();
         }
         public void midReset()
