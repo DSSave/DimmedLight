@@ -150,8 +150,8 @@ namespace DimmedLight.GamePlay.Isplayer
             Hit.Loop = false;
             _helperIndicatorDefault = content.Load<Texture2D>("LOOP_Indicator_Default");
             _helperIndicatorAlert = content.Load<Texture2D>("LOOP_Indicator_Alert");
-            _helperIndicatorOriginDefault = new Vector2(_helperIndicatorDefault.Width / 2f, _helperIndicatorDefault.Height / 2f);
-            _helperIndicatorOriginAlert = new Vector2(_helperIndicatorAlert.Width / 2f, _helperIndicatorAlert.Height / 2f);
+            _helperIndicatorOriginDefault = new Vector2(_helperIndicatorDefault.Width / 3f, _helperIndicatorDefault.Height / 2f);
+            _helperIndicatorOriginAlert = new Vector2(_helperIndicatorAlert.Width / 3f, _helperIndicatorAlert.Height / 2f);
 
             _attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
             _jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
