@@ -104,6 +104,15 @@ namespace DimmedLight.GamePlay.Managers
             prepareTimer = 0f;
             shootTimer = 0f;
 
+            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _bmg)
+            {
+                MediaPlayer.Pause();
+            }
+            else if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.Stop();
+            }
+
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Pause();
 
@@ -193,7 +202,7 @@ namespace DimmedLight.GamePlay.Managers
                     End(false);
                     return;
                 }
-                if (!projectileRemoved && (!projectiles[i].Active || projectiles[i].Position.X < -projectiles[i].Texture.Width)) // ปรับเงื่อนไขการลบ projectile ที่ตกขอบ
+                if (!projectileRemoved && (!projectiles[i].Active || projectiles[i].Position.X < -projectiles[i].Texture.Width))
                 {
                     projectiles.RemoveAt(i);
                 }
@@ -271,8 +280,13 @@ namespace DimmedLight.GamePlay.Managers
             projectiles.Clear();*/
 
             if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _eventSong)
+            {
                 MediaPlayer.Stop();
-
+                if (MediaPlayer.State == MediaState.Paused)
+                {
+                    MediaPlayer.Resume();
+                }
+            }
             //MediaPlayer.Play(bmg);
             /*MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.008f * SoundManager.BgmVolume;

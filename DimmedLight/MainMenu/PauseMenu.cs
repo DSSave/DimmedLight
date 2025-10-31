@@ -22,6 +22,7 @@ namespace DimmedLight.MainMenu
         private Texture2D Restart;
         private Texture2D Option;
         private Texture2D Exit;
+        private Texture2D _pixelTexture;
 
         public Action ClickRestart;
         public Action ClickExit;
@@ -56,6 +57,10 @@ namespace DimmedLight.MainMenu
             Restart = content.Load<Texture2D>("MenuAsset/restart");
             Option = content.Load<Texture2D>("MenuAsset/option");
             Exit = content.Load<Texture2D>("MenuAsset/mainMenu");
+
+            _pixelTexture = new Texture2D(graphics, 1, 1);
+            _pixelTexture.SetData(new[] { Color.White });
+
             SetupMenus();
         }
         private void SetupMenus()
@@ -209,10 +214,7 @@ namespace DimmedLight.MainMenu
             if (!IsPaused) return;
 
             Vector2 cameraOffset = camera != null ? camera.CurrentPosition + camera.ShakeOffset : Vector2.Zero;
-
-            Texture2D blackPixel = new Texture2D(graphics, 1, 1);
-            blackPixel.SetData(new[] { Color.White });
-            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
+            spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
 
             spriteBatch.Draw(pauseMenu, new Rectangle((int)(graphics.Viewport.Width / 2 - 576 + cameraOffset.X), (int)(graphics.Viewport.Height / 2 - 324 + cameraOffset.Y), 1152, 648), Color.White);
 

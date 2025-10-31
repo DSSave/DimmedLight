@@ -12,12 +12,15 @@ namespace DimmedLight.GamePlay.UI
         private GraphicsDevice graphics;
         public bool IsActive { get; private set; } = false;
         private Action onFinish;
-
+        private Texture2D _pixelTexture;
         public TutorialEvent(GraphicsDevice graphics, Texture2D tutorialImage, Action onFinish)
         {
             this.graphics = graphics;
             this.tutorialImage = tutorialImage;
             this.onFinish = onFinish;
+
+            _pixelTexture = new Texture2D(graphics, 1, 1);
+            _pixelTexture.SetData(new[] { Color.White });
         }
 
         public void Start()
@@ -41,10 +44,7 @@ namespace DimmedLight.GamePlay.UI
         {
             if (!IsActive) return;
 
-            // พื้นหลังสีดำ * 0.7
-            Texture2D blackPixel = new Texture2D(graphics, 1, 1);
-            blackPixel.SetData(new[] { Color.White });
-            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
+            spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, graphics.Viewport.Width, graphics.Viewport.Height), Color.Black * 0.7f);
 
             // รูป tutorial ขนาด 1427 x 757 ตรงกลาง
             int imageWidth = 1427;

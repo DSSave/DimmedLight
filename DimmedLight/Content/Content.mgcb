@@ -85,11 +85,11 @@
 /processorParam:Quality=Best
 /build:Audio/MainMenu.mp3
 
-#begin Audio/MainTheme .mp3
-/importer:Mp3Importer
+#begin Audio/MainTheme.ogg
+/importer:OggImporter
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Audio/MainTheme .mp3
+/build:Audio/MainTheme.ogg
 
 #begin Background/back1.png
 /importer:TextureImporter
@@ -448,6 +448,18 @@
 /processorParam:TextureFormat=Color
 /build:MenuAsset/tutorialEnemy_New.png
 
+#begin MenuAsset/tutorialEnemy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:MenuAsset/tutorialEnemy.png
+
 #begin MenuAsset/tutorialKeyboard_New.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -585,18 +597,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:traumadead_Spritesheet.png
-
-#begin tutorial3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tutorial3.png
 
 #begin tutorialEvent_New.png
 /importer:TextureImporter

@@ -112,7 +112,7 @@ namespace DimmedLight.GamePlay.Managers
         }
         private void UpdatePhase3EventTimer(float delta)
         {
-            if (_currentIndex == 2)
+            if (_currentIndex == 2 && !_hellCloakEvent.IsActive && !_hellCloakEvent.IsPreparing)
             {
                 _phase3Timer += delta;
                 if (_phase3Timer >= _nextEventTime)

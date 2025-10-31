@@ -39,14 +39,23 @@ namespace DimmedLight.GamePlay.Managers
         {
             enemy.Position = pos;
             enemy.SetSpeed(spd);
-            enemy.Idle = idle.Clone();
-            enemy.Death = death.Clone();
+            enemy.Idle = idle;
+            enemy.Idle.Reset();
+
+            enemy.Death = death;
+            enemy.Death.Reset();
+
             if (attack != null)
             {
-                enemy.AttackAnim = attack.Clone();
+                enemy.AttackAnim = attack;
+                enemy.AttackAnim.Reset();
             }
+            if (enemy is Trauma trauma)
+                trauma.ProjectileObj.Deactivate();
+            if (enemy is FloorTrauma floorTrauma)
+                floorTrauma.ProjectileObj.Deactivate();
+
             enemy.IsDead = false;
-            // enemy.DeathAnimationStarted = false; // This is handled in EnemyBase constructor/reset
             return enemy;
         }
 
@@ -54,7 +63,8 @@ namespace DimmedLight.GamePlay.Managers
         {
             var g = new Guilt();
             InitializeEnemy(g, pos, speed, _guiltIdleProto, _guiltDeathProto, _guiltAttackProto);
-            g.Attack = _guiltAttackProto.Clone(); // Guilt has a specific 'Attack' property
+            g.Attack = _guiltAttackProto;
+            g.Attack.Reset();
             return g;
         }
         public Trauma CreateTrauma(Vector2 pos, float speed)

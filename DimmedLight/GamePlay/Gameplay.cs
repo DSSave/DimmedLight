@@ -85,8 +85,12 @@ namespace DimmedLight.GamePlay
             InitializeEnemies();
 
             _eventTextSlide = new EventTextSlide(_game.GraphicsDevice, Stepalange, _camera);
-            MediaPlayer.Play(_bmg);
-            MediaPlayer.IsRepeating = true;
+
+            if(MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
+            {
+                //MediaPlayer.Play(_bmg);
+                MediaPlayer.IsRepeating = true;
+            }
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }
         private void LoadTextures()
@@ -102,7 +106,6 @@ namespace DimmedLight.GamePlay
             _frame = _game.Content.Load<Texture2D>("Frame");
             _bottonCursor = _game.Content.Load<Texture2D>("bottonCursor");
 
-            // Create 1x1 textures for drawing primitives
             _hurtBoxTex = new Texture2D(_game.GraphicsDevice, 1, 1);
             _hurtBoxTex.SetData(new[] { Color.Red });
             _hitBoxTex = new Texture2D(_game.GraphicsDevice, 1, 1);
@@ -120,7 +123,7 @@ namespace DimmedLight.GamePlay
             _ammoShoot = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EventParryAmmoAndGuilt");
             _playerHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
             _parryHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
-            _bmg = _game.Content.Load<Song>("Audio/MainTheme ");
+            _bmg = _game.Content.Load<Song>("Audio/MainTheme");
             _eventSound = _game.Content.Load<Song>("Audio/Event");
             _gameOverSound = _game.Content.Load<Song>("Audio/EasyGameOver");
         }
@@ -161,23 +164,23 @@ namespace DimmedLight.GamePlay
             _pauseMenu.LoadContent(_game.Content);
             _pauseMenu.ClickExit = () =>
             {
-                MediaPlayer.Stop();
+                //MediaPlayer.Stop();
                 _game.ChangeScreen(new MenuScreen(_game, _graphics, _game.GraphicsDevice, _game.Content));
             };
             _pauseMenu.ClickOption = () =>
             {
                 if (MediaPlayer.State == MediaState.Playing)
                 {
-                    MediaPlayer.Pause();
+                    //MediaPlayer.Pause();
                 }
                 _game.ChangeScreen(new SettingScreen(_game, _graphics, _game.GraphicsDevice, _game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
+            _pauseMenu.ClickRestart = ResetGame;
             _gameOverScreen = new GameOver(_game, _graphics);
             _gameOverScreen.LoadContent();
         }
         private void InitializeEnemies()
         {
-            // Guilt animations
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltIdle.Load(_game.Content, "Guilt_idle", 1, 1, 15);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -185,7 +188,6 @@ namespace DimmedLight.GamePlay
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltDeath.Load(_game.Content, "guiltdead_Spritesheet", 7, 1, 8);
 
-            // Trauma animations
             var traumaIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             traumaIdle.Load(_game.Content, "trauma-re", 1, 1, 15);
             var traumaAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
@@ -193,13 +195,11 @@ namespace DimmedLight.GamePlay
             var traumaDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             traumaDeath.Load(_game.Content, "traumadead_Spritesheet", 7, 1, 8);
 
-            // Judgement animations
             var judgementIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             judgementIdle.Load(_game.Content, "judgement_Spritesheet", 10, 1, 15);
             var judgementDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             judgementDeath.Load(_game.Content, "judgement_dead_Spritesheet", 8, 1, 9);
 
-            // Enemy Factory
             _enemyFactory = new EnemyFactory(
                 guiltIdle, guiltAttack, guiltDeath,
                 traumaIdle, traumaAttack, traumaDeath,
@@ -208,7 +208,6 @@ namespace DimmedLight.GamePlay
                 _parryProjecTex
             );
 
-            // Phase Manager
             _phaseManager = new PhaseManager(this, _enemyFactory, _player, _delisaster, _camera, _hellCloakTheme, _tutorialImage,
                   _parryProjecTex, _attackProjecTex, _parryHit, _eventSound, _bmg, _game.GraphicsDevice, _scoreManager,
                   _platformManager);
@@ -287,7 +286,7 @@ namespace DimmedLight.GamePlay
 
                     if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
                     {
-                        MediaPlayer.Play(_bmg);
+                        //MediaPlayer.Play(_bmg);
                         MediaPlayer.IsRepeating = true;
                         MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
                     }
@@ -306,7 +305,6 @@ namespace DimmedLight.GamePlay
 
             _previousKeyState = keyState;
             _previousGamePadState = gpState;
-            _pauseMenu.ClickRestart = ResetGame;
         }
 
         private void HandleMusic()
@@ -443,10 +441,9 @@ namespace DimmedLight.GamePlay
             _eventTextSlide.StartAnimation("", Color.White);
 
             _gameOverSoundPlayed = false;
-            if (MediaPlayer.State != MediaState.Playing)
-            {
-                MediaPlayer.Play(_bmg);
-            }
+            MediaPlayer.Stop();
+
+            //MediaPlayer.Play(_bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }

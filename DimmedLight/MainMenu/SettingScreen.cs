@@ -475,10 +475,7 @@ namespace DimmedLight.MainMenu
             spriteBatch.Begin(samplerState: SamplerState.PointClamp); // Use PointClamp for sharp pixels
 
             spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Color.White);
-
-            Texture2D blackPixel = new Texture2D(GraphicsDevice, 1, 1);
-            blackPixel.SetData(new[] { Color.White });
-            spriteBatch.Draw(blackPixel, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
+            spriteBatch.Draw(_pixelTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
 
             for (int i = 0; i < _tabButtons.Count; i++)
             {
