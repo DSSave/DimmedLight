@@ -97,6 +97,14 @@ namespace DimmedLight.GamePlay.Enemies
                 }
                 //sb.Draw(hurtBoxTex, HitN, Color.Red * 0.4f);
             }
+<<<<<<< Updated upstream
+=======
+            else
+            {
+                Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
+            }
+            //sb.Draw(hitBoxTex, HitN, Color.Red * 0.6f);
+>>>>>>> Stashed changes
         }
     }
 }

@@ -22,6 +22,7 @@ namespace DimmedLight.GamePlay
         private SpriteFont font;
 
         #region Assets
+<<<<<<< Updated upstream
         Texture2D bg1Tex, bg2Tex, bg3Tex, bg4Tex, bg5Tex;
         Texture2D platformTex, platformAsset;
         Texture2D projectileTex, attackProjecTex, parryProjecTex;
@@ -31,6 +32,19 @@ namespace DimmedLight.GamePlay
         Texture2D tutorialImage;
         Texture2D pauseImage, frame;
         Texture2D bottonCursor;
+=======
+        private Texture2D _platformTex, _platformAsset;
+        private Texture2D _projectileTex, _attackProjecTex, _parryProjecTex;
+        private Texture2D _hurtBoxTex, _hitBoxTex, _pixelTexture;
+        private Texture2D _hellCloakTheme;
+        private Texture2D _tutorialImage;
+        private Texture2D _pauseImage, _frame, _bottonCursor;
+        private SoundEffect _parryHit, _enemiesDead, _playerHit, _ammoShoot;
+        private Song _bmg, _eventSound;
+        private Song _gameOverSound;
+        private Texture2D _redOverlay;
+        private Texture2D _healthPlayer;
+>>>>>>> Stashed changes
         #endregion
 
         #region Background & Platforms
@@ -55,10 +69,22 @@ namespace DimmedLight.GamePlay
         #endregion
 
         #region Control
+<<<<<<< Updated upstream
         bool isFlipped = false;
         KeyboardState previousKeyState;
         GamePadState previousGamePadState;
         PauseMenu pauseMenu;
+=======
+        private bool _isFlipped;
+        private KeyboardState _previousKeyState;
+        private GamePadState _previousGamePadState;
+        private PauseMenu _pauseMenu;
+        private GameOver _gameOverScreen;
+        private bool _showGameOver;
+        private bool _delisasterHasDashed;
+        public bool SettingScreenWasOpen { get; set; }
+        private bool _gameOverSoundPlayed = false;
+>>>>>>> Stashed changes
         #endregion
 
         private SoundEffect parryHit,enemiesDead,playerHit,ammoShoot;
@@ -100,14 +126,35 @@ namespace DimmedLight.GamePlay
             attackProjecTex = game.Content.Load<Texture2D>("bullet2");
             parryProjecTex = game.Content.Load<Texture2D>("bullet1");
 
+<<<<<<< Updated upstream
             font = game.Content.Load<SpriteFont>("gameFont");
             hellCloakTheme = game.Content.Load<Texture2D>("ThemeEvent");
+=======
+            _eventTextSlide = new EventTextSlide(_game.GraphicsDevice, Stepalange, _camera);
+            MediaPlayer.Play(_bmg);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
+        }
+        private void LoadTextures()
+        {
+            _platformTex = _game.Content.Load<Texture2D>("platform-remake");
+            _platformAsset = _game.Content.Load<Texture2D>("floating-platform");
+            _projectileTex = _game.Content.Load<Texture2D>("bullet4");
+            _attackProjecTex = _game.Content.Load<Texture2D>("bullet2");
+            _parryProjecTex = _game.Content.Load<Texture2D>("bullet1");
+            _hellCloakTheme = _game.Content.Load<Texture2D>("ThemeEvent");
+            _tutorialImage = _game.Content.Load<Texture2D>("eventTutorial");
+            _pauseImage = _game.Content.Load<Texture2D>("PauseNew");
+            _frame = _game.Content.Load<Texture2D>("Frame");
+            _bottonCursor = _game.Content.Load<Texture2D>("bottonCursor");
+>>>>>>> Stashed changes
 
             pauseImage = game.Content.Load<Texture2D>("PauseNew");
             tutorialImage = game.Content.Load<Texture2D>("eventTutorial");
             frame = game.Content.Load<Texture2D>("Frame");
             bottonCursor = game.Content.Load<Texture2D>("bottonCursor");
 
+<<<<<<< Updated upstream
             enemiesDead = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EnemiesDead");
             ammoShoot = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EventParryAmmoAndGuilt");
             playerHit = game.Content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
@@ -115,6 +162,56 @@ namespace DimmedLight.GamePlay
             BMG = game.Content.Load<Song>("Audio/TaLayJai");
             EventSound = game.Content.Load<Song>("Audio/SunYaNaFon");
             if (MediaPlayer.State == MediaState.Playing && pauseMenu.IsPaused)
+=======
+            _healthPlayer = _game.Content.Load<Texture2D>("MenuAsset/Hearts");
+        }
+        private void LoadSounds()
+        {
+            _enemiesDead = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EnemiesDead");
+            _ammoShoot = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EventParryAmmoAndGuilt");
+            _playerHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
+            _parryHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
+            _bmg = _game.Content.Load<Song>("Audio/MainTheme ");
+            _eventSound = _game.Content.Load<Song>("Audio/Event");
+            _gameOverSound = _game.Content.Load<Song>("Audio/EasyGameOver");
+        }
+        private void LoadFonts()
+        {
+            Stepalange = _game.Content.Load<SpriteFont>("Fonts/StepalangeFont");
+            StepalangeShort = _game.Content.Load<SpriteFont>("Fonts/StepalangeShortFont");
+        }
+        private void InitializeBackground()
+        {
+            var bg1Tex = _game.Content.Load<Texture2D>("Background/back1");
+            var bg2Tex = _game.Content.Load<Texture2D>("Background/back2");
+            var bg3Tex = _game.Content.Load<Texture2D>("Background/back3");
+            var bg4Tex = _game.Content.Load<Texture2D>("Background/back4");
+            var bg5Tex = _game.Content.Load<Texture2D>("Background/back5");
+
+            _bg1 = new BackgroundLayer(bg1Tex, 3, 0.1f);
+            _bg2 = new BackgroundLayer(bg2Tex, 3, 0.3f);
+            _bg3 = new BackgroundLayer(bg3Tex, 3, 0.5f);
+            _bg4 = new BackgroundLayer(bg4Tex, 3, 0.7f);
+            _bg5 = new BackgroundLayer(bg5Tex, 3, 0.9f);
+            _platformManager = new PlatformManager(_platformTex, _platformAsset, 6);
+        }
+        private void InitializeCoreGameplay()
+        {
+            _scoreManager = new ScoreManager();
+            _scoreManager.LoadContent(_game.Content);
+            _player = new Player(_phaseManager, _scoreManager);
+            _player.Load(_game.Content);
+            _delisaster = new Delisaster();
+            _delisaster.Load(_game.Content);
+            _camera = new Camera();
+        }
+        private void InitializeUI()
+        {
+            _hud = new HUD();
+            _pauseMenu = new PauseMenu(_graphics.GraphicsDevice, Stepalange, _pauseImage, _frame, _bottonCursor, _camera);
+            _pauseMenu.LoadContent(_game.Content);
+            _pauseMenu.ClickExit = () =>
+>>>>>>> Stashed changes
             {
                 MediaPlayer.Stop();
             }
@@ -163,10 +260,16 @@ namespace DimmedLight.GamePlay
             pauseMenu = new PauseMenu(_graphics.GraphicsDevice, font, pauseImage, frame, bottonCursor, camera);
             pauseMenu.ClickExit = () =>
             {
+<<<<<<< Updated upstream
                 if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
                     MediaPlayer.Stop();
 
                 game.ChangeScreen(new MenuScreen((Game1)game, _graphics, game.GraphicsDevice, game.Content));
+=======
+                if (MediaPlayer.State == MediaState.Playing)
+                    MediaPlayer.Pause();
+                _game.ChangeScreen(new SettingScreen(_game, _graphics, _game.GraphicsDevice, _game.Content, SettingScreen.SettingSource.PauseMenu, this));
+>>>>>>> Stashed changes
             };
             pauseMenu.ClickOption = () =>
             {
@@ -181,6 +284,10 @@ namespace DimmedLight.GamePlay
             #region Enemy&Factory
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
+<<<<<<< Updated upstream
+=======
+            guiltAttack.Load(_game.Content, "guilt_attack_spritesheet", 7, 1, 15);
+>>>>>>> Stashed changes
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltIdle.Load(game.Content, "Guilt_idle", 1, 1, 15);
             guiltAttack.Load(game.Content, "Guilt_idle", 1, 1, 15);
@@ -233,7 +340,75 @@ namespace DimmedLight.GamePlay
 
             //if (keyState.IsKeyDown(Keys.D4) && !previousKeyState.IsKeyDown(Keys.D4)) ResetGame();
 
+<<<<<<< Updated upstream
             if (pauseMenu.IsPaused && !player.IsDead)
+=======
+            if (!_pauseMenu.IsPaused)
+            {
+                float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_phaseManager.TutorialEvent != null && _phaseManager.TutorialEvent.IsActive)
+                {
+                    _phaseManager.TutorialEvent.Update(keyState, _previousKeyState);
+                }
+                else if (!_player.IsDead)
+                {
+                    UpdateGameplay(gameTime, keyState, gpState, delta, _phaseManager);
+                }
+                else
+                {
+                    UpdateGameOver(delta);
+                }
+
+                _camera.MoveCamTocenter(delta);
+            }
+            if (_showGameOver)
+            {
+                _gameOverScreen.Update(gameTime);
+                if (_gameOverScreen.RestartRequested)
+                {
+                    ResetGame();
+                }
+                return;
+            }
+            if(_isEventEndingAnimationPlaying)
+            {
+                float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _eventTextSlide.Update(delta);
+                if (!_eventTextSlide.IsActive)
+                {
+                    _isEventEndingAnimationPlaying = false;
+                    _phaseManager._hellCloakEvent.PostTextEnd();
+                    _player.canWalk = true;
+
+                    if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
+                    {
+                        MediaPlayer.Play(_bmg);
+                        MediaPlayer.IsRepeating = true;
+                        MediaPlayer.Volume = 0.1f * SoundManager.BgmVolume;
+                    }
+                    _platformManager?.Update(0f, delta);
+                    _bg1?.Update(0f); _bg2?.Update(0f); _bg3?.Update(0f); _bg4?.Update(0f); _bg5?.Update(0f);
+                    _camera?.MoveCamTocenter(delta);
+                    _player?.UpdateAnimations(delta);
+                    _delisaster?.Update(delta, _player);
+                    _scoreManager?.Update(gameTime, _player);
+
+                    _previousKeyState = keyState;
+                    _previousGamePadState = gpState;
+                    return;
+                }
+            }
+
+            _previousKeyState = keyState;
+            _previousGamePadState = gpState;
+            _pauseMenu.ClickRestart = ResetGame;
+        }
+
+        private void HandleMusic()
+        {
+            if (_pauseMenu.IsPaused && !_player.IsDead)
+>>>>>>> Stashed changes
             {
                 if (MediaPlayer.State == MediaState.Playing)
                     MediaPlayer.Pause();
@@ -319,6 +494,36 @@ namespace DimmedLight.GamePlay
             pauseMenu.ClickRestart = () => ResetGame();
         }
 
+<<<<<<< Updated upstream
+=======
+        private void UpdateGameOver(float delta)
+        {
+            _player.UpdateDeathAnimation(delta);
+            _delisaster.Update(delta, _player);
+
+            if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.Stop();
+            }
+
+            if (!_delisasterHasDashed)
+            {
+                _delisaster.DashForward(new Vector2(0, _delisaster.Position.Y));
+                _delisasterHasDashed = true;
+            }
+
+            if (_player.DeathDelayStarted && _player.DeathDelayTimer >= _player.PostDeathDelay)
+            {
+                if(!_gameOverSoundPlayed)
+                {
+                    MediaPlayer.Play(_gameOverSound);
+                    MediaPlayer.IsRepeating = false;
+                    MediaPlayer.Volume = SoundManager.BgmVolume;
+                }
+                _showGameOver = true;
+            }
+        }
+>>>>>>> Stashed changes
         public void Draw(GameTime gameTime)
         {
             game.GraphicsDevice.Clear(Color.Black);
@@ -367,6 +572,7 @@ namespace DimmedLight.GamePlay
 
         private void ResetGame()
         {
+<<<<<<< Updated upstream
             phaseManager.Reset();
             isFlipped = false;
             player.Position = new Vector2(400, 650);
@@ -385,6 +591,25 @@ namespace DimmedLight.GamePlay
             MediaPlayer.Play(BMG);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f;
+=======
+            _phaseManager.Reset();
+            _isFlipped = false;
+            _player.Reset();
+            _delisaster.ResetPosition();
+            _delisasterHasDashed = false;
+            _scoreManager.Reset();
+            _platformManager.Reset();
+            _showGameOver = false;
+            _gameOverScreen.Reset();
+            _eventTextSlide.StartAnimation("", Color.White);
+            _gameOverSoundPlayed = false;
+            if (MediaPlayer.State != MediaState.Playing)
+            {
+                MediaPlayer.Play(_bmg);
+            }
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.1f * SoundManager.BgmVolume;
+>>>>>>> Stashed changes
         }
     }
 }

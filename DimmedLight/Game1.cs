@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Reflection.Metadata;
 
@@ -41,8 +42,17 @@ namespace DimmedLight
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+<<<<<<< Updated upstream
             var menuScreen = new MenuScreen(this, _graphics, GraphicsDevice, Content);
             ChangeScreen(menuScreen);
+=======
+            SoundManager.LoadUISound(Content);
+            Song mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.5f * SoundManager.BgmVolume;
+            MediaPlayer.Play(mainMenuMusic);
+            ChangeScreen(new MenuScreen(this, _graphics, GraphicsDevice, Content));
+>>>>>>> Stashed changes
         }
         protected override void Update(GameTime gameTime)
         {

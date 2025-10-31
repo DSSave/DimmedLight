@@ -83,9 +83,13 @@ namespace DimmedLight.GamePlay.Managers
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Pause();
 
-            //MediaPlayer.Play(eventSong);
+            MediaPlayer.Play(_eventSong);
             MediaPlayer.IsRepeating = false;
+<<<<<<< Updated upstream
             MediaPlayer.Volume = 0.2f;
+=======
+            MediaPlayer.Volume = 0.1f * SoundManager.BgmVolume;
+>>>>>>> Stashed changes
 
             player.SetEvent(true);
             delisaster.IsInEvent = true;
@@ -223,9 +227,17 @@ namespace DimmedLight.GamePlay.Managers
             if (MediaPlayer.State == MediaState.Playing)
                 MediaPlayer.Stop();
 
+<<<<<<< Updated upstream
             //MediaPlayer.Play(bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.008f;
+=======
+            MediaPlayer.Play(_bmg);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.05f * SoundManager.BgmVolume;
+            _scoreManager.ResetEventCombo();
+            _platformManager?.ResetAssetTimer();
+>>>>>>> Stashed changes
         }
 
         public void Reset()

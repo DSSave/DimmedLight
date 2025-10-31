@@ -21,12 +21,13 @@ namespace DimmedLight.GamePlay.Enemies
         public bool HitTriggered = false;
         public float ProjectileSpeed;
         public float AttackRange = 1600f;
-
+        private bool _hasFired = false;
         public FloorTrauma(Texture2D proj)
         {
             ProjectileTex = proj;
             ProjectileObj = new Projectile(ProjectileTex);
             EnemyType = "FloorTrauma";
+            _hasFired = false;
         }
 
         public override void Load(ContentManager content)
@@ -44,10 +45,50 @@ namespace DimmedLight.GamePlay.Enemies
         {
             if (!player.IsDead)
             {
+<<<<<<< Updated upstream
                 Position.X -= speed * delta * 60;
                 HurtBox = new Rectangle((int)Position.X, (int)Position.Y, 109, 175);
                 float distance = Vector2.Distance(Position, player.Position); // คำนวณระยะห่างระหว่างศัตรูกับผู้เล่น
                 if (!IsDead)
+=======
+                IsFlipped = player.Position.X > Position.X;
+                HandleShooting(player, delta);
+                HandleProjectile(player, delisaster, scoreManager, delta);
+                HandlePlayerCollision(player, scoreManager);
+
+                if (Position.X < -HurtBox.Width) StartDeathAnimation(playSound: false);
+            }
+
+            if (IsDead && !DeathAnimationStarted)
+            {
+                StartDeathAnimation();
+            }
+
+            if (DeathAnimationStarted)
+            {
+                HandleDeathAnimation(delta);
+            }
+        }
+
+        private void HandleShooting(Player player, float delta)
+        {
+            float distance = Vector2.Distance(Position, player.Position);
+            if (!HitTriggered && !ProjectileObj.Active && distance <= AttackRange && !IsAttacking && !_hasFired)
+            {
+                IsAttacking = true;
+                AttackTimer = 0f;
+                AttackAnim.Reset();
+                ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 145), new Vector2(player.Position.X, 745), ProjectileSpeed);
+                _hasFired = true;
+                AmmoShoot?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
+            }
+
+            if (IsAttacking)
+            {
+                AttackTimer += delta;
+                AttackAnim.UpdateFrame(delta);
+                if (AttackTimer >= AttackDuration)
+>>>>>>> Stashed changes
                 {
                     IsFlipped = player.Position.X > Position.X; // หันหน้าไปทางผู้เล่น
                     if (!HitTriggered && !ProjectileObj.Active && distance <= AttackRange && !IsAttacking) // ถ้าศัตรูยังไม่โจมตีและโปรเจกไทล์ไม่ทำงาน และผู้เล่นอยู่ในระยะโจมตี

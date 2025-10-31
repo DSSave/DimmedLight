@@ -142,6 +142,7 @@ namespace DimmedLight.GamePlay.Enemies
         {
             if (!IsDead || DeathAnimationStarted)
             {
+<<<<<<< Updated upstream
                 if (DeathAnimationStarted && IsDead)
                 {
                     Death.DrawFrame(sb, new Vector2(Position.X - 6, Position.Y - 68), IsFlipped);
@@ -156,6 +157,18 @@ namespace DimmedLight.GamePlay.Enemies
                     Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), IsFlipped);
                 }
                 //sb.Draw(hurtBoxTex, HurtBox, Color.Red * 0.4f);
+=======
+                Death.DrawFrame(sb, new Vector2(Position.X - 6, Position.Y - 68), IsFlipped);
+            }
+            else if (IsAttacking)
+            {
+                Attack.DrawFrame(sb, new Vector2(Position.X - 80, Position.Y - 68), IsFlipped);
+                sb.Draw(hitBoxTex, HitBox, Color.Red * 0.6f);
+            }
+            else
+            {
+                Idle.DrawFrame(sb, Position, IsFlipped);
+>>>>>>> Stashed changes
             }
         }
     }

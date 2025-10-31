@@ -105,8 +105,25 @@ namespace DimmedLight.GamePlay.Isplayer
         private SoundEffect attackEffect, jumpEffect,hitEffect;
         #endregion
 
+<<<<<<< Updated upstream
         private PhaseManager phaseManager;
         private ScoreManager scoreManager;
+=======
+        #region Helpers
+        private Rectangle _helperAttackBoxRect;
+        private float _helperAttackBoxTimer;
+        private const float HelperAttackBoxDuration = 0.2f;
+        private float _helperBlinkTotalTimer = 0f;
+        private const float HelperBlinkDuration = 2.0f;
+        private float _helperBlinkIntervalTimer = 0f;
+        private const float HelperBlinkInterval = 0.1f;
+        private bool _isHelperBlinkVisible = false;
+        private readonly Color _helperAttackBoxColor = Color.Yellow * 0.6f;
+        #endregion
+
+        private bool _isUltimateActive = false;
+        private const float _ultimateGaugeDrainRate = 200f;
+>>>>>>> Stashed changes
         public Player(PhaseManager manager, ScoreManager score)
         {
             Idle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f); //ใส่อนิเมชั่น Rotate, Scale, Depth
@@ -126,7 +143,7 @@ namespace DimmedLight.GamePlay.Isplayer
             Walk.Load(content, "player_running_Spritesheet", 14, 1, 24); //frame count = จำนวนช่องใน 1 แถว, row = จำนวนแถว, fps = ความเร็ว
             Jump.Load(content, "player_jumping_Spritesheet", 9, 1, 8);
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
-            Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
+            Parry.Load(content, "cha_parry_spritesheet", 10, 1, 30);
             Death.Load(content, "game_over_spritesheet", 1, 22, 10);
 
             #region Sound&Effect
@@ -205,8 +222,18 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 HitBoxAttack = Rectangle.Empty;
             }
+<<<<<<< Updated upstream
             bool parryPressed = keyState.IsKeyDown(Keys.J) && !prevKey.IsKeyDown(Keys.J) || keyState.IsKeyDown(Keys.K) && !prevKey.IsKeyDown(Keys.K) || gpState.IsButtonDown(Buttons.RightShoulder) && !prevGp.IsButtonDown(Buttons.RightShoulder); //ตั้งปุ่มแพร์รี่
             if (!inEvent)
+=======
+        }
+        private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
+        {
+            Rectangle potentialHitbox = new Rectangle((int)Position.X + 186 + 50, (int)Position.Y + 50, 80, 80);
+            bool enemyInRange = false;
+
+            if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
+>>>>>>> Stashed changes
             {
                 if (parryPressed && !IsParrying && !IsAttacking && parryDelayTimer <= 0f && /*actionDelayTimer <= 0f &&*/ !IsDead)
                 {
@@ -254,11 +281,30 @@ namespace DimmedLight.GamePlay.Isplayer
                 bool ultiPressed = keyState.IsKeyDown(Keys.F) && keyState.IsKeyDown(Keys.J) || gpState.IsButtonDown(Buttons.RightShoulder) && gpState.IsButtonDown(Buttons.LeftShoulder);
             if (scoreManager.SoulGauge >= 600 && ultiPressed && !IsDead)
             {
+<<<<<<< Updated upstream
                 if (!phaseManager.IsInEvent)
+=======
+                _helperAttackBoxTimer -= delta;
+            }
+            if (_helperAttackBoxTimer < 0f)
+            {
+                _helperAttackBoxTimer = 0f;
+            }
+
+            if(_helperBlinkTotalTimer > 0f)
+            {
+                _helperBlinkTotalTimer -= delta;
+                _helperBlinkIntervalTimer += delta;
+                if (_helperBlinkIntervalTimer >= HelperBlinkInterval)
+>>>>>>> Stashed changes
                 {
                     UltimateReset();
                     scoreManager.removeSoul(600);
                 }
+<<<<<<< Updated upstream
+=======
+                _helperAttackBoxRect = new Rectangle((int)Position.X + 186, (int)Position.Y + 50, 80, 80);
+>>>>>>> Stashed changes
                 
             }
             #endregion
@@ -353,9 +399,28 @@ namespace DimmedLight.GamePlay.Isplayer
             if (!IsVisible && !DeathAnimationStarted)
                 return;
 
+<<<<<<< Updated upstream
             if (!canWalk)
             {
                 Idle.DrawFrame(sb, new Vector2(Position.X, Position.Y), false);
+=======
+            if (DeathAnimationStarted) Death.DrawFrame(sb, Position);
+            else if (IsHit) Hit.DrawFrame(sb, Position);
+            else if (!canWalk) Idle.DrawFrame(sb, Position);
+            else if (IsAttacking) Attack.DrawFrame(sb, Position);
+            else if (IsParrying) Parry.DrawFrame(sb, Position, false, Color.LightSkyBlue);
+            else if (IsJumping) Jump.DrawFrame(sb, Position);
+            else if (IsVisible) Walk.DrawFrame(sb, Position);
+
+            if (_helperAttackBoxTimer > 0f)
+            {
+                float alpha = _helperAttackBoxTimer / HelperAttackBoxDuration;
+                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor * alpha);
+            }
+            if (_isHelperBlinkVisible)
+            {
+                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor);
+>>>>>>> Stashed changes
             }
             else if (IsAttacking)
             {

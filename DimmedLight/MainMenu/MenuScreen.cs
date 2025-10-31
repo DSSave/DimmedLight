@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace DimmedLight.MainMenu
         private List<Rectangle> _buttons = new List<Rectangle>();
         private List<string> _buttonLabels = new List<string>();
         private int _selectedButtonIndex = 0;
+
 
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
                    : base(game, graphicsDeviceManager, graphicsDevice, content)
@@ -156,6 +158,7 @@ namespace DimmedLight.MainMenu
             switch (buttonIndex)
             {
                 case 0: // Play
+                    MediaPlayer.Stop();
                     if (SettingScreen.ShowTutorial)
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else

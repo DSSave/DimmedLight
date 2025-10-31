@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/EasyGameOver.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/EasyGameOver.mp3
+
+#begin Audio/Event.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Event.mp3
+
 #begin Audio/LOOP_SFX_EnemiesDead.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -55,17 +67,33 @@
 /processorParam:Quality=Best
 /build:Audio/LOOP_SFX_PlayerHit2.wav
 
+<<<<<<< Updated upstream
 #begin Audio/SunYaNaFon.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
+=======
+#begin Audio/LOOP_UI_Interact.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SunYaNaFon.mp3
+/build:Audio/LOOP_UI_Interact.wav
 
-#begin Audio/TaLayJai.mp3
+#begin Audio/LOOP_UI_UiMoving.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/LOOP_UI_UiMoving.wav
+
+#begin Audio/MainMenu.mp3
+>>>>>>> Stashed changes
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Audio/TaLayJai.mp3
+/build:Audio/MainMenu.mp3
+
+#begin Audio/MainTheme .mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/MainTheme .mp3
 
 #begin Background/back1.png
 /importer:TextureImporter
@@ -139,6 +167,33 @@
 #begin bullet4.png
 /copy:bullet4.png
 
+<<<<<<< Updated upstream
+=======
+#begin cha_hit_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cha_hit_sprite.png
+
+#begin cha_parry_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cha_parry_spritesheet.png
+
+>>>>>>> Stashed changes
 #begin cursorMainmenu1.png
 /copy:cursorMainmenu1.png
 
@@ -187,6 +242,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
+
+#begin guilt_attack_spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:guilt_attack_spritesheet.png
 
 #begin Guilt_idle.png
 /copy:Guilt_idle.png
