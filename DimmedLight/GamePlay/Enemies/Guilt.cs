@@ -132,7 +132,7 @@ namespace DimmedLight.GamePlay.Enemies
             }
             else if (IsAttacking)
             {
-                Attack.DrawFrame(sb, new Vector2(Position.X - 45, Position.Y), IsFlipped, _attackColor);
+                Attack.DrawFrame(sb, new Vector2(Position.X - 92, Position.Y - 68), IsFlipped);
             }
             else
             {

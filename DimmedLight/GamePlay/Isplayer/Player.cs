@@ -103,13 +103,21 @@ namespace DimmedLight.GamePlay.Isplayer
         #endregion
 
         #region Helpers
-        private Rectangle _helperAttackBoxRect;
+        private Texture2D _helperIndicatorDefault;
+        private Texture2D _helperIndicatorAlert;
+        private Vector2 _helperIndicatorPosition;
+        private Vector2 _helperIndicatorOriginDefault;
+        private Vector2 _helperIndicatorOriginAlert;
+
+        private float _helperIndicatorScale = 1.5f;
+
         private float _helperBlinkTotalTimer = 0f;
         private const float HelperBlinkDuration = 2.0f;
         private float _helperBlinkIntervalTimer = 0f;
         private const float HelperBlinkInterval = 0.1f;
         private bool _isHelperBlinkVisible = false;
-        private readonly Color _helperAttackBoxColor = Color.Yellow * 0.6f;
+
+        private bool _isHelperEnemyInRange = false;
         #endregion
 
         private bool _isUltimateActive = false;
@@ -134,10 +142,14 @@ namespace DimmedLight.GamePlay.Isplayer
             Walk.Load(content, "player_running_Spritesheet", 14, 1, 24);
             Jump.Load(content, "player_jumping_Spritesheet", 9, 1, 8);
             Attack.Load(content, "player_attack_spritesheet", 10, 1, 24);
-            Parry.Load(content, "player_attack_spritesheet", 10, 1, 20);
+            Parry.Load(content, "cha_parry_spritesheet", 10, 1, 24);
             Death.Load(content, "game_over_spritesheet", 1, 22, 10);
             Hit.Load(content, "cha_hit_sprite", 1, 1, 15);
             Hit.Loop = false;
+            _helperIndicatorDefault = content.Load<Texture2D>("LOOP_Indicator_Default");
+            _helperIndicatorAlert = content.Load<Texture2D>("LOOP_Indicator_Alert");
+            _helperIndicatorOriginDefault = new Vector2(_helperIndicatorDefault.Width / 2f, _helperIndicatorDefault.Height / 2f);
+            _helperIndicatorOriginAlert = new Vector2(_helperIndicatorAlert.Width / 2f, _helperIndicatorAlert.Height / 2f);
 
             _attackEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerAttack");
             _jumpEffect = content.Load<SoundEffect>("Audio/LOOP_SFX_Jump");
@@ -237,36 +249,10 @@ namespace DimmedLight.GamePlay.Isplayer
         }
         private void UpdateHelperAttackBox(float delta, PhaseManager phaseManager)
         {
-            /*Rectangle potentialHitbox = new Rectangle((int)Position.X + 186 + 50, (int)Position.Y + 50, 80, 80);
-            bool enemyInRange = false;
+            _helperIndicatorPosition = new Vector2(Position.X + 186 + 60, Position.Y + 50 + 40);
+            Rectangle detectionRect = new Rectangle((int)Position.X + 206, (int)Position.Y + 50, 80, 80);
 
-            if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
-            {
-                foreach (var enemy in phaseManager.ActiveEnemies)
-                {
-                    if (enemy.IsDead) continue;
-
-                    Rectangle enemyHitbox = (enemy is Judgement judge) ? judge.HitN : enemy.HurtBox;
-
-                    if (potentialHitbox.Intersects(enemyHitbox))
-                    {
-                        enemyInRange = true;
-                        _helperAttackBoxTimer = HelperAttackBoxDuration;
-                        _helperAttackBoxRect = potentialHitbox;
-                        break;
-                    }
-                }
-            }
-
-            if (!enemyInRange && _helperAttackBoxTimer > 0f)
-            {
-                _helperAttackBoxTimer -= delta;
-            }
-            if (_helperAttackBoxTimer < 0f)
-            {
-                _helperAttackBoxTimer = 0f;
-            }*/
-            if(_helperBlinkTotalTimer > 0f)
+            if (_helperBlinkTotalTimer > 0f)
             {
                 _helperBlinkTotalTimer -= delta;
                 _helperBlinkIntervalTimer += delta;
@@ -275,8 +261,7 @@ namespace DimmedLight.GamePlay.Isplayer
                     _isHelperBlinkVisible = !_isHelperBlinkVisible;
                     _helperBlinkIntervalTimer -= HelperBlinkInterval;
                 }
-                _helperAttackBoxRect = new Rectangle((int)Position.X + 186, (int)Position.Y, 76, 174);
-                
+
                 if (_helperBlinkTotalTimer <= 0f)
                 {
                     _isHelperBlinkVisible = false;
@@ -286,6 +271,22 @@ namespace DimmedLight.GamePlay.Isplayer
             {
                 _isHelperBlinkVisible = false;
             }
+            bool enemyInRange = false;
+            if (phaseManager != null && !IsDead && !IsAttacking && !_inEvent)
+            {
+                foreach (var enemy in phaseManager.ActiveEnemies)
+                {
+                    if (enemy.IsDead) continue;
+                    Rectangle enemyHitbox = (enemy is Judgement judge) ? judge.HitN : enemy.HurtBox;
+
+                    if (detectionRect.Intersects(enemyHitbox))
+                    {
+                        enemyInRange = true;
+                        break;
+                    }
+                }
+            }
+            _isHelperEnemyInRange = enemyInRange;
         }
         private void HandleParry(KeyboardState keyState, GamePadState gpState, KeyboardState prevKey, GamePadState prevGp, float delta)
         {
@@ -456,16 +457,26 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsParrying) Parry.DrawFrame(sb, Position, false, Color.LightSkyBlue);
             else if (IsJumping) Jump.DrawFrame(sb, Position);
             else if (IsVisible) Walk.DrawFrame(sb, Position);
-
-            /*if (_helperAttackBoxTimer > 0f)
-            {
-                float alpha = _helperAttackBoxTimer / HelperAttackBoxDuration;
-                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor * alpha);
-            }*/
-            if (_isHelperBlinkVisible)
-            {
-                sb.Draw(pixelTexture, _helperAttackBoxRect, _helperAttackBoxColor);
-            }
+            if (_isHelperEnemyInRange)
+                sb.Draw(_helperIndicatorAlert,
+                        _helperIndicatorPosition,
+                        null,
+                        Color.White,
+                        0f,
+                        _helperIndicatorOriginAlert,
+                        _helperIndicatorScale,
+                        SpriteEffects.None,
+                        0f);
+            else if (_isHelperBlinkVisible)
+                sb.Draw(_helperIndicatorDefault,
+                        _helperIndicatorPosition,
+                        null,
+                        Color.White,
+                        0f,
+                        _helperIndicatorOriginDefault,
+                        _helperIndicatorScale,
+                        SpriteEffects.None,
+                        0f);
         }
         public void SetPhaseManager(PhaseManager manager) => _phaseManager = manager;
 
@@ -477,6 +488,7 @@ namespace DimmedLight.GamePlay.Isplayer
             _helperBlinkTotalTimer = 0f;
             _helperBlinkIntervalTimer = 0f;
             _isHelperBlinkVisible = false;
+            _isHelperEnemyInRange = false;
             midReset();
         }
         public void midReset()

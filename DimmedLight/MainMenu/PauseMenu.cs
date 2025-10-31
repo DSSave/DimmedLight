@@ -70,7 +70,7 @@ namespace DimmedLight.MainMenu
             {
                 (Resume, new Rectangle(centerX - 150, startY, 300, 50), () => IsPaused = false),
                 (Restart, new Rectangle(centerX - 150, startY + spacing, 300, 50), () => { ClickRestart?.Invoke(); IsPaused = false; }),
-                (Option, new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { ClickOption?.Invoke(); IsPaused = false; }),
+                (Option, new Rectangle(centerX - 150, startY + spacing * 2, 300, 50), () => { ClickOption?.Invoke(); }),
                 (Exit, new Rectangle(centerX - 150, startY + spacing * 3, 300, 50), () => { inExitMenu = true; }),
             };
 

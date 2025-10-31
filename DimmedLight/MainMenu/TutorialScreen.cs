@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,7 @@ namespace DimmedLight.MainMenu
                 }
                 else
                 {
+                    MediaPlayer.Stop();
                     Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
             }

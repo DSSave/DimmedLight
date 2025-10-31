@@ -24,12 +24,13 @@ namespace DimmedLight.GamePlay.Enemies
         public bool HitTriggered = false;
         public float ProjectileSpeed = 600f;
         public float AttackRange = 1000f;
-
+        private bool _hasFired = false;
         public Trauma(Texture2D proj)
         {
             ProjectileTex = proj;
             ProjectileObj = new Projectile(ProjectileTex);
             EnemyType = "Trauma";
+            _hasFired = false;
         }
 
         public override void Load(ContentManager content)
@@ -67,13 +68,13 @@ namespace DimmedLight.GamePlay.Enemies
         private void HandleShooting(Player player, float delta)
         {
             float distance = Vector2.Distance(Position, player.Position);
-            if (!HitTriggered && !ProjectileObj.Active && distance <= AttackRange && !IsAttacking)
+            if (!HitTriggered && !ProjectileObj.Active && distance <= AttackRange && !IsAttacking && !_hasFired)
             {
                 IsAttacking = true;
                 AttackTimer = 0f;
                 AttackAnim.Reset();
                 ProjectileObj.Fire(new Vector2(Position.X, Position.Y + 125), new Vector2(player.Position.X + 250, 650), ProjectileSpeed);
-                
+                _hasFired = true;
                 AmmoShoot?.Play(0.3f * SoundManager.SfxVolume, 0f, 0f);
             }
 

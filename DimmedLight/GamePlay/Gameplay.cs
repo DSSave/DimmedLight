@@ -31,6 +31,7 @@ namespace DimmedLight.GamePlay
         private Texture2D _pauseImage, _frame, _bottonCursor;
         private SoundEffect _parryHit, _enemiesDead, _playerHit, _ammoShoot;
         private Song _bmg, _eventSound;
+        private Song _gameOverSound;
         private Texture2D _redOverlay;
         private Texture2D _healthPlayer;
         #endregion
@@ -56,6 +57,7 @@ namespace DimmedLight.GamePlay
         private bool _showGameOver;
         private bool _delisasterHasDashed;
         public bool SettingScreenWasOpen { get; set; }
+        private bool _gameOverSoundPlayed = false;
         #endregion
 
         private EventTextSlide _eventTextSlide;
@@ -83,7 +85,7 @@ namespace DimmedLight.GamePlay
             InitializeEnemies();
 
             _eventTextSlide = new EventTextSlide(_game.GraphicsDevice, Stepalange, _camera);
-            //MediaPlayer.Play(_bmg);
+            MediaPlayer.Play(_bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }
@@ -118,8 +120,9 @@ namespace DimmedLight.GamePlay
             _ammoShoot = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_EventParryAmmoAndGuilt");
             _playerHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_PlayerHit2");
             _parryHit = _game.Content.Load<SoundEffect>("Audio/LOOP_SFX_ParrySuccess2");
-            _bmg = _game.Content.Load<Song>("Audio/TaLayJai");
-            _eventSound = _game.Content.Load<Song>("Audio/SunYaNaFon");
+            _bmg = _game.Content.Load<Song>("Audio/MainTheme ");
+            _eventSound = _game.Content.Load<Song>("Audio/Event");
+            _gameOverSound = _game.Content.Load<Song>("Audio/EasyGameOver");
         }
         private void LoadFonts()
         {
@@ -163,7 +166,10 @@ namespace DimmedLight.GamePlay
             };
             _pauseMenu.ClickOption = () =>
             {
-                //MediaPlayer.Stop();
+                if (MediaPlayer.State == MediaState.Playing)
+                {
+                    MediaPlayer.Pause();
+                }
                 _game.ChangeScreen(new SettingScreen(_game, _graphics, _game.GraphicsDevice, _game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
             _gameOverScreen = new GameOver(_game, _graphics);
@@ -175,7 +181,7 @@ namespace DimmedLight.GamePlay
             var guiltIdle = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltIdle.Load(_game.Content, "Guilt_idle", 1, 1, 15);
             var guiltAttack = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
-            guiltAttack.Load(_game.Content, "Guilt_idle", 1, 1, 15);
+            guiltAttack.Load(_game.Content, "guilt_attack_spritesheet", 7, 1, 12);
             var guiltDeath = new AnimatedTexture(Vector2.Zero, 0f, 1f, 0.5f);
             guiltDeath.Load(_game.Content, "guiltdead_Spritesheet", 7, 1, 8);
 
@@ -281,7 +287,7 @@ namespace DimmedLight.GamePlay
 
                     if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
                     {
-                        //MediaPlayer.Play(_bmg);
+                        MediaPlayer.Play(_bmg);
                         MediaPlayer.IsRepeating = true;
                         MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
                     }
@@ -315,7 +321,7 @@ namespace DimmedLight.GamePlay
                 if (MediaPlayer.State == MediaState.Paused)
                     MediaPlayer.Resume();
             }
-            else if (_player.IsDead)
+            else if (_player.IsDead && !_gameOverSoundPlayed)
             {
                 if (MediaPlayer.State == MediaState.Playing)
                     MediaPlayer.Stop();
@@ -354,7 +360,7 @@ namespace DimmedLight.GamePlay
             _player.UpdateDeathAnimation(delta);
             _delisaster.Update(delta, _player);
 
-            if (MediaPlayer.State == MediaState.Playing)
+            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != _gameOverSound)
             {
                 MediaPlayer.Stop();
             }
@@ -367,6 +373,14 @@ namespace DimmedLight.GamePlay
 
             if (_player.DeathDelayStarted && _player.DeathDelayTimer >= _player.PostDeathDelay)
             {
+                if (!_gameOverSoundPlayed)
+                {
+                    MediaPlayer.Play(_gameOverSound);
+                    MediaPlayer.IsRepeating = false;
+                    MediaPlayer.Volume = SoundManager.BgmVolume * 1f;
+
+                    _gameOverSoundPlayed = true;
+                }
                 _showGameOver = true;
             }
         }
@@ -428,9 +442,10 @@ namespace DimmedLight.GamePlay
             _gameOverScreen.Reset();
             _eventTextSlide.StartAnimation("", Color.White);
 
+            _gameOverSoundPlayed = false;
             if (MediaPlayer.State != MediaState.Playing)
             {
-                //MediaPlayer.Play(_bmg);
+                MediaPlayer.Play(_bmg);
             }
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;

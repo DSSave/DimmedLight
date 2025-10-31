@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace DimmedLight.MainMenu
         private Texture2D _selectedButtonTexture;
         private Texture2D _titleTexture; // << เพิ่ม: ตัวแปรสำหรับรูปภาพ Title
 
+        private Texture2D _lockChainTexture;
+        private Vector2 _lockChainPosition;
+        private float _lockChainRotation = 0f;
+        private float _lockChainShakeTimer = 0f;
+        private const float LockChainShakeDuration = 0.5f;
         // --- ตำแหน่งข้อความ ---
         private Vector2 _titlePosition;
 
@@ -33,7 +39,7 @@ namespace DimmedLight.MainMenu
         private List<string> _buttonLabels = new List<string>();
         private int _selectedButtonIndex = 0;
         private int _previousSelectedButtonIndex = 0;
-
+        private Song _mainMenuMusic;
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
                    : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
@@ -46,6 +52,7 @@ namespace DimmedLight.MainMenu
             _selectedButtonTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
             _titleTexture = Content.Load<Texture2D>("UX_UIAsset/mainmenu_page/Title");
 
+            _lockChainTexture = Content.Load<Texture2D>("lockChain");
             // --- ปุ่ม ---
             int buttonWidth = 450;
             int buttonHeight = 90;
@@ -65,6 +72,17 @@ namespace DimmedLight.MainMenu
                 GraphicsDevice.Viewport.Width / 2f + 580, // ปรับตำแหน่งแกน X ตามต้องการ
                 GraphicsDevice.Viewport.Height /2f - _titleTexture.Height + 30    // ปรับตำแหน่งแกน Y ตามต้องการ
             );
+
+            Rectangle upgradeButtonRect = _buttons[1];
+            _lockChainPosition = new Vector2(upgradeButtonRect.Center.X, upgradeButtonRect.Center.Y - 6);
+
+            _mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
+            if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _mainMenuMusic)
+            {
+                MediaPlayer.Play(_mainMenuMusic);
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
+            }
 
             _previousMouseState = Mouse.GetState();
             _previousKeyboardState = Keyboard.GetState();
@@ -138,6 +156,17 @@ namespace DimmedLight.MainMenu
                 }
             }
 
+            if (_lockChainShakeTimer > 0f)
+            {
+                _lockChainShakeTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                _lockChainRotation = (float)Math.Sin(_lockChainShakeTimer * 30f) * 0.2f;
+
+                if (_lockChainShakeTimer <= 0f)
+                {
+                    _lockChainRotation = 0f;
+                }
+            }
+
             _previousMouseState = mouse;
             _previousKeyboardState = keyboard;
             _previousGamePadState = gamePad;
@@ -148,6 +177,7 @@ namespace DimmedLight.MainMenu
             switch (buttonIndex)
             {
                 case 0: // Play
+                    MediaPlayer.Stop();
                     if (SettingScreen.ShowTutorial)
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else
@@ -157,6 +187,8 @@ namespace DimmedLight.MainMenu
                     break;
                 case 1: // Upgrade
                     //Game.ChangeScreen(new UpgradeScreen(Game, Game._graphics, GraphicsDevice, Content));
+                    _lockChainShakeTimer = LockChainShakeDuration; // <-- เพิ่ม: เริ่มการสั่น
+                    SoundManager.PlayUIHover();
                     break;
                 case 2: // Setting
                     //Game.ChangeScreen(new SettingScreen(Game, Game._graphics, GraphicsDevice, Content, SettingSource.MainMenu));
@@ -235,6 +267,18 @@ namespace DimmedLight.MainMenu
                     0f
                 );
             }
+            Vector2 lockOrigin = new Vector2(_lockChainTexture.Width / 2f, _lockChainTexture.Height / 2f);
+            spriteBatch.Draw(
+                _lockChainTexture,
+                _lockChainPosition,
+                null,
+                Color.White,
+                _lockChainRotation,
+                lockOrigin,
+                0.7f, // ขนาด
+                SpriteEffects.None,
+                0f
+            );
 
             spriteBatch.End();
         }
