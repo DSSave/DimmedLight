@@ -53,7 +53,7 @@ namespace DimmedLight.GamePlay.Managers
                 new WarmupPhase(),
                 new FullPhase()
             };
-            _currentIndex = 2;
+            _currentIndex = 1;
             _currentPhase = _phases[_currentIndex];
             _currentPhase.Initialize();
 

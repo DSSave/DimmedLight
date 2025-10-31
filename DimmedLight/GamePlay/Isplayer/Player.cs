@@ -118,6 +118,8 @@ namespace DimmedLight.GamePlay.Isplayer
         private bool _isHelperBlinkVisible = false;
 
         private bool _isHelperEnemyInRange = false;
+
+        private bool _initialDelayComplete = false;
         #endregion
 
         private bool _isUltimateActive = false;
@@ -187,6 +189,7 @@ namespace DimmedLight.GamePlay.Isplayer
                     _helperBlinkTotalTimer = HelperBlinkDuration;
                     _isHelperBlinkVisible = true;
                     _helperBlinkIntervalTimer = 0f;
+                    _initialDelayComplete = true;
                 }
             }
         }
@@ -484,6 +487,7 @@ namespace DimmedLight.GamePlay.Isplayer
         {
             idleTimer = 0f;
             canWalk = false;
+            _initialDelayComplete = false;
             IsVisible = true;
             _helperBlinkTotalTimer = 0f;
             _helperBlinkIntervalTimer = 0f;
@@ -497,6 +501,7 @@ namespace DimmedLight.GamePlay.Isplayer
             IsJumping = false;
             IsAttacking = false;
             IsParrying = false;
+            IsHit = false;
             Health = 2;
             DeathAnimationStarted = false;
             DeathDelayStarted = false;
