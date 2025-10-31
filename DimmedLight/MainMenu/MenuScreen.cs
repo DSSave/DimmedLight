@@ -81,7 +81,7 @@ namespace DimmedLight.MainMenu
             {
                 MediaPlayer.Play(_mainMenuMusic);
                 MediaPlayer.IsRepeating = true;
-                MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
+                MediaPlayer.Volume = 0.07f * SoundManager.BgmVolume;
             }
 
             _previousMouseState = Mouse.GetState();
