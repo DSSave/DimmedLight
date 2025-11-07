@@ -104,7 +104,7 @@ namespace DimmedLight.GamePlay.Managers
             prepareTimer = 0f;
             shootTimer = 0f;
 
-            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _bmg)
+            if (MediaPlayer.State == MediaState.Playing)
             {
                 MediaPlayer.Pause();
             }

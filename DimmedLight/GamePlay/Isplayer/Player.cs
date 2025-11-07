@@ -476,7 +476,7 @@ namespace DimmedLight.GamePlay.Isplayer
             else if (IsHit) Hit.DrawFrame(sb, Position);
             else if (!canWalk) Idle.DrawFrame(sb, Position);
             else if (IsAttacking) Attack.DrawFrame(sb, Position);
-            else if (IsParrying) Parry.DrawFrame(sb, Position, false, Color.LightSkyBlue);
+            else if (IsParrying) Parry.DrawFrame(sb, Position, false);
             else if (IsJumping) Jump.DrawFrame(sb, Position);
             else if (IsVisible) Walk.DrawFrame(sb, Position);
             if (_isHelperEnemyInRange)
