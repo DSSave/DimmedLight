@@ -11,7 +11,6 @@ namespace DimmedLight.GamePlay.UI
 {
     public class HUD
     {
-        Player player;
         public void DrawHealth(SpriteBatch sb, Texture2D healthPlayer, byte health, Player player)
         {
             int startX = (int)player.Position.X + 20;

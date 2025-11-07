@@ -29,12 +29,13 @@ namespace DimmedLight.GamePlay.UI
         private int _previousSelectedIndex = -1;
 
         private Vector2 pos = Vector2.Zero;
-
+        private ScoreManager _scoreManager;
         public bool RestartRequested { get; private set; }
-        public GameOver(Game1 game, GraphicsDeviceManager graphics)
+        public GameOver(Game1 game, GraphicsDeviceManager graphics, ScoreManager scoreManager)
         {
             this.game = game;
             _graphics = graphics;
+            _scoreManager = scoreManager;
         }
         public void LoadContent()
         {
@@ -80,6 +81,7 @@ namespace DimmedLight.GamePlay.UI
                 else if (mainMenuRect.Contains(mouse.Position))
                 {
                     SoundManager.PlayUIClick();
+                    _scoreManager.SaveHighScore();
                     game.ChangeScreen(new MenuScreen(game, _graphics, game.GraphicsDevice, game.Content));
                     RestartRequested = false;
                 }

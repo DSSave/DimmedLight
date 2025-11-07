@@ -176,7 +176,7 @@ namespace DimmedLight.GamePlay
                 _game.ChangeScreen(new SettingScreen(_game, _graphics, _game.GraphicsDevice, _game.Content, SettingScreen.SettingSource.PauseMenu, this));
             };
             _pauseMenu.ClickRestart = ResetGame;
-            _gameOverScreen = new GameOver(_game, _graphics);
+            _gameOverScreen = new GameOver(_game, _graphics, _scoreManager);
             _gameOverScreen.LoadContent();
         }
         private void InitializeEnemies()
