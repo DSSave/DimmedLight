@@ -80,6 +80,7 @@ namespace DimmedLight.GamePlay.UI
                 else if (mainMenuRect.Contains(mouse.Position))
                 {
                     SoundManager.PlayUIClick();
+                    SoundManager.PlayMainMenuMusic();
                     game.ChangeScreen(new MenuScreen(game, _graphics, game.GraphicsDevice, game.Content));
                     RestartRequested = false;
                 }

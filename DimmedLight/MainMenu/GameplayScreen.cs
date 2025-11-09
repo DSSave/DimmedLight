@@ -30,6 +30,7 @@ namespace DimmedLight.MainMenu
         {
             if (!_alreadyLoaded)
             {
+                SoundManager.StopMusic();
                 _gameplay.LoadContent();
                 _alreadyLoaded = true;
             }

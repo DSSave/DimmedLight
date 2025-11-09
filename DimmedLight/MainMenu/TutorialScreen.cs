@@ -40,6 +40,7 @@ namespace DimmedLight.MainMenu
             _tutorialPage2 = Content.Load<Texture2D>("MenuAsset/tutorialController_New");
             _tutorialPage3 = Content.Load<Texture2D>("MenuAsset/tutorialEnemy");
 
+            SoundManager.PlayMainMenuMusic();
 
             _previousKeyboard = Keyboard.GetState();
             _previousGamePad = GamePad.GetState(PlayerIndex.One);
@@ -73,7 +74,7 @@ namespace DimmedLight.MainMenu
                 }
                 else
                 {
-                    MediaPlayer.Stop();
+                    SoundManager.StopMusic();
                     Game.ChangeScreen(new GameplayScreen(Game, Game._graphics, GraphicsDevice, Content));
                 }
             }

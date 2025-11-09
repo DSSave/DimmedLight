@@ -46,8 +46,6 @@ namespace DimmedLight.GamePlay.Managers
         private Random rng = new Random();
         private bool playerHit = false;
         private readonly SoundEffect _parryHit;
-        private readonly Song _eventSong;
-        private readonly Song _bmg;
         private PlatformManager _platformManager;
         public Action OnPrepareFinished;
         private ScoreManager _scoreManager;
@@ -75,7 +73,7 @@ namespace DimmedLight.GamePlay.Managers
             camera.StartShake(prepareTime, 20f);
         }
         public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera,
-            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg,
+            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit,
             ScoreManager scoreManager, PlatformManager platformManager)
         {
             HellCloakTheme = hellCloakTheme;
@@ -85,8 +83,6 @@ namespace DimmedLight.GamePlay.Managers
             this.parryProjecTex = parryProjecTex;
             this.attackProjecTex = attackProjecTex;
             _parryHit = parryHit;
-            _eventSong = eventSong;
-            _bmg = bmg;
             _scoreManager = scoreManager;
             _platformManager = platformManager;
         }
@@ -110,6 +106,9 @@ namespace DimmedLight.GamePlay.Managers
             camera.MoveTo(new Vector2(0, 130));
 
             player.canWalk = false;
+
+            SoundManager.PauseMusic();
+            SoundManager.PlayEventSound();
         }
 
         public void Update(GameTime gameTime, float delta, float currentPhaseSpeed, ScoreManager scoreManager)
@@ -269,11 +268,16 @@ namespace DimmedLight.GamePlay.Managers
                 delisaster.ResetPosition();
             if (camera != null)
                 camera.ResetPosition();
+
+            SoundManager.StopMusic();
+            SoundManager.ResumeMusic();
+
             _scoreManager.ResetEventCombo();
             _platformManager?.ResetAssetTimer();
         }
         public void Reset()
         {
+            bool wasActive = IsActive || IsPreparing;
             IsActive = false;
             IsPreparing = false;
             eventElapsed = 0f;
@@ -289,6 +293,11 @@ namespace DimmedLight.GamePlay.Managers
                 delisaster.ResetPosition();
             if (camera != null)
                 camera.ResetPosition();
+            if (wasActive)
+            {
+                SoundManager.StopMusic();
+                SoundManager.ResumeMusic();
+            }
             _scoreManager.ResetEventCombo();
             _platformManager?.ResetAssetTimer();
         }

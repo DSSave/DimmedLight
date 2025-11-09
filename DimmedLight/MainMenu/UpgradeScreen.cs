@@ -51,6 +51,7 @@ namespace DimmedLight.MainMenu
             _pixelTexture = new Texture2D(GraphicsDevice, 1, 1);
             _pixelTexture.SetData(new[] { Color.White });
 
+            SoundManager.PlayMainMenuMusic();
             InitializeUpgradeNodes();
 
             _previousMouseState = Mouse.GetState();
