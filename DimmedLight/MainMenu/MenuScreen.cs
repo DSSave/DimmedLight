@@ -77,7 +77,7 @@ namespace DimmedLight.MainMenu
             _lockChainPosition = new Vector2(upgradeButtonRect.Center.X, upgradeButtonRect.Center.Y - 6);
 
             _mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
-            if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _mainMenuMusic)
+            if (MediaPlayer.State != MediaState.Playing)
             {
                 MediaPlayer.Play(_mainMenuMusic);
                 MediaPlayer.IsRepeating = true;

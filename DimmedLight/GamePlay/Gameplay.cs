@@ -86,9 +86,9 @@ namespace DimmedLight.GamePlay
 
             _eventTextSlide = new EventTextSlide(_game.GraphicsDevice, Stepalange, _camera);
 
-            if(MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
+            if(MediaPlayer.State != MediaState.Playing)
             {
-                //MediaPlayer.Play(_bmg);
+                MediaPlayer.Play(_bmg);
                 MediaPlayer.IsRepeating = true;
             }
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
@@ -284,9 +284,9 @@ namespace DimmedLight.GamePlay
                     _phaseManager._hellCloakEvent.PostTextEnd();
                     _player.canWalk = true;
 
-                    if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _bmg)
+                    if (MediaPlayer.State != MediaState.Playing)
                     {
-                        //MediaPlayer.Play(_bmg);
+                        MediaPlayer.Play(_bmg);
                         MediaPlayer.IsRepeating = true;
                         MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
                     }
@@ -443,7 +443,7 @@ namespace DimmedLight.GamePlay
             _gameOverSoundPlayed = false;
             MediaPlayer.Stop();
 
-            //MediaPlayer.Play(_bmg);
+            MediaPlayer.Play(_bmg);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = 0.01f * SoundManager.BgmVolume;
         }
