@@ -77,12 +77,6 @@ namespace DimmedLight.MainMenu
             _lockChainPosition = new Vector2(upgradeButtonRect.Center.X, upgradeButtonRect.Center.Y - 6);
 
             _mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
-            if (MediaPlayer.State != MediaState.Playing || MediaPlayer.Queue.ActiveSong != _mainMenuMusic)
-            {
-                MediaPlayer.Play(_mainMenuMusic);
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Volume = 0.07f * SoundManager.BgmVolume;
-            }
 
             _previousMouseState = Mouse.GetState();
             _previousKeyboardState = Keyboard.GetState();
@@ -177,7 +171,6 @@ namespace DimmedLight.MainMenu
             switch (buttonIndex)
             {
                 case 0: // Play
-                    MediaPlayer.Stop();
                     if (SettingScreen.ShowTutorial)
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else

@@ -104,22 +104,6 @@ namespace DimmedLight.GamePlay.Managers
             prepareTimer = 0f;
             shootTimer = 0f;
 
-            if (MediaPlayer.State == MediaState.Playing)
-            {
-                MediaPlayer.Pause();
-            }
-            else if (MediaPlayer.State == MediaState.Playing)
-            {
-                MediaPlayer.Stop();
-            }
-
-            if (MediaPlayer.State == MediaState.Playing)
-                MediaPlayer.Pause();
-
-            MediaPlayer.Play(_eventSong);
-            MediaPlayer.IsRepeating = false;
-            MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
-
             player.SetEvent(true);
             delisaster.IsInEvent = true;
             delisaster.movetToRight(new Vector2(1220, -50));
@@ -269,29 +253,6 @@ namespace DimmedLight.GamePlay.Managers
                 message = _failMessages[index];
             }
             OnEventFinishTrigger?.Invoke(message, success);
-            /*eventElapsed = 0f;
-
-            delisaster.ResetPosition();
-
-            camera.ResetPosition();
-
-            player.SetEvent(false);
-            player.canWalk = true;
-            projectiles.Clear();*/
-
-            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _eventSong)
-            {
-                MediaPlayer.Stop();
-                if (MediaPlayer.State == MediaState.Paused)
-                {
-                    MediaPlayer.Resume();
-                }
-            }
-            //MediaPlayer.Play(bmg);
-            /*MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f * SoundManager.BgmVolume;
-            _scoreManager.ResetEventCombo();
-            _platformManager?.ResetAssetTimer();*/
         }
         public void PostTextEnd()
         {
