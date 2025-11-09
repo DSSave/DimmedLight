@@ -46,8 +46,6 @@ namespace DimmedLight.GamePlay.Managers
         private Random rng = new Random();
         private bool playerHit = false;
         private readonly SoundEffect _parryHit;
-        private readonly Song _eventSong;
-        private readonly Song _bmg;
         private PlatformManager _platformManager;
         public Action OnPrepareFinished;
         private ScoreManager _scoreManager;
@@ -75,7 +73,7 @@ namespace DimmedLight.GamePlay.Managers
             camera.StartShake(prepareTime, 20f);
         }
         public HellCloakEvent(Texture2D hellCloakTheme, Player player, Delisaster delisaster, Camera camera,
-            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit, Song eventSong, Song bmg,
+            Texture2D parryProjecTex, Texture2D attackProjecTex, SoundEffect parryHit,
             ScoreManager scoreManager, PlatformManager platformManager)
         {
             HellCloakTheme = hellCloakTheme;
@@ -85,8 +83,6 @@ namespace DimmedLight.GamePlay.Managers
             this.parryProjecTex = parryProjecTex;
             this.attackProjecTex = attackProjecTex;
             _parryHit = parryHit;
-            _eventSong = eventSong;
-            _bmg = bmg;
             _scoreManager = scoreManager;
             _platformManager = platformManager;
         }
@@ -104,28 +100,15 @@ namespace DimmedLight.GamePlay.Managers
             prepareTimer = 0f;
             shootTimer = 0f;
 
-            if (MediaPlayer.State == MediaState.Playing)
-            {
-                MediaPlayer.Pause();
-            }
-            else if (MediaPlayer.State == MediaState.Playing)
-            {
-                MediaPlayer.Stop();
-            }
-
-            if (MediaPlayer.State == MediaState.Playing)
-                MediaPlayer.Pause();
-
-            MediaPlayer.Play(_eventSong);
-            MediaPlayer.IsRepeating = false;
-            MediaPlayer.Volume = 0.2f * SoundManager.BgmVolume;
-
             player.SetEvent(true);
             delisaster.IsInEvent = true;
             delisaster.movetToRight(new Vector2(1220, -50));
             camera.MoveTo(new Vector2(0, 130));
 
             player.canWalk = false;
+
+            SoundManager.PauseMusic();
+            SoundManager.PlayEventSound();
         }
 
         public void Update(GameTime gameTime, float delta, float currentPhaseSpeed, ScoreManager scoreManager)
@@ -269,29 +252,6 @@ namespace DimmedLight.GamePlay.Managers
                 message = _failMessages[index];
             }
             OnEventFinishTrigger?.Invoke(message, success);
-            /*eventElapsed = 0f;
-
-            delisaster.ResetPosition();
-
-            camera.ResetPosition();
-
-            player.SetEvent(false);
-            player.canWalk = true;
-            projectiles.Clear();*/
-
-            if (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong == _eventSong)
-            {
-                MediaPlayer.Stop();
-                if (MediaPlayer.State == MediaState.Paused)
-                {
-                    MediaPlayer.Resume();
-                }
-            }
-            //MediaPlayer.Play(bmg);
-            /*MediaPlayer.IsRepeating = true;
-            MediaPlayer.Volume = 0.008f * SoundManager.BgmVolume;
-            _scoreManager.ResetEventCombo();
-            _platformManager?.ResetAssetTimer();*/
         }
         public void PostTextEnd()
         {
@@ -308,11 +268,16 @@ namespace DimmedLight.GamePlay.Managers
                 delisaster.ResetPosition();
             if (camera != null)
                 camera.ResetPosition();
+
+            SoundManager.StopMusic();
+            SoundManager.ResumeMusic();
+
             _scoreManager.ResetEventCombo();
             _platformManager?.ResetAssetTimer();
         }
         public void Reset()
         {
+            bool wasActive = IsActive || IsPreparing;
             IsActive = false;
             IsPreparing = false;
             eventElapsed = 0f;
@@ -328,6 +293,11 @@ namespace DimmedLight.GamePlay.Managers
                 delisaster.ResetPosition();
             if (camera != null)
                 camera.ResetPosition();
+            if (wasActive)
+            {
+                SoundManager.StopMusic();
+                SoundManager.ResumeMusic();
+            }
             _scoreManager.ResetEventCombo();
             _platformManager?.ResetAssetTimer();
         }

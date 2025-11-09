@@ -114,6 +114,11 @@ namespace DimmedLight.MainMenu
             _bgVolume = SoundManager.BgmVolume;
             _sfxVolume = SoundManager.SfxVolume;
 
+            if (_source == SettingSource.MainMenu)
+            {
+                SoundManager.PlayMainMenuMusic();
+            }
+
             CalculateLayout();
             UpdateSliderKnobs();
 

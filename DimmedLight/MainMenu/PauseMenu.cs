@@ -95,6 +95,7 @@ namespace DimmedLight.MainMenu
                 if (!IsPaused)
                 {
                     IsPaused = true;
+                    SoundManager.PauseMusic();
                     inExitMenu = false;
                 }
                 else if (IsPaused && inExitMenu)
@@ -104,6 +105,7 @@ namespace DimmedLight.MainMenu
                 else
                 {
                     IsPaused = false;
+                    SoundManager.ResumeMusic();
                 }
             }
             if (IsPaused)

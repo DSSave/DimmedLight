@@ -39,7 +39,6 @@ namespace DimmedLight.MainMenu
         private List<string> _buttonLabels = new List<string>();
         private int _selectedButtonIndex = 0;
         private int _previousSelectedButtonIndex = 0;
-        private Song _mainMenuMusic;
         public MenuScreen(Game1 game, GraphicsDeviceManager graphicsDeviceManager, GraphicsDevice graphicsDevice, ContentManager content)
                    : base(game, graphicsDeviceManager, graphicsDevice, content)
         {
@@ -76,13 +75,7 @@ namespace DimmedLight.MainMenu
             Rectangle upgradeButtonRect = _buttons[1];
             _lockChainPosition = new Vector2(upgradeButtonRect.Center.X, upgradeButtonRect.Center.Y - 6);
 
-            _mainMenuMusic = Content.Load<Song>("Audio/MainMenu");
-            if (MediaPlayer.State != MediaState.Playing)
-            {
-                MediaPlayer.Play(_mainMenuMusic);
-                MediaPlayer.IsRepeating = true;
-                MediaPlayer.Volume = 0.07f * SoundManager.BgmVolume;
-            }
+            SoundManager.PlayMainMenuMusic();
 
             _previousMouseState = Mouse.GetState();
             _previousKeyboardState = Keyboard.GetState();
@@ -177,7 +170,6 @@ namespace DimmedLight.MainMenu
             switch (buttonIndex)
             {
                 case 0: // Play
-                    MediaPlayer.Stop();
                     if (SettingScreen.ShowTutorial)
                         Game.ChangeScreen(new TutorialScreen(Game, Game._graphics, GraphicsDevice, Content));
                     else

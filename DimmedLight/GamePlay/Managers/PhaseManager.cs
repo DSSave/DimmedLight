@@ -42,7 +42,7 @@ namespace DimmedLight.GamePlay.Managers
 
         public PhaseManager(Gameplay gameplay, EnemyFactory factory, Player player, Delisaster delisaster, Camera camera,
             Texture2D hellCloakTheme, Texture2D tutorialImage, Texture2D parryProjecTex, Texture2D attackProjecTex,
-            SoundEffect parryHit, Song eventSound, Song bgm, GraphicsDevice graphicsDevice, ScoreManager scoreManager,
+            SoundEffect parryHit, GraphicsDevice graphicsDevice, ScoreManager scoreManager,
             PlatformManager platformManager)
         {
             _gameplay = gameplay;
@@ -53,11 +53,11 @@ namespace DimmedLight.GamePlay.Managers
                 new WarmupPhase(),
                 new FullPhase()
             };
-            _currentIndex = 0;
+            _currentIndex = 2;
             _currentPhase = _phases[_currentIndex];
             _currentPhase.Initialize();
 
-            _hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, eventSound, bgm, scoreManager, _platformManager);
+            _hellCloakEvent = new HellCloakEvent(hellCloakTheme, player, delisaster, camera, parryProjecTex, attackProjecTex, parryHit, scoreManager, _platformManager);
             _scoreManager = scoreManager;
             TutorialEvent = new TutorialEvent(graphicsDevice, tutorialImage, _hellCloakEvent.StartEvent);
             _hellCloakEvent.OnPrepareFinished = () =>

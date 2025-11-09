@@ -49,6 +49,8 @@ namespace DimmedLight.MainMenu
             _exitFrameTexture = Content.Load<Texture2D>("UX_UIAsset/exit_page/ExitScreen");
             _buttonFrameTexture = Content.Load<Texture2D>("UX_UIAsset/cursor/cursor_frame");
 
+            SoundManager.PlayMainMenuMusic();
+
             // --- CHANGE: ปรับขนาดและตำแหน่งให้คล้ายในรูป ---
             //int dialogWidth = 600;
             //int dialogHeight = 300;
