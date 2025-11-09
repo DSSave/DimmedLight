@@ -107,7 +107,6 @@ namespace DimmedLight.GamePlay.Managers
 
             player.canWalk = false;
 
-            SoundManager.PauseMusic();
             SoundManager.PlayEventSound();
         }
 
@@ -270,7 +269,7 @@ namespace DimmedLight.GamePlay.Managers
                 camera.ResetPosition();
 
             SoundManager.StopMusic();
-            SoundManager.ResumeMusic();
+            SoundManager.PlayBGM();
 
             _scoreManager.ResetEventCombo();
             _platformManager?.ResetAssetTimer();

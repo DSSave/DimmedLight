@@ -69,7 +69,7 @@ namespace DimmedLight.MainMenu
             {
                 MediaPlayer.Play(_eventSound);
                 MediaPlayer.IsRepeating = false;
-                MediaPlayer.Volume = BgmVolume * 0.2f;
+                MediaPlayer.Volume = BgmVolume * 0.25f;
             }
         }
         public static void PlayGameOverSound()
