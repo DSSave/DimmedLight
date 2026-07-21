@@ -78,15 +78,22 @@ namespace DimmedLight.GamePlay.UI
 
         public void SaveHighScore()
         {
+#if WEBGL
+            return;
+#else
             if (Score > HighScore)
             {
                 HighScore = Score;
                 File.WriteAllText(_highScoreFile, HighScore.ToString());
             }
+#endif
         }
 
         private void LoadHighScore()
         {
+#if WEBGL
+            HighScore = 0;
+#else
             if (File.Exists(_highScoreFile))
             {
                 string text = File.ReadAllText(_highScoreFile);
@@ -97,6 +104,7 @@ namespace DimmedLight.GamePlay.UI
             {
                 HighScore = 0;
             }
+#endif
         }
 
         public void Update(GameTime gameTime, Player player)

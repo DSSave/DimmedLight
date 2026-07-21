@@ -250,7 +250,7 @@
 /processorParam:TextureFormat=Compressed
 /build:gameFont.spritefont
 
-#begin gameOver_แก้.png
+#begin gameOver_fixed.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -260,7 +260,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:gameOver_แก้.png
+/build:gameOver_fixed.png
 
 #begin guilt_attack_spritesheet.png
 /importer:TextureImporter

@@ -38,7 +38,7 @@ namespace DimmedLight.GamePlay.UI
         }
         public void LoadContent()
         {
-            gameOverTex = game.Content.Load<Texture2D>("gameOver_แก้");
+            gameOverTex = game.Content.Load<Texture2D>("gameOver_fixed");
             reStart = game.Content.Load<Texture2D>("cursorRestart2");
             restartHolder = game.Content.Load<Texture2D>("cursorRestart1");
             mainMenu = game.Content.Load<Texture2D>("cursorMainmenu1");

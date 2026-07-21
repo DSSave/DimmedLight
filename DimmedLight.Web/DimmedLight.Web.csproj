@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <KniPlatform>BlazorGL</KniPlatform>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <WasmEnableThreads>false</WasmEnableThreads>
+    <DefineConstants>$(DefineConstants);WEBGL</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile
+      Include="..\DimmedLight\**\*.cs"
+      Exclude="..\DimmedLight\Program.cs;..\DimmedLight\bin\**;..\DimmedLight\obj\**"
+      LinkBase="DimmedLight" />
+    <KniContentReference Include="..\DimmedLight\Content\Content.mgcb">
+      <ContentFolder>Content</ContentFolder>
+    </KniContentReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.28" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.28" PrivateAssets="all" />
+    <PackageReference Include="nkast.Kni.Platform.Blazor.GL" Version="4.2.9001.2" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline.Builder" Version="4.2.9001" />
+  </ItemGroup>
+
+</Project>

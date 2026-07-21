@@ -1,0 +1,11 @@
+<ErrorBoundary>
+    <ChildContent>
+        <Home />
+    </ChildContent>
+    <ErrorContent Context="exception">
+        <main class="error-panel">
+            <h1>Dimmed Light failed to start</h1>
+            <pre>@exception.ToString()</pre>
+        </main>
+    </ErrorContent>
+</ErrorBoundary>

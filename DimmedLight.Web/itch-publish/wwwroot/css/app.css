@@ -1,0 +1,69 @@
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #050505;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#theCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    outline: none;
+}
+
+.loading-screen {
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+    color: #f2f2f2;
+    font-size: 18px;
+    background: #050505;
+}
+
+#blazor-error-ui {
+    background: #161616;
+    bottom: 0;
+    box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.4);
+    color: white;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.error-panel {
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 24px;
+    overflow: auto;
+    color: #f2f2f2;
+    background: #090909;
+}
+
+.error-panel h1 {
+    margin: 0 0 16px;
+    font-size: 22px;
+}
+
+.error-panel pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #ffb4b4;
+}

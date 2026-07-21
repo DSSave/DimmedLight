@@ -1,0 +1,21 @@
+@page "/"
+@page "/index.html"
+@implements IDisposable
+@inject GameHost GameHost
+
+<PageTitle>Dimmed Light</PageTitle>
+
+<canvas id="theCanvas" width="1920" height="1080"></canvas>
+
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            GameHost.Start();
+    }
+
+    public void Dispose()
+    {
+        GameHost.Dispose();
+    }
+}
